@@ -5,32 +5,35 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../APP/hid_ble.c \
-../APP/hid_usb.c \
-../APP/input.c \
-../APP/main.c \
-../APP/output.c \
-../APP/protoctrl.c 
+../APP/MAIN.c \
+../APP/app_ble.c \
+../APP/app_usb.c \
+../APP/keyin.c \
+../APP/led.c \
+../APP/protocol.c \
+../APP/usercfg.c 
 
 OBJS += \
-./APP/hid_ble.o \
-./APP/hid_usb.o \
-./APP/input.o \
-./APP/main.o \
-./APP/output.o \
-./APP/protoctrl.o 
+./APP/MAIN.o \
+./APP/app_ble.o \
+./APP/app_usb.o \
+./APP/keyin.o \
+./APP/led.o \
+./APP/protocol.o \
+./APP/usercfg.o 
 
 C_DEPS += \
-./APP/hid_ble.d \
-./APP/hid_usb.d \
-./APP/input.d \
-./APP/main.d \
-./APP/output.d \
-./APP/protoctrl.d 
+./APP/MAIN.d \
+./APP/app_ble.d \
+./APP/app_usb.d \
+./APP/keyin.d \
+./APP/led.d \
+./APP/protocol.d \
+./APP/usercfg.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
 APP/%.o: ../APP/%.c
-	@	@	riscv-none-embed-gcc -march=rv32imac -mabi=ilp32 -mcmodel=medany -msmall-data-limit=8 -mno-save-restore -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common  -g -I"C:\Users\19156\Desktop\DualModeKeyboard\SDK\Startup" -I"C:\Users\19156\Desktop\DualModeKeyboard\SDK\APP\include" -I"C:\Users\19156\Desktop\DualModeKeyboard\SDK\Profile\include" -I"C:\Users\19156\Desktop\DualModeKeyboard\SDK\StdPeriphDriver\inc" -I"C:\Users\19156\Desktop\DualModeKeyboard\SDK\HAL\include" -I"C:\Users\19156\Desktop\DualModeKeyboard\SDK\Ld" -I"C:\Users\19156\Desktop\DualModeKeyboard\SDK\LIB" -I"C:\Users\19156\Desktop\DualModeKeyboard\SDK\RVMSIS" -std=gnu99 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -c -o "$@" "$<"
+	@	@	riscv-none-embed-gcc -march=rv32imac -mabi=ilp32 -mcmodel=medany -msmall-data-limit=8 -mno-save-restore -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common  -g -I"C:\Users\19156\Desktop\SRC\Startup" -I"C:\Users\19156\Desktop\DualModeKeyboard\SDK\APP\include" -I"C:\Users\19156\Desktop\DualModeKeyboard\SDK\Profile\include" -I"C:\Users\19156\Desktop\SRC\StdPeriphDriver\inc" -I"C:\Users\19156\Desktop\DualModeKeyboard\HAL\include" -I"C:\Users\19156\Desktop\SRC\Ld" -I"C:\Users\19156\Desktop\DualModeKeyboard\LIB" -I"C:\Users\19156\Desktop\SRC\RVMSIS" -std=gnu99 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -c -o "$@" "$<"
 	@	@
 

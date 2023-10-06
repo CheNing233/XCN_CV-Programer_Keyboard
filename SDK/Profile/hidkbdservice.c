@@ -150,7 +150,7 @@ static const uint8_t hidReportMap[] = {
         0x19, 0x00,         // 使用最小值：0
         0x2A, 0xff, 0x1f,   // 使用最大值：0x1FFF (8191)
         0x75, 0x10,         // 报告大小（位）：16
-        0x95, 0x01,         // 报告计数：1
+        0x95, 0x02,         // 报告计数：2
         0x81, 0x00,         // 输入（数据、变量、绝对值）
 
         0xc0            // 结束集合
@@ -225,7 +225,7 @@ static gattCharCfg_t hidReportConsumerInClientCharCfg[GATT_MAX_NUM_CONN];
 
 // HID Report Reference characteristic descriptor, Consumer input
 static uint8_t hidReportRefConsumerIn[HID_REPORT_REF_LEN] = {
-HID_RPT_ID_CONSUMER_IN, HID_REPORT_TYPE_INPUT };
+        HID_RPT_ID_CONSUMER_IN, HID_REPORT_TYPE_INPUT };
 
 // Feature Report
 static uint8_t hidReportFeatureProps = GATT_PROP_READ | GATT_PROP_WRITE;

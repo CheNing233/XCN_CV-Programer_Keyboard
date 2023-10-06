@@ -343,13 +343,21 @@ extern uint8_t HidDev_Report(uint8_t id, uint8_t type, uint8_t len,
         uint8_t *pData);
 
 /*********************************************************************
+ * @fn      HidDev_Start
+ *
+ * @brief   start advertising.
+ *
+ * @return  None.
+ */
+extern void HidDev_Start(void);
+
+/*********************************************************************
  * @fn      HidDev_Close
  *
  * @brief   Close the connection or stop advertising.
  *
  * @return  None.
  */
-extern void HidDev_Start(void);
 extern void HidDev_Close(void);
 
 /*********************************************************************

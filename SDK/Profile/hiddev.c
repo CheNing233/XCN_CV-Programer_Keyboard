@@ -14,13 +14,13 @@
  * INCLUDES
  */
 
-#include <hid_ble.h>
+
 #include "CONFIG.h"
 #include "battservice.h"
 #include "scanparamservice.h"
 #include "devinfoservice.h"
 #include "hiddev.h"
-
+#include "app_ble.h"
 /*********************************************************************
  * MACROS
  */
@@ -43,6 +43,10 @@
 #define HID_INITIAL_ADV_TIMEOUT           60
 #define HID_HIGH_ADV_TIMEOUT              5
 #define HID_LOW_ADV_TIMEOUT               0
+
+// Connection Interval
+#define HID_CONN_INT_MIN                  80
+#define HID_CONN_INT_MAX                  80
 
 // Heart Rate Task Events
 #define START_DEVICE_EVT                  0x0001
@@ -316,6 +320,7 @@ uint8_t HidDev_Report(uint8_t id, uint8_t type, uint8_t len, uint8_t *pData) {
  */
 void HidDev_Start(void) {
     uint8_t param;
+
     param = TRUE;
     GAPRole_SetParameter(GAPROLE_ADVERT_ENABLED, sizeof(uint8_t), &param);
 }
@@ -326,15 +331,10 @@ void HidDev_Close(void) {
     // if connected then disconnect
     if (hidDevGapState == GAPROLE_CONNECTED) {
         GAPRole_TerminateLink(gapConnHandle);
-        param = FALSE;
-        GAPRole_SetParameter(GAPROLE_ADVERT_ENABLED, sizeof(uint8_t), &param);
     }
-    // else stop advertising
-//    else
-//    {
-//        param = FALSE;
-//        GAPRole_SetParameter(GAPROLE_ADVERT_ENABLED, sizeof(uint8_t), &param);
-//    }
+
+    param = FALSE;
+    GAPRole_SetParameter(GAPROLE_ADVERT_ENABLED, sizeof(uint8_t), &param);
 }
 
 /*********************************************************************
@@ -977,6 +977,9 @@ static void hidDevHighAdvertising(void) {
     GAP_SetParamValue(TGAP_DISC_ADV_INT_MAX, HID_HIGH_ADV_INT_MAX);
     GAP_SetParamValue(TGAP_LIM_ADV_TIMEOUT, HID_HIGH_ADV_TIMEOUT);
 
+    GAP_SetParamValue(TGAP_CONN_EST_INT_MIN, HID_CONN_INT_MIN);
+    GAP_SetParamValue(TGAP_CONN_EST_INT_MAX, HID_CONN_INT_MAX);
+
     param = TRUE;
     GAPRole_SetParameter(GAPROLE_ADVERT_ENABLED, sizeof(uint8_t), &param);
 }
@@ -997,6 +1000,9 @@ static void hidDevLowAdvertising(void) {
     GAP_SetParamValue(TGAP_DISC_ADV_INT_MAX, HID_LOW_ADV_INT_MAX);
     GAP_SetParamValue(TGAP_LIM_ADV_TIMEOUT, HID_LOW_ADV_TIMEOUT);
 
+    GAP_SetParamValue(TGAP_CONN_EST_INT_MIN, HID_CONN_INT_MIN);
+    GAP_SetParamValue(TGAP_CONN_EST_INT_MAX, HID_CONN_INT_MAX);
+
     param = TRUE;
     GAPRole_SetParameter(GAPROLE_ADVERT_ENABLED, sizeof(uint8_t), &param);
 }
@@ -1014,6 +1020,9 @@ static void hidDevInitialAdvertising(void) {
     GAP_SetParamValue(TGAP_DISC_ADV_INT_MIN, HID_INITIAL_ADV_INT_MIN);
     GAP_SetParamValue(TGAP_DISC_ADV_INT_MAX, HID_INITIAL_ADV_INT_MAX);
     GAP_SetParamValue(TGAP_LIM_ADV_TIMEOUT, HID_INITIAL_ADV_TIMEOUT);
+
+    GAP_SetParamValue(TGAP_CONN_EST_INT_MIN, HID_CONN_INT_MIN);
+    GAP_SetParamValue(TGAP_CONN_EST_INT_MAX, HID_CONN_INT_MAX);
 
     param = TRUE;
     GAPRole_SetParameter(GAPROLE_ADVERT_ENABLED, sizeof(uint8_t), &param);

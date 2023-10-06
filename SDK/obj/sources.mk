@@ -29,7 +29,4 @@ Profile \
 RVMSIS \
 Startup \
 StdPeriphDriver \
-UserPeriphDriver/IIC \
-UserPeriphDriver/SSD13xx \
-UserPeriphDriver/USB \
 

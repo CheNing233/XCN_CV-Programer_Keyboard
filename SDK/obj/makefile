@@ -9,9 +9,6 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
--include UserPeriphDriver/USB/subdir.mk
--include UserPeriphDriver/SSD13xx/subdir.mk
--include UserPeriphDriver/IIC/subdir.mk
 -include StdPeriphDriver/subdir.mk
 -include Startup/subdir.mk
 -include RVMSIS/subdir.mk
@@ -43,34 +40,34 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 SECONDARY_FLASH += \
-Project.hex \
+SDK.hex \
 
 SECONDARY_LIST += \
-Project.lst \
+SDK.lst \
 
 SECONDARY_SIZE += \
-Project.siz \
+SDK.siz \
 
 
 # 所有目标
-all: Project.elf secondary-outputs
+all: SDK.elf secondary-outputs
 
 # 工具调用
-Project.elf: $(OBJS) $(USER_OBJS)
-	@	@	riscv-none-embed-gcc -march=rv32imac -mabi=ilp32 -mcmodel=medany -msmall-data-limit=8 -mno-save-restore -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common  -g -T "C:\Users\19156\Desktop\DualModeKeyboard\SDK\Ld\Link.ld" -nostartfiles -Xlinker --gc-sections -s -L"../" -L"C:\Users\19156\Desktop\DualModeKeyboard\SDK\LIB" -L"C:\Users\19156\Desktop\DualModeKeyboard\SDK\StdPeriphDriver" -L"C:\Users\19156\Desktop\DualModeKeyboard\SDK\UserPeriphDriver" -L"C:\Users\19156\Desktop\DualModeKeyboard\SDK\APP" -L"C:\Users\19156\Desktop\DualModeKeyboard\SDK\Profile" -Xlinker --print-memory-usage -Wl,-Map,"Project.map" --specs=nano.specs --specs=nosys.specs -o "Project.elf" $(OBJS) $(USER_OBJS) $(LIBS)
+SDK.elf: $(OBJS) $(USER_OBJS)
+	@	@	riscv-none-embed-gcc -march=rv32imac -mabi=ilp32 -mcmodel=medany -msmall-data-limit=8 -mno-save-restore -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common  -g -T "C:\Users\19156\Desktop\SRC\Ld\Link.ld" -nostartfiles -Xlinker --gc-sections -s -L"../" -L"C:\Users\19156\Desktop\DualModeKeyboard\LIB" -L"C:\Users\19156\Desktop\SRC\StdPeriphDriver" -Xlinker --print-memory-usage -Wl,-Map,"SDK.map" --specs=nano.specs --specs=nosys.specs -o "SDK.elf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@	@
-Project.hex: Project.elf
-	@	riscv-none-embed-objcopy -O ihex "Project.elf"  "Project.hex"
+SDK.hex: SDK.elf
+	@	riscv-none-embed-objcopy -O ihex "SDK.elf"  "SDK.hex"
 	@	@
-Project.lst: Project.elf
-	@	riscv-none-embed-objdump --source --all-headers --demangle --line-numbers --wide -D "Project.elf" > "Project.lst"
+SDK.lst: SDK.elf
+	@	riscv-none-embed-objdump --source --all-headers --demangle --line-numbers --wide -D "SDK.elf" > "SDK.lst"
 	@	@
-Project.siz: Project.elf
-	@	riscv-none-embed-size --format=berkeley "Project.elf"
+SDK.siz: SDK.elf
+	@	riscv-none-embed-size --format=berkeley "SDK.elf"
 	@	@
 # 其他目标
 clean:
-	-$(RM) $(ASM_UPPER_DEPS)$(OBJS)$(SECONDARY_FLASH)$(SECONDARY_LIST)$(SECONDARY_SIZE)$(ASM_DEPS)$(S_DEPS)$(S_UPPER_DEPS)$(C_DEPS) Project.elf
+	-$(RM) $(ASM_UPPER_DEPS)$(OBJS)$(SECONDARY_FLASH)$(SECONDARY_LIST)$(SECONDARY_SIZE)$(ASM_DEPS)$(S_DEPS)$(S_UPPER_DEPS)$(C_DEPS) SDK.elf
 	-@
 secondary-outputs: $(SECONDARY_FLASH) $(SECONDARY_LIST) $(SECONDARY_SIZE)
 

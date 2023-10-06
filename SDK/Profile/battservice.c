@@ -433,15 +433,15 @@ static void battNotifyCB(linkDBItem_t *pLinkItem) {
             attHandleValueNoti_t noti;
 
             noti.pValue = GATT_bm_alloc(pLinkItem->connectionHandle,
-            ATT_HANDLE_VALUE_NOTI,
-            BATT_LEVEL_VALUE_LEN, NULL, 0);
+                    ATT_HANDLE_VALUE_NOTI,
+                    BATT_LEVEL_VALUE_LEN, NULL, 0);
             if (noti.pValue != NULL) {
                 noti.handle = battAttrTbl[BATT_LEVEL_VALUE_IDX].handle;
                 noti.len = BATT_LEVEL_VALUE_LEN;
                 noti.pValue[0] = battLevel;
 
                 if (GATT_Notification(pLinkItem->connectionHandle, &noti,
-                FALSE) != SUCCESS) {
+                        FALSE) != SUCCESS) {
                     GATT_bm_free((gattMsg_t *) &noti, ATT_HANDLE_VALUE_NOTI);
                 }
             }

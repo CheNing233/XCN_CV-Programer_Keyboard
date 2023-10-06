@@ -12,23 +12,25 @@
 
 /******************************************************************************/
 /* 头文件包含 */
-#include <hid_ble.h>
-#include <hid_usb.h>
 
 #include "CONFIG.h"
 #include "HAL.h"
 #include "hiddev.h"
+#include "protocol.h"
+#include "app_usb.h"
+#include "app_ble.h"
+#include "usercfg.h"
+#include "keyin.h"
 
-#include "protoctrl.h"
-#include "input.h"
-#include "output.h"
+#define EN8_A GPIO_Pin_4 //PB4
+#define EN8_B GPIO_Pin_7 //PB7
+#define EN8_C GPIO_Pin_12 //PA12
 
-#include "OLED.h"
 
 /*********************************************************************
  * GLOBAL TYPEDEFS
  */
-__attribute__((aligned(4)))        uint32_t MEM_BUF[BLE_MEMHEAP_SIZE / 4];
+__attribute__((aligned(4)))  uint32_t MEM_BUF[BLE_MEMHEAP_SIZE / 4];
 
 #if(defined(BLE_MAC)) && (BLE_MAC == TRUE)
 const uint8_t MacAddr[6] = {0x84, 0xC2, 0xE4, 0x03, 0x02, 0x02};
@@ -50,6 +52,13 @@ void Main_Circulation() {
     }
 }
 
+/*********************************************************************
+ * @fn      main
+ *
+ * @brief   主函数
+ *
+ * @return  none
+ */
 int main(void) {
 #if(defined(DCDC_ENABLE)) && (DCDC_ENABLE == TRUE)
     PWR_DCDCCfg(ENABLE);
@@ -59,34 +68,38 @@ int main(void) {
     GPIOA_ModeCfg(GPIO_Pin_All, GPIO_ModeIN_PU);
     GPIOB_ModeCfg(GPIO_Pin_All, GPIO_ModeIN_PU);
 #endif
-#ifdef DEBUG
-    GPIOA_SetBits(bTXD1);
-    GPIOA_ModeCfg(bTXD1, GPIO_ModeOut_PP_5mA);
-    UART1_DefInit();
-#endif
-    PRINT("%s\n", VER_LIB);
+//#ifdef DEBUG
+//    GPIOA_SetBits(bTXD1);
+//    GPIOA_ModeCfg(bTXD1, GPIO_ModeOut_PP_5mA);
+//    UART1_DefInit();
+//#endif
 
-    // 保持上电稳定
     DelayMs(10);
 
-    // BLE INIT
+    UserCfg_Init();
+
     CH57X_BLEInit();
     HAL_Init();
+
+    USB_Init();
+
     GAPRole_PeripheralInit();
-
-    // PROTOCOL SW CTRL
-    ProtoCtrl_Init();
-
-    // ON_BOARD_FUNCTIONALITY INIT
-    Output_Init();
-    Input_Init();
-
-    // BLE_HID INIT
     HidDev_Init();
     HidEmu_Init();
 
-    // USB_HID INIT
-    USB_Init();
+    ProtoCtrl_Init();
+
+    // LED INIT
+    GPIOB_ModeCfg(EN8_A, GPIO_ModeOut_PP_5mA);
+    GPIOB_ModeCfg(EN8_B, GPIO_ModeOut_PP_5mA);
+    GPIOA_ModeCfg(EN8_C, GPIO_ModeOut_PP_5mA);
+
+    GPIOB_SetBits(EN8_A);
+    GPIOB_SetBits(EN8_B);
+    GPIOA_SetBits(EN8_C);
+
+    Keyin_Init();
+
 
     Main_Circulation();
 }
