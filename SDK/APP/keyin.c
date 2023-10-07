@@ -36,8 +36,8 @@ uint32_t Key_rr_tricnt = 0;
 
 uint8_t enco_left = 0;
 uint8_t enco_right = 0;
-
 uint8_t enco_finish_flg = TRUE;
+
 uint8_t finish_upload = TRUE;
 
 static uint8_t TMOS_Keys_Debounce_ID = INVALID_TASK_ID;
@@ -55,8 +55,7 @@ static uint16_t TMOS_Keys_TransMacro(uint8_t task_id, uint16_t events);
 void Keyin_Init() {
 
     // KEY INIT
-    GPIOA_ModeCfg(KEY_LEFT_CTRL | ROLLER_BUTTON | ROLLER_A | ROLLER_B,
-            GPIO_ModeIN_PU);
+    GPIOA_ModeCfg(KEY_LEFT_CTRL | ROLLER_BUTTON | ROLLER_A | ROLLER_B, GPIO_ModeIN_PU);
     GPIOB_ModeCfg(KEY_RIGHT_ENTER | KEY_X | KEY_C | KEY_V, GPIO_ModeIN_PU);
 
     TMOS_Keys_Debounce_ID = TMOS_ProcessEventRegister(TMOS_Keys_Debounce);
@@ -172,8 +171,7 @@ uint16_t TMOS_Keys_Debounce(uint8_t task_id, uint16_t events) {
     } else {
         dbc_push_cnt_ctrl = 0;
 
-        if (dbc_release_cnt_ctrl
-                == UserCfg_RAM.KeyIn_Debouncing_DelayCircle_Cnt) {
+        if (dbc_release_cnt_ctrl == UserCfg_RAM.KeyIn_Debouncing_DelayCircle_Cnt) {
             Keymap &= ~(0x01 << MAP_CTRL);
             dbc_release_cnt_ctrl = 0;
         } else {
@@ -184,8 +182,7 @@ uint16_t TMOS_Keys_Debounce(uint8_t task_id, uint16_t events) {
     if (!GPIOB_ReadPortPin(KEY_RIGHT_ENTER)) {
         dbc_release_cnt_enter = 0;
 
-        if (dbc_push_cnt_enter
-                == UserCfg_RAM.KeyIn_Debouncing_DelayCircle_Cnt) {
+        if (dbc_push_cnt_enter == UserCfg_RAM.KeyIn_Debouncing_DelayCircle_Cnt) {
             Keymap |= (0x01 << MAP_ENTER);
             dbc_push_cnt_enter = 0;
         } else {
@@ -194,8 +191,7 @@ uint16_t TMOS_Keys_Debounce(uint8_t task_id, uint16_t events) {
     } else {
         dbc_push_cnt_enter = 0;
 
-        if (dbc_release_cnt_enter
-                == UserCfg_RAM.KeyIn_Debouncing_DelayCircle_Cnt) {
+        if (dbc_release_cnt_enter == UserCfg_RAM.KeyIn_Debouncing_DelayCircle_Cnt) {
             Keymap &= ~(0x01 << MAP_ENTER);
             dbc_release_cnt_enter = 0;
         } else {
@@ -215,8 +211,7 @@ uint16_t TMOS_Keys_Debounce(uint8_t task_id, uint16_t events) {
     } else {
         dbc_push_cnt_rbt = 0;
 
-        if (dbc_release_cnt_rbt
-                == UserCfg_RAM.KeyIn_Debouncing_DelayCircle_Cnt) {
+        if (dbc_release_cnt_rbt == UserCfg_RAM.KeyIn_Debouncing_DelayCircle_Cnt) {
             Keymap &= ~(0x01 << MAP_RBT);
             dbc_release_cnt_rbt = 0;
         } else {
@@ -247,8 +242,7 @@ uint16_t TMOS_Enco_Debounce(uint8_t task_id, uint16_t events) {
     } else {
         dbc_push_cnt_left = 0;
 
-        if (dbc_release_cnt_left
-                == UserCfg_RAM.KeyIn_Debouncing_DelayCircle_Cnt) {
+        if (dbc_release_cnt_left == UserCfg_RAM.KeyIn_Debouncing_DelayCircle_Cnt) {
             Keymap &= ~(0x01 << MAP_RL);
             dbc_release_cnt_left = 0;
         } else {
@@ -259,8 +253,7 @@ uint16_t TMOS_Enco_Debounce(uint8_t task_id, uint16_t events) {
     if (!GPIOA_ReadPortPin(ROLLER_B)) {
         dbc_release_cnt_right = 0;
 
-        if (dbc_push_cnt_right
-                == UserCfg_RAM.KeyIn_Debouncing_DelayCircle_Cnt) {
+        if (dbc_push_cnt_right == UserCfg_RAM.KeyIn_Debouncing_DelayCircle_Cnt) {
             Keymap |= (0x01 << MAP_RR);
             dbc_push_cnt_right = 0;
         } else {
@@ -269,8 +262,7 @@ uint16_t TMOS_Enco_Debounce(uint8_t task_id, uint16_t events) {
     } else {
         dbc_push_cnt_right = 0;
 
-        if (dbc_release_cnt_right
-                == UserCfg_RAM.KeyIn_Debouncing_DelayCircle_Cnt) {
+        if (dbc_release_cnt_right == UserCfg_RAM.KeyIn_Debouncing_DelayCircle_Cnt) {
             Keymap &= ~(0x01 << MAP_RR);
             dbc_release_cnt_right = 0;
         } else {
@@ -283,80 +275,64 @@ uint16_t TMOS_Enco_Debounce(uint8_t task_id, uint16_t events) {
 
 uint16_t TMOS_Keys_TaskManager(uint8_t task_id, uint16_t events) {
 
-    if (((Keymap & (0x01 << MAP_X)) > 0)
-            && ((Keymap_o & (0x01 << MAP_X)) == 0)) {
+    if (((Keymap & (0x01 << MAP_X)) > 0) && ((Keymap_o & (0x01 << MAP_X)) == 0)) {
         // push
         Key_x_encnt++;
-    } else if (((Keymap & (0x01 << MAP_X)) == 0)
-            && ((Keymap_o & (0x01 << MAP_X)) > 0)) {
+    } else if (((Keymap & (0x01 << MAP_X)) == 0) && ((Keymap_o & (0x01 << MAP_X)) > 0)) {
         // release
         Key_x_decnt++;
     }
 
-    if (((Keymap & (0x01 << MAP_C)) > 0)
-            && ((Keymap_o & (0x01 << MAP_C)) == 0)) {
+    if (((Keymap & (0x01 << MAP_C)) > 0) && ((Keymap_o & (0x01 << MAP_C)) == 0)) {
         // push
         Key_c_encnt++;
-    } else if (((Keymap & (0x01 << MAP_C)) == 0)
-            && ((Keymap_o & (0x01 << MAP_C)) > 0)) {
+    } else if (((Keymap & (0x01 << MAP_C)) == 0) && ((Keymap_o & (0x01 << MAP_C)) > 0)) {
         // release
         Key_c_decnt++;
     }
 
-    if (((Keymap & (0x01 << MAP_V)) > 0)
-            && ((Keymap_o & (0x01 << MAP_V)) == 0)) {
+    if (((Keymap & (0x01 << MAP_V)) > 0) && ((Keymap_o & (0x01 << MAP_V)) == 0)) {
         // push
         Key_v_encnt++;
-    } else if (((Keymap & (0x01 << MAP_V)) == 0)
-            && ((Keymap_o & (0x01 << MAP_V)) > 0)) {
+    } else if (((Keymap & (0x01 << MAP_V)) == 0) && ((Keymap_o & (0x01 << MAP_V)) > 0)) {
         // release
         Key_v_decnt++;
     }
 
-    if (((Keymap & (0x01 << MAP_CTRL)) > 0)
-            && ((Keymap_o & (0x01 << MAP_CTRL)) == 0)) {
+    if (((Keymap & (0x01 << MAP_CTRL)) > 0) && ((Keymap_o & (0x01 << MAP_CTRL)) == 0)) {
         // push
         Key_ctrl_encnt++;
-    } else if (((Keymap & (0x01 << MAP_CTRL)) == 0)
-            && ((Keymap_o & (0x01 << MAP_CTRL)) > 0)) {
+    } else if (((Keymap & (0x01 << MAP_CTRL)) == 0) && ((Keymap_o & (0x01 << MAP_CTRL)) > 0)) {
         // release
         Key_ctrl_decnt++;
     }
 
-    if (((Keymap & (0x01 << MAP_ENTER)) > 0)
-            && ((Keymap_o & (0x01 << MAP_ENTER)) == 0)) {
+    if (((Keymap & (0x01 << MAP_ENTER)) > 0) && ((Keymap_o & (0x01 << MAP_ENTER)) == 0)) {
         // push
         Key_enter_encnt++;
-    } else if (((Keymap & (0x01 << MAP_ENTER)) == 0)
-            && ((Keymap_o & (0x01 << MAP_ENTER)) > 0)) {
+    } else if (((Keymap & (0x01 << MAP_ENTER)) == 0) && ((Keymap_o & (0x01 << MAP_ENTER)) > 0)) {
         // release
         Key_enter_decnt++;
     }
 
-    if (((Keymap & (0x01 << MAP_RBT)) > 0)
-            && ((Keymap_o & (0x01 << MAP_RBT)) == 0)) {
+    if (((Keymap & (0x01 << MAP_RBT)) > 0) && ((Keymap_o & (0x01 << MAP_RBT)) == 0)) {
         // push
         Key_rbt_encnt++;
-    } else if (((Keymap & (0x01 << MAP_RBT)) == 0)
-            && ((Keymap_o & (0x01 << MAP_RBT)) > 0)) {
+    } else if (((Keymap & (0x01 << MAP_RBT)) == 0) && ((Keymap_o & (0x01 << MAP_RBT)) > 0)) {
         // release
         Key_rbt_decnt++;
     }
 
-    if (((Keymap & (0x01 << MAP_RL)) > 0)
-            && ((Keymap_o & (0x01 << MAP_RL)) == 0)
-            && ((Keymap & (0x01 << MAP_RR)) == 0)) {
+    if (((Keymap & (0x01 << MAP_RL)) > 0) && ((Keymap_o & (0x01 << MAP_RL)) == 0)
+        && ((Keymap & (0x01 << MAP_RR)) == 0)) {
         // push rl
         Key_rl_encnt++;
-    } else if (((Keymap & (0x01 << MAP_RR)) > 0)
-            && ((Keymap_o & (0x01 << MAP_RR)) == 0)
-            && ((Keymap & (0x01 << MAP_RL)) == 0)) {
+    } else if (((Keymap & (0x01 << MAP_RR)) > 0) && ((Keymap_o & (0x01 << MAP_RR)) == 0)
+        && ((Keymap & (0x01 << MAP_RL)) == 0)) {
         // push rr
         Key_rr_encnt++;
-    } else if ((((Keymap & (0x01 << MAP_RL)) > 0)
-            && ((Keymap & (0x01 << MAP_RR)) > 0))
-            || (((Keymap & (0x01 << MAP_RL)) == 0)
-                    && ((Keymap & (0x01 << MAP_RR)) == 0))) {
+    } else if ((((Keymap & (0x01 << MAP_RL)) > 0) && ((Keymap & (0x01 << MAP_RR)) > 0))
+        || (((Keymap & (0x01 << MAP_RL)) == 0) && ((Keymap & (0x01 << MAP_RR)) == 0))) {
 
         if (((Keymap & (0x01 << MAP_RL)) != (Keymap_o & (0x01 << MAP_RL)))) {
             Key_rl_decnt++;
@@ -376,13 +352,12 @@ uint16_t TMOS_Keys_TransMacro(uint8_t task_id, uint16_t events) {
 
     uint8_t i = 0;
 
-    if((!finish_upload) && (Protocol_SW == Board_Use_BLE)){
+    if ((!finish_upload) && (Protocol_SW == Board_Use_BLE)) {
         return 0;
     }
 
     // X
-    if (Key_x_tricnt >= KeyCfg_RAM_X.SwitchKeys_DelayCnt
-            && KeyCfg_RAM_X.SwitchKeys_DelayCnt != 0) {
+    if (Key_x_tricnt >= KeyCfg_RAM_X.SwitchKeys_DelayCnt && KeyCfg_RAM_X.SwitchKeys_DelayCnt != 0) {
         // Switch key
         KeyCfg_JumpNext(KEYCFG_ROM_X, &KeyCfg_RAM_X);
     }
@@ -398,12 +373,9 @@ uint16_t TMOS_Keys_TransMacro(uint8_t task_id, uint16_t events) {
         Key_x_tricnt++;
     }
 
-    if ((Key_x_encnt >= KeyCfg_RAM_X.FinishTsk_PushCnt
-            && KeyCfg_RAM_X.FinishTsk_PushCnt != 0)
-            || (Key_x_decnt >= KeyCfg_RAM_X.FinishTsk_RlseCnt
-                    && KeyCfg_RAM_X.FinishTsk_RlseCnt != 0)
-            || (Key_x_tricnt >= KeyCfg_RAM_X.FinishTsk_HoldCnt
-                    && KeyCfg_RAM_X.FinishTsk_HoldCnt != 0)) {
+    if ((Key_x_encnt >= KeyCfg_RAM_X.FinishTsk_PushCnt && KeyCfg_RAM_X.FinishTsk_PushCnt != 0)
+        || (Key_x_decnt >= KeyCfg_RAM_X.FinishTsk_RlseCnt && KeyCfg_RAM_X.FinishTsk_RlseCnt != 0)
+        || (Key_x_tricnt >= KeyCfg_RAM_X.FinishTsk_HoldCnt && KeyCfg_RAM_X.FinishTsk_HoldCnt != 0)) {
         // finish task
         for (i = 0; i < 8; i++) {
             ReportBuf_Keyboard[i] &= KeyCfg_RAM_X.Reset_Keys[i];
@@ -422,8 +394,7 @@ uint16_t TMOS_Keys_TransMacro(uint8_t task_id, uint16_t events) {
     }
 
     // C
-    if (Key_c_tricnt >= KeyCfg_RAM_C.SwitchKeys_DelayCnt
-            && KeyCfg_RAM_C.SwitchKeys_DelayCnt != 0) {
+    if (Key_c_tricnt >= KeyCfg_RAM_C.SwitchKeys_DelayCnt && KeyCfg_RAM_C.SwitchKeys_DelayCnt != 0) {
         // Switch key
         KeyCfg_JumpNext(KEYCFG_ROM_C, &KeyCfg_RAM_C);
     }
@@ -439,12 +410,9 @@ uint16_t TMOS_Keys_TransMacro(uint8_t task_id, uint16_t events) {
         Key_c_tricnt++;
     }
 
-    if ((Key_c_encnt >= KeyCfg_RAM_C.FinishTsk_PushCnt
-            && KeyCfg_RAM_C.FinishTsk_PushCnt != 0)
-            || (Key_c_decnt >= KeyCfg_RAM_C.FinishTsk_RlseCnt
-                    && KeyCfg_RAM_C.FinishTsk_RlseCnt != 0)
-            || (Key_c_tricnt >= KeyCfg_RAM_C.FinishTsk_HoldCnt
-                    && KeyCfg_RAM_C.FinishTsk_HoldCnt != 0)) {
+    if ((Key_c_encnt >= KeyCfg_RAM_C.FinishTsk_PushCnt && KeyCfg_RAM_C.FinishTsk_PushCnt != 0)
+        || (Key_c_decnt >= KeyCfg_RAM_C.FinishTsk_RlseCnt && KeyCfg_RAM_C.FinishTsk_RlseCnt != 0)
+        || (Key_c_tricnt >= KeyCfg_RAM_C.FinishTsk_HoldCnt && KeyCfg_RAM_C.FinishTsk_HoldCnt != 0)) {
         // finish task
         for (i = 0; i < 8; i++) {
             ReportBuf_Keyboard[i] &= KeyCfg_RAM_C.Reset_Keys[i];
@@ -463,8 +431,7 @@ uint16_t TMOS_Keys_TransMacro(uint8_t task_id, uint16_t events) {
     }
 
     // V
-    if (Key_v_tricnt >= KeyCfg_RAM_V.SwitchKeys_DelayCnt
-            && KeyCfg_RAM_V.SwitchKeys_DelayCnt != 0) {
+    if (Key_v_tricnt >= KeyCfg_RAM_V.SwitchKeys_DelayCnt && KeyCfg_RAM_V.SwitchKeys_DelayCnt != 0) {
         // Switch key
         KeyCfg_JumpNext(KEYCFG_ROM_V, &KeyCfg_RAM_V);
     }
@@ -480,12 +447,9 @@ uint16_t TMOS_Keys_TransMacro(uint8_t task_id, uint16_t events) {
         Key_v_tricnt++;
     }
 
-    if ((Key_v_encnt >= KeyCfg_RAM_V.FinishTsk_PushCnt
-            && KeyCfg_RAM_V.FinishTsk_PushCnt != 0)
-            || (Key_v_decnt >= KeyCfg_RAM_V.FinishTsk_RlseCnt
-                    && KeyCfg_RAM_V.FinishTsk_RlseCnt != 0)
-            || (Key_v_tricnt >= KeyCfg_RAM_V.FinishTsk_HoldCnt
-                    && KeyCfg_RAM_V.FinishTsk_HoldCnt != 0)) {
+    if ((Key_v_encnt >= KeyCfg_RAM_V.FinishTsk_PushCnt && KeyCfg_RAM_V.FinishTsk_PushCnt != 0)
+        || (Key_v_decnt >= KeyCfg_RAM_V.FinishTsk_RlseCnt && KeyCfg_RAM_V.FinishTsk_RlseCnt != 0)
+        || (Key_v_tricnt >= KeyCfg_RAM_V.FinishTsk_HoldCnt && KeyCfg_RAM_V.FinishTsk_HoldCnt != 0)) {
         // finish task
         for (i = 0; i < 8; i++) {
             ReportBuf_Keyboard[i] &= KeyCfg_RAM_V.Reset_Keys[i];
@@ -504,8 +468,7 @@ uint16_t TMOS_Keys_TransMacro(uint8_t task_id, uint16_t events) {
     }
 
     // CTRL
-    if (Key_ctrl_tricnt >= KeyCfg_RAM_CTRL.SwitchKeys_DelayCnt
-            && KeyCfg_RAM_CTRL.SwitchKeys_DelayCnt != 0) {
+    if (Key_ctrl_tricnt >= KeyCfg_RAM_CTRL.SwitchKeys_DelayCnt && KeyCfg_RAM_CTRL.SwitchKeys_DelayCnt != 0) {
         // Switch key
         KeyCfg_JumpNext(KEYCFG_ROM_CTRL, &KeyCfg_RAM_CTRL);
     }
@@ -521,12 +484,9 @@ uint16_t TMOS_Keys_TransMacro(uint8_t task_id, uint16_t events) {
         Key_ctrl_tricnt++;
     }
 
-    if ((Key_ctrl_encnt >= KeyCfg_RAM_CTRL.FinishTsk_PushCnt
-            && KeyCfg_RAM_CTRL.FinishTsk_PushCnt != 0)
-            || (Key_ctrl_decnt >= KeyCfg_RAM_CTRL.FinishTsk_RlseCnt
-                    && KeyCfg_RAM_CTRL.FinishTsk_RlseCnt != 0)
-            || (Key_ctrl_tricnt >= KeyCfg_RAM_CTRL.FinishTsk_HoldCnt
-                    && KeyCfg_RAM_CTRL.FinishTsk_HoldCnt != 0)) {
+    if ((Key_ctrl_encnt >= KeyCfg_RAM_CTRL.FinishTsk_PushCnt && KeyCfg_RAM_CTRL.FinishTsk_PushCnt != 0)
+        || (Key_ctrl_decnt >= KeyCfg_RAM_CTRL.FinishTsk_RlseCnt && KeyCfg_RAM_CTRL.FinishTsk_RlseCnt != 0)
+        || (Key_ctrl_tricnt >= KeyCfg_RAM_CTRL.FinishTsk_HoldCnt && KeyCfg_RAM_CTRL.FinishTsk_HoldCnt != 0)) {
         // finish task
         for (i = 0; i < 8; i++) {
             ReportBuf_Keyboard[i] &= KeyCfg_RAM_CTRL.Reset_Keys[i];
@@ -545,8 +505,7 @@ uint16_t TMOS_Keys_TransMacro(uint8_t task_id, uint16_t events) {
     }
 
     // ENTER
-    if (Key_enter_tricnt >= KeyCfg_RAM_ENTER.SwitchKeys_DelayCnt
-            && KeyCfg_RAM_ENTER.SwitchKeys_DelayCnt != 0) {
+    if (Key_enter_tricnt >= KeyCfg_RAM_ENTER.SwitchKeys_DelayCnt && KeyCfg_RAM_ENTER.SwitchKeys_DelayCnt != 0) {
         // Switch key
         KeyCfg_JumpNext(KEYCFG_ROM_ENTER, &KeyCfg_RAM_ENTER);
     }
@@ -562,12 +521,9 @@ uint16_t TMOS_Keys_TransMacro(uint8_t task_id, uint16_t events) {
         Key_enter_tricnt++;
     }
 
-    if ((Key_enter_encnt >= KeyCfg_RAM_ENTER.FinishTsk_PushCnt
-            && KeyCfg_RAM_ENTER.FinishTsk_PushCnt != 0)
-            || (Key_enter_decnt >= KeyCfg_RAM_ENTER.FinishTsk_RlseCnt
-                    && KeyCfg_RAM_ENTER.FinishTsk_RlseCnt != 0)
-            || (Key_enter_tricnt >= KeyCfg_RAM_ENTER.FinishTsk_HoldCnt
-                    && KeyCfg_RAM_ENTER.FinishTsk_HoldCnt != 0)) {
+    if ((Key_enter_encnt >= KeyCfg_RAM_ENTER.FinishTsk_PushCnt && KeyCfg_RAM_ENTER.FinishTsk_PushCnt != 0)
+        || (Key_enter_decnt >= KeyCfg_RAM_ENTER.FinishTsk_RlseCnt && KeyCfg_RAM_ENTER.FinishTsk_RlseCnt != 0)
+        || (Key_enter_tricnt >= KeyCfg_RAM_ENTER.FinishTsk_HoldCnt && KeyCfg_RAM_ENTER.FinishTsk_HoldCnt != 0)) {
         // finish task
         for (i = 0; i < 8; i++) {
             ReportBuf_Keyboard[i] &= KeyCfg_RAM_ENTER.Reset_Keys[i];
@@ -586,8 +542,7 @@ uint16_t TMOS_Keys_TransMacro(uint8_t task_id, uint16_t events) {
     }
 
     // RBT
-    if (Key_rbt_tricnt >= KeyCfg_RAM_RBT.SwitchKeys_DelayCnt
-            && KeyCfg_RAM_RBT.SwitchKeys_DelayCnt != 0) {
+    if (Key_rbt_tricnt >= KeyCfg_RAM_RBT.SwitchKeys_DelayCnt && KeyCfg_RAM_RBT.SwitchKeys_DelayCnt != 0) {
         // Switch key
         KeyCfg_JumpNext(KEYCFG_ROM_RBT, &KeyCfg_RAM_RBT);
     }
@@ -603,12 +558,9 @@ uint16_t TMOS_Keys_TransMacro(uint8_t task_id, uint16_t events) {
         Key_rbt_tricnt++;
     }
 
-    if ((Key_rbt_encnt >= KeyCfg_RAM_RBT.FinishTsk_PushCnt
-            && KeyCfg_RAM_RBT.FinishTsk_PushCnt != 0)
-            || (Key_rbt_decnt >= KeyCfg_RAM_RBT.FinishTsk_RlseCnt
-                    && KeyCfg_RAM_RBT.FinishTsk_RlseCnt != 0)
-            || (Key_rbt_tricnt >= KeyCfg_RAM_RBT.FinishTsk_HoldCnt
-                    && KeyCfg_RAM_RBT.FinishTsk_HoldCnt != 0)) {
+    if ((Key_rbt_encnt >= KeyCfg_RAM_RBT.FinishTsk_PushCnt && KeyCfg_RAM_RBT.FinishTsk_PushCnt != 0)
+        || (Key_rbt_decnt >= KeyCfg_RAM_RBT.FinishTsk_RlseCnt && KeyCfg_RAM_RBT.FinishTsk_RlseCnt != 0)
+        || (Key_rbt_tricnt >= KeyCfg_RAM_RBT.FinishTsk_HoldCnt && KeyCfg_RAM_RBT.FinishTsk_HoldCnt != 0)) {
         // finish task
         for (i = 0; i < 8; i++) {
             ReportBuf_Keyboard[i] &= KeyCfg_RAM_RBT.Reset_Keys[i];
@@ -627,8 +579,7 @@ uint16_t TMOS_Keys_TransMacro(uint8_t task_id, uint16_t events) {
     }
 
     // RL
-    if (Key_rl_tricnt >= KeyCfg_RAM_RL.SwitchKeys_DelayCnt
-            && KeyCfg_RAM_RL.SwitchKeys_DelayCnt != 0) {
+    if (Key_rl_tricnt >= KeyCfg_RAM_RL.SwitchKeys_DelayCnt && KeyCfg_RAM_RL.SwitchKeys_DelayCnt != 0) {
         // Switch key
         KeyCfg_JumpNext(KEYCFG_ROM_RL, &KeyCfg_RAM_RL);
     }
@@ -645,14 +596,11 @@ uint16_t TMOS_Keys_TransMacro(uint8_t task_id, uint16_t events) {
         Key_rl_tricnt++;
     }
 
-    if ((Key_rl_encnt >= KeyCfg_RAM_RL.FinishTsk_PushCnt
-            && KeyCfg_RAM_RL.FinishTsk_PushCnt != 0)
-            || (Key_rl_decnt >= KeyCfg_RAM_RL.FinishTsk_RlseCnt
-                    && KeyCfg_RAM_RL.FinishTsk_RlseCnt != 0)
-            || (Key_rl_tricnt >= KeyCfg_RAM_RL.FinishTsk_HoldCnt
-                    && KeyCfg_RAM_RL.FinishTsk_HoldCnt != 0)) {
+    if ((Key_rl_encnt >= KeyCfg_RAM_RL.FinishTsk_PushCnt && KeyCfg_RAM_RL.FinishTsk_PushCnt != 0)
+        || (Key_rl_decnt >= KeyCfg_RAM_RL.FinishTsk_RlseCnt && KeyCfg_RAM_RL.FinishTsk_RlseCnt != 0)
+        || (Key_rl_tricnt >= KeyCfg_RAM_RL.FinishTsk_HoldCnt && KeyCfg_RAM_RL.FinishTsk_HoldCnt != 0)) {
         // finish task
-        switch(enco_left){
+        switch (enco_left) {
         case 0:
             break;
         default:
@@ -676,8 +624,7 @@ uint16_t TMOS_Keys_TransMacro(uint8_t task_id, uint16_t events) {
     }
 
     // RR
-    if (Key_rr_tricnt >= KeyCfg_RAM_RR.SwitchKeys_DelayCnt
-            && KeyCfg_RAM_RR.SwitchKeys_DelayCnt != 0) {
+    if (Key_rr_tricnt >= KeyCfg_RAM_RR.SwitchKeys_DelayCnt && KeyCfg_RAM_RR.SwitchKeys_DelayCnt != 0) {
         // Switch key
         KeyCfg_JumpNext(KEYCFG_ROM_RR, &KeyCfg_RAM_RR);
     }
@@ -694,14 +641,11 @@ uint16_t TMOS_Keys_TransMacro(uint8_t task_id, uint16_t events) {
         Key_rr_tricnt++;
     }
 
-    if ((Key_rr_encnt >= KeyCfg_RAM_RR.FinishTsk_PushCnt
-            && KeyCfg_RAM_RR.FinishTsk_PushCnt != 0)
-            || (Key_rr_decnt >= KeyCfg_RAM_RR.FinishTsk_RlseCnt
-                    && KeyCfg_RAM_RR.FinishTsk_RlseCnt != 0)
-            || (Key_rr_tricnt >= KeyCfg_RAM_RR.FinishTsk_HoldCnt
-                    && KeyCfg_RAM_RR.FinishTsk_HoldCnt != 0)) {
+    if ((Key_rr_encnt >= KeyCfg_RAM_RR.FinishTsk_PushCnt && KeyCfg_RAM_RR.FinishTsk_PushCnt != 0)
+        || (Key_rr_decnt >= KeyCfg_RAM_RR.FinishTsk_RlseCnt && KeyCfg_RAM_RR.FinishTsk_RlseCnt != 0)
+        || (Key_rr_tricnt >= KeyCfg_RAM_RR.FinishTsk_HoldCnt && KeyCfg_RAM_RR.FinishTsk_HoldCnt != 0)) {
         // finish task
-        switch(enco_right){
+        switch (enco_right) {
         case 0:
             break;
         default:
@@ -723,14 +667,14 @@ uint16_t TMOS_Keys_TransMacro(uint8_t task_id, uint16_t events) {
         }
     }
 
-    if(enco_left > enco_right){
-        enco_right= 0;
-    }else if(enco_right > enco_left){
+    if (enco_left > enco_right) {
+        enco_right = 0;
+    } else if (enco_right > enco_left) {
         enco_left = 0;
     }
 
-    if(enco_finish_flg){
-        if(enco_left){
+    if (enco_finish_flg) {
+        if (enco_left) {
             // Hold Task
             enco_left--;
             for (i = 0; i < 8; i++) {
@@ -740,8 +684,7 @@ uint16_t TMOS_Keys_TransMacro(uint8_t task_id, uint16_t events) {
                 ReportBuf_Consumer[i] |= KeyCfg_RAM_RL.Set_Csms[i];
             }
             enco_finish_flg = FALSE;
-        }
-        else if (enco_right){
+        } else if (enco_right) {
             // Hold Task
             enco_right--;
             for (i = 0; i < 8; i++) {

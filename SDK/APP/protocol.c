@@ -81,7 +81,7 @@ uint16_t TMOSTASK_ProtoCtrl_Fresh(uint8_t task_id, uint16_t events) {
 
 uint16_t TMOSTASK_ProtoCtrl_UploadData(uint8_t task_id, uint16_t events) {
 
-    static uint8_t roller_onhold = FALSE;
+//    static uint8_t roller_onhold = FALSE;
 
     if (events & SYS_EVENT_MSG) {
         return (events ^ SYS_EVENT_MSG);

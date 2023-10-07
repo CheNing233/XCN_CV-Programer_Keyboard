@@ -9,34 +9,25 @@
 #include "usercfg.h"
 #include "hiddev.h"
 
-// USB
-//usercfg UserCfg_RAM = {
-//        .Init_Flag = 233,
-//
-//        .Proto_FreshState_Interval = 1600,
-//        .Proto_USBBuffer_PushInterval = 8,
-//        .Proto_BLEBuffer_PushInterval = 16,
-//
-//        .KeyIn_Debouncing_Sampling_Interval = 4,
-//        .KeyIn_Debouncing_DelayCircle_Cnt = 1,
-//
-//        .USB_UploadRate = 0x01, .BLE_Uplaod_PackCnt = 16
-//
-//};
-
-
 usercfg UserCfg_RAM = {
         .Init_Flag = 233,
 
         .Proto_FreshState_Interval = 1600,
         .Proto_USBBuffer_PushInterval = 8,
-        .Proto_BLEBuffer_PushInterval = 8,
+        .Proto_BLEBuffer_PushInterval = 32,
 
-        .KeyIn_Debouncing_Sampling_Interval = 4,
+        .KeyIn_Key_Debouncing_Sampling_Interval = 4,
+        .KeyIn_Enco_Debouncing_Sampling_Interval = 4,
+
         .KeyIn_Debouncing_DelayCircle_Cnt = 1,
 
-        .USB_UploadRate = 0x01, .BLE_Uplaod_PackCnt = 16
+        .KeyIn_TaskFlgManager_Circle_Interval = 8,
+        .KeyIn_TransMacro_Circle_Interval = 8,
 
+        .USB_UploadRate = 0x01,
+        .BLE_Conn_Interval = 1,
+
+        .BLE_Uplaod_PackCnt = 20
 };
 
 keycfg KeyCfg_RAM_X = {

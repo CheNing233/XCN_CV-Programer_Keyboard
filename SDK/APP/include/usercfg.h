@@ -28,10 +28,17 @@ typedef struct __PACKED _usercfg {
     uint8_t Proto_USBBuffer_PushInterval;// USB推送间隔
     uint8_t Proto_BLEBuffer_PushInterval;// BLE推送间隔
 
-    uint8_t KeyIn_Debouncing_Sampling_Interval;// 键盘循环扫描采样间隔
+    uint8_t KeyIn_Key_Debouncing_Sampling_Interval;// 键盘循环扫描采样间隔
+    uint8_t KeyIn_Enco_Debouncing_Sampling_Interval;// 编码器循环扫描采样间隔
+
     uint8_t KeyIn_Debouncing_DelayCircle_Cnt;// 键盘消抖延迟循环数
 
+    uint8_t KeyIn_TaskFlgManager_Circle_Interval;// 任务标志更新间隔
+    uint8_t KeyIn_TransMacro_Circle_Interval;// 宏翻译间隔
+
     uint8_t USB_UploadRate;// USB中断传输轮询间隔
+    uint8_t BLE_Conn_Interval;// BLE扫描间隔
+
     uint8_t BLE_Uplaod_PackCnt;// BLE每次发送包数量
 
 } usercfg;

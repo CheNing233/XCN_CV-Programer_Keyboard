@@ -78,7 +78,7 @@ void DevEP3_OUT_Deal(uint8_t l) { /* 用户可自定义 */
 // OUT EP
 void DevEP4_OUT_Deal(uint8_t l) { /* 用户可自定义 */
 
-    uint8_t i, len = 0;
+    uint8_t len = 0;
 
     if (pEP4_OUT_DataBuf[0] == 'w') {
         //擦除数据

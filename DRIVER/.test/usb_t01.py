@@ -9,10 +9,11 @@ import usb.backend.libusb1
 be_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "libusb-1.0.dll")
 
 backend = usb.backend.libusb1.get_backend(find_library=lambda x: be_path)
-# dev = usb.core.find(idVendor=0x413D, idProduct=0x2107, backend=backend)
+dev = usb.core.find(idVendor=0x413D, idProduct=0x2107, backend=backend)
 
-dev = usb.core.find()
-print(dev)
+# dev = usb.core.find()
+# print(dev)
+
 if dev is None:
     raise ValueError("Device not found")
 
@@ -21,19 +22,19 @@ if dev is None:
 
 
 
-# dev.set_configuration()
+dev.set_configuration()
 
-# RSTATE = False
+RSTATE = False
 
-# msg_w = (ord('w'),6,5,6,8,4,5,6)
-# msg_r = (ord('u'),32)
+msg_w = (ord('w'),6,0,0,0,0,0,0)
+msg_r = (ord('r'),64)
 
-# msg = msg_r if RSTATE else msg_w
-# assert dev.write(0x4, msg, 100) == len(msg)
+msg = msg_r if RSTATE else msg_w
+assert dev.write(0x4, msg, 100) == len(msg)
 
-# # read(endpoint, size_or_buffer, timeout = None)
-# data = dev.read(0x83, 64, 1000)
-# print(data)
+# read(endpoint, size_or_buffer, timeout = None)
+data = dev.read(0x83, 64, 1000)
+print(data)
 
 
-# usb.util.dispose_resources(device=dev)
+usb.util.dispose_resources(device=dev)

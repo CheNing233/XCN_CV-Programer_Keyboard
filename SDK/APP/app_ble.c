@@ -41,10 +41,10 @@
 #define DEFAULT_HID_IDLE_TIMEOUT             60000
 
 // Minimum connection interval (units of 1.25ms)
-#define DEFAULT_DESIRED_MIN_CONN_INTERVAL    8
+#define DEFAULT_DESIRED_MIN_CONN_INTERVAL    4
 
 // Maximum connection interval (units of 1.25ms)
-#define DEFAULT_DESIRED_MAX_CONN_INTERVAL    8
+#define DEFAULT_DESIRED_MAX_CONN_INTERVAL    4
 
 // Slave latency to use if parameter update request
 #define DEFAULT_DESIRED_SLAVE_LATENCY        0
@@ -178,8 +178,6 @@ void HidEmu_Init() {
     {
         uint8_t initial_advertising_enable = TRUE;
 
-        uint16_t conn_intv = 2;
-
         // Set the GAP Role Parameters
         GAPRole_SetParameter(GAPROLE_ADVERT_ENABLED, sizeof(uint8_t),
                 &initial_advertising_enable);
@@ -188,12 +186,6 @@ void HidEmu_Init() {
                 advertData);
         GAPRole_SetParameter(GAPROLE_SCAN_RSP_DATA, sizeof(scanRspData),
                 scanRspData);
-
-        GAPRole_SetParameter(GAPROLE_MIN_CONN_INTERVAL, sizeof(uint16_t),
-                &conn_intv);
-
-        GAPRole_SetParameter(GAPROLE_MAX_CONN_INTERVAL, sizeof(uint16_t),
-                &conn_intv);
     }
 
     // Set the GAP Characteristics
@@ -250,7 +242,7 @@ void HidEmu_Init() {
  * @return  events not processed
  */
 uint16_t HidEmu_ProcessEvent(uint8_t task_id, uint16_t events) {
-    static uint8_t send_char = 4;
+//    static uint8_t send_char = 4;
 
     if (events & SYS_EVENT_MSG) {
         uint8_t *pMsg;
