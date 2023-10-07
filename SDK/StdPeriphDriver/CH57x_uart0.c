@@ -21,10 +21,10 @@
  *
  * @return  none
  */
-void UART0_DefInit(void) {
+void UART0_DefInit(void)
+{
     UART0_BaudRateCfg(115200);
-    R8_UART0_FCR = (2 << 6) | RB_FCR_TX_FIFO_CLR | RB_FCR_RX_FIFO_CLR
-            | RB_FCR_FIFO_EN; // FIFO打开，触发点4字节
+    R8_UART0_FCR = (2 << 6) | RB_FCR_TX_FIFO_CLR | RB_FCR_RX_FIFO_CLR | RB_FCR_FIFO_EN; // FIFO打开，触发点4字节
     R8_UART0_LCR = RB_LCR_WORD_SZ;
     R8_UART0_IER = RB_IER_TXD_EN;
     R8_UART0_DIV = 1;
@@ -39,12 +39,13 @@ void UART0_DefInit(void) {
  *
  * @return  none
  */
-void UART0_BaudRateCfg(uint32_t baudrate) {
+void UART0_BaudRateCfg(uint32_t baudrate)
+{
     uint32_t x;
 
     x = 10 * GetSysClock() / 8 / baudrate;
     x = (x + 5) / 10;
-    R16_UART0_DL = (uint16_t) x;
+    R16_UART0_DL = (uint16_t)x;
 }
 
 /*********************************************************************
@@ -56,7 +57,8 @@ void UART0_BaudRateCfg(uint32_t baudrate) {
  *
  * @return  none
  */
-void UART0_ByteTrigCfg(UARTByteTRIGTypeDef b) {
+void UART0_ByteTrigCfg(UARTByteTRIGTypeDef b)
+{
     R8_UART0_FCR = (R8_UART0_FCR & ~RB_FCR_FIFO_TRIG) | (b << 6);
 }
 
@@ -74,11 +76,15 @@ void UART0_ByteTrigCfg(UARTByteTRIGTypeDef b) {
  *
  * @return  none
  */
-void UART0_INTCfg(FunctionalState s, uint8_t i) {
-    if (s) {
+void UART0_INTCfg(FunctionalState s, uint8_t i)
+{
+    if(s)
+    {
         R8_UART0_IER |= i;
         R8_UART0_MCR |= RB_MCR_INT_OE;
-    } else {
+    }
+    else
+    {
         R8_UART0_IER &= ~i;
     }
 }
@@ -92,7 +98,8 @@ void UART0_INTCfg(FunctionalState s, uint8_t i) {
  *
  * @return  none
  */
-void UART0_Reset(void) {
+void UART0_Reset(void)
+{
     R8_UART0_IER = RB_IER_RESET;
 }
 
@@ -106,7 +113,8 @@ void UART0_Reset(void) {
  *
  * @return  none
  */
-void UART0_SendString(uint8_t *buf, uint16_t l) {
+void UART0_SendString(uint8_t *buf, uint16_t l)
+{
     uint16_t len = l;
 
     while(len)
@@ -128,7 +136,8 @@ void UART0_SendString(uint8_t *buf, uint16_t l) {
  *
  * @return  读取数据长度
  */
-uint16_t UART0_RecvString(uint8_t *buf) {
+uint16_t UART0_RecvString(uint8_t *buf)
+{
     uint16_t len = 0;
 
     while(R8_UART0_RFC)

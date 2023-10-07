@@ -22,7 +22,8 @@ extern "C" {
 /**
  * @brief  adc single channel define
  */
-typedef enum {
+typedef enum
+{
     CH_EXTIN_0 = 0,   // ADC 外部模拟通道 0
     CH_EXTIN_1,       // ADC 外部模拟通道 1
     CH_EXTIN_2,       // ADC 外部模拟通道 2
@@ -42,7 +43,8 @@ typedef enum {
 /**
  * @brief  adc differential channel define
  */
-typedef enum {
+typedef enum
+{
     CH_DIFF_0_2 = 0, // ADC 差分通道 #0-#2
     CH_DIFF_1_3,     // ADC 差分通道 #1-#3
 
@@ -51,7 +53,8 @@ typedef enum {
 /**
  * @brief  adc sampling clock
  */
-typedef enum {
+typedef enum
+{
     SampleFreq_3_2 = 0, // 3.2M 采样频率
     SampleFreq_8,       // 8M 采样频率
     SampleFreq_5_33,    // 5.33M 采样频率
@@ -61,7 +64,8 @@ typedef enum {
 /**
  * @brief  adc signal PGA
  */
-typedef enum {
+typedef enum
+{
     ADC_PGA_1_4 = 0, // -12dB, 1/4倍
     ADC_PGA_1_2,     // -6dB, 1/2倍
     ADC_PGA_0,       // 0dB, 1倍，无增益
@@ -71,10 +75,12 @@ typedef enum {
 /**
  * @brief  Configuration DMA mode
  */
-typedef enum {
+typedef enum
+{
     ADC_Mode_Single = 0, // 单次模式
     ADC_Mode_LOOP,       // 循环模式
 } ADC_DMAModeTypeDef;
+
 
 /**
  * @brief   设置 ADC 采样通道
@@ -184,8 +190,7 @@ void ADC_AutoConverCycle(uint8_t cycle);
  * @param   endAddr     - DMA 结束地址
  * @param   m           - 配置DMA模式
  */
-void ADC_DMACfg(uint8_t s, uint16_t startAddr, uint16_t endAddr,
-        ADC_DMAModeTypeDef m);
+void ADC_DMACfg(uint8_t s, uint16_t startAddr, uint16_t endAddr, ADC_DMAModeTypeDef m);
 
 /**
  * @brief   Convert ADC value to temperature(Celsius)
@@ -247,6 +252,7 @@ int adc_to_temperature_celsius(uint16_t adc_val);
  * @brief   清除TouchKey中断标志
  */
 #define TouchKey_ClearITFlag()    (R8_TKEY_CTRL |= RB_TKEY_PWR_ON)
+
 
 #ifdef __cplusplus
 }

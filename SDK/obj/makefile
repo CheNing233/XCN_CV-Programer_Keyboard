@@ -54,13 +54,13 @@ all: SDK.elf secondary-outputs
 
 # 工具调用
 SDK.elf: $(OBJS) $(USER_OBJS)
-	@	@	riscv-none-embed-gcc -march=rv32imac -mabi=ilp32 -mcmodel=medany -msmall-data-limit=8 -mno-save-restore -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common  -g -T "C:\Users\19156\Desktop\SRC\Ld\Link.ld" -nostartfiles -Xlinker --gc-sections -s -L"../" -L"C:\Users\19156\Desktop\DualModeKeyboard\LIB" -L"C:\Users\19156\Desktop\SRC\StdPeriphDriver" -Xlinker --print-memory-usage -Wl,-Map,"SDK.map" --specs=nano.specs --specs=nosys.specs -o "SDK.elf" $(OBJS) $(USER_OBJS) $(LIBS)
+	@	@	riscv-none-embed-gcc -march=rv32imac -mabi=ilp32 -mcmodel=medany -msmall-data-limit=8 -mno-save-restore -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -Wunused  -g -T "C:\Users\19156\Desktop\DualModeKeyboard\SDK\Ld\Link.ld" -nostartfiles -Xlinker --gc-sections -L"C:\Users\19156\Desktop\DualModeKeyboard\SDK\StdPeriphDriver" -L"C:\Users\19156\Desktop\DualModeKeyboard\SDK\LIB" -Xlinker --print-memory-usage -Wl,-Map,"SDK.map" --specs=nano.specs --specs=nosys.specs -o "SDK.elf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@	@
 SDK.hex: SDK.elf
 	@	riscv-none-embed-objcopy -O ihex "SDK.elf"  "SDK.hex"
 	@	@
 SDK.lst: SDK.elf
-	@	riscv-none-embed-objdump --source --all-headers --demangle --line-numbers --wide -D "SDK.elf" > "SDK.lst"
+	@	riscv-none-embed-objdump --source --all-headers --demangle --line-numbers --wide "SDK.elf" > "SDK.lst"
 	@	@
 SDK.siz: SDK.elf
 	@	riscv-none-embed-size --format=berkeley "SDK.elf"

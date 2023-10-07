@@ -1,4 +1,4 @@
-StdPeriphDriver/CH57x_sys.o: ../StdPeriphDriver/CH57x_sys.c \
+StdPeriphDriver/CH57x_uart0.o: ../StdPeriphDriver/CH57x_uart0.c \
  C:\Users\19156\Desktop\DualModeKeyboard\SDK\StdPeriphDriver\inc/CH57x_common.h \
  C:\Users\19156\Desktop\DualModeKeyboard\SDK\StdPeriphDriver\inc/CH573SFR.h \
  C:\Users\19156\Desktop\DualModeKeyboard\SDK\RVMSIS/core_riscv.h \

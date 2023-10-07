@@ -20,7 +20,8 @@ extern "C" {
 /**
  * @brief  系统主频定义
  */
-typedef enum {
+typedef enum
+{
     CLK_SOURCE_LSI = 0x00,
     CLK_SOURCE_LSE,
 
@@ -44,23 +45,30 @@ typedef enum {
 /**
  * @brief  32K时钟选择
  */
-typedef enum {
-    Clk32K_LSI = 0, Clk32K_LSE,
+typedef enum
+{
+    Clk32K_LSI = 0,
+    Clk32K_LSE,
 
 } LClk32KTypeDef;
 
 /**
  * @brief  32M晶振电流挡位
  */
-typedef enum {
-    HSE_RCur_75 = 0, HSE_RCur_100, HSE_RCur_125, HSE_RCur_150
+typedef enum
+{
+    HSE_RCur_75 = 0,
+    HSE_RCur_100,
+    HSE_RCur_125,
+    HSE_RCur_150
 
 } HSECurrentTypeDef;
 
 /**
  * @brief  32M晶振内部电容挡位
  */
-typedef enum {
+typedef enum
+{
     HSECap_10p = 0,
     HSECap_12p,
     HSECap_14p,
@@ -75,15 +83,20 @@ typedef enum {
 /**
  * @brief  32K晶振电流挡位
  */
-typedef enum {
-    LSE_RCur_70 = 0, LSE_RCur_100, LSE_RCur_140, LSE_RCur_200
+typedef enum
+{
+    LSE_RCur_70 = 0,
+    LSE_RCur_100,
+    LSE_RCur_140,
+    LSE_RCur_200
 
 } LSECurrentTypeDef;
 
 /**
  * @brief  32K晶振内部电容挡位
  */
-typedef enum {
+typedef enum
+{
     LSECap_2p = 0,
     LSECap_13p,
     LSECap_14p,
@@ -115,7 +128,8 @@ typedef enum {
 /**
  * @brief  rtc timer mode period define
  */
-typedef enum {
+typedef enum
+{
     Period_0_125_S = 0, // 0.125s 周期
     Period_0_25_S,      // 0.25s 周期
     Period_0_5_S,       // 0.5s 周期
@@ -129,7 +143,8 @@ typedef enum {
 /**
  * @brief  rtc interrupt event define
  */
-typedef enum {
+typedef enum
+{
     RTC_TRIG_EVENT = 0, // RTC 触发事件
     RTC_TMR_EVENT,      // RTC 周期定时事件
 
@@ -138,7 +153,8 @@ typedef enum {
 /**
  * @brief  rtc interrupt event define
  */
-typedef enum {
+typedef enum
+{
     RTC_TRIG_MODE = 0, // RTC 触发模式
     RTC_TMR_MODE,      // RTC 周期定时模式
 
@@ -216,8 +232,7 @@ void LSI_SetTune_RAM(void);
  * @param   m       - 配置分钟，MAX_M = 59
  * @param   s       - 配置秒，MAX_S = 59
  */
-void RTC_InitTime(uint16_t y, uint16_t mon, uint16_t d, uint16_t h, uint16_t m,
-        uint16_t s);
+void RTC_InitTime(uint16_t y, uint16_t mon, uint16_t d, uint16_t h, uint16_t m, uint16_t s);
 
 /**
  * @brief   获取当前时间
@@ -229,8 +244,7 @@ void RTC_InitTime(uint16_t y, uint16_t mon, uint16_t d, uint16_t h, uint16_t m,
  * @param   pm      - 获取到的分钟，MAX_M = 59
  * @param   ps      - 获取到的秒，MAX_S = 59
  */
-void RTC_GetTime(uint16_t *py, uint16_t *pmon, uint16_t *pd, uint16_t *ph,
-        uint16_t *pm, uint16_t *ps);
+void RTC_GetTime(uint16_t *py, uint16_t *pmon, uint16_t *pd, uint16_t *ph, uint16_t *pm, uint16_t *ps);
 
 /**
  * @brief   基于LSE/LSI时钟，配置当前RTC 周期数

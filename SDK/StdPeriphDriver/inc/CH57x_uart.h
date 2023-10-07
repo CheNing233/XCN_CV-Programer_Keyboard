@@ -32,7 +32,8 @@ extern "C" {
 /**
  * @brief  Configuration UART TrigByte num
  */
-typedef enum {
+typedef enum
+{
     UART_1BYTE_TRIG = 0, // 1字节触发
     UART_2BYTE_TRIG,     // 2字节触发
     UART_4BYTE_TRIG,     // 4字节触发

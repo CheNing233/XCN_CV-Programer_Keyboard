@@ -18,12 +18,12 @@ extern "C" {
 #endif
 
 #if DISK_LIB_ENABLE
-#if DISK_WITHOUT_USB_HUB
-/* 不使用U盘文件系统库或者U盘挂载USBhub下面，需要关闭下面定义 */
-#define FOR_ROOT_UDISK_ONLY
-#endif
-/* 使用U盘文件系统库，需要开启下面定义, 不使用请关闭 */
-#define DISK_BASE_BUF_LEN    512  /* 默认的磁盘数据缓冲区大小为512字节,建议选择为2048甚至4096以支持某些大扇区的U盘,为0则禁止在.H文件中定义缓冲区并由应用程序在pDISK_BASE_BUF中指定 */
+  #if DISK_WITHOUT_USB_HUB
+    /* 不使用U盘文件系统库或者U盘挂载USBhub下面，需要关闭下面定义 */
+    #define FOR_ROOT_UDISK_ONLY
+  #endif
+    /* 使用U盘文件系统库，需要开启下面定义, 不使用请关闭 */
+  #define DISK_BASE_BUF_LEN    512  /* 默认的磁盘数据缓冲区大小为512字节,建议选择为2048甚至4096以支持某些大扇区的U盘,为0则禁止在.H文件中定义缓冲区并由应用程序在pDISK_BASE_BUF中指定 */
 #endif
 
 // 各子程序返回状态码
@@ -48,39 +48,41 @@ extern "C" {
 #define DEV_TYPE_UNKNOW        0xFF
 
 /*
- 约定: USB设备地址分配规则(参考USB_DEVICE_ADDR)
- 地址值  设备位置
- 0x02    内置Root-HUB下的USB设备或外部HUB
- 0x1x    内置Root-HUB下的外部HUB的端口x下的USB设备,x为1~n
- */
+约定: USB设备地址分配规则(参考USB_DEVICE_ADDR)
+地址值  设备位置
+0x02    内置Root-HUB下的USB设备或外部HUB
+0x1x    内置Root-HUB下的外部HUB的端口x下的USB设备,x为1~n
+*/
 #define HUB_MAX_PORTS          4
 #define WAIT_USB_TOUT_200US    800   // 等待USB中断超时时间
 
-typedef struct {
-    uint8_t DeviceStatus;  // 设备状态,0-无设备,1-有设备但尚未初始化,2-有设备但初始化枚举失败,3-有设备且初始化枚举成功
-    uint8_t DeviceAddress; // 设备被分配的USB地址
-    uint8_t DeviceSpeed;   // 0为低速,非0为全速
-    uint8_t DeviceType;    // 设备类型
+typedef struct
+{
+    uint8_t  DeviceStatus;  // 设备状态,0-无设备,1-有设备但尚未初始化,2-有设备但初始化枚举失败,3-有设备且初始化枚举成功
+    uint8_t  DeviceAddress; // 设备被分配的USB地址
+    uint8_t  DeviceSpeed;   // 0为低速,非0为全速
+    uint8_t  DeviceType;    // 设备类型
     uint16_t DeviceVID;
     uint16_t DevicePID;
-    uint8_t GpVar[4];     // 通用变量，存放端点
-    uint8_t GpHUBPortNum; // 通用变量,如果是HUB，表示HUB端口数
+    uint8_t  GpVar[4];     // 通用变量，存放端点
+    uint8_t  GpHUBPortNum; // 通用变量,如果是HUB，表示HUB端口数
 } _RootHubDev;
 
-typedef struct {
-    UINT8 DeviceStatus;  // 设备状态,0-无设备,1-有设备但尚未初始化,2-有设备但初始化枚举失败,3-有设备且初始化枚举成功
-    UINT8 DeviceAddress; // 设备被分配的USB地址
-    UINT8 DeviceSpeed;   // 0为低速,非0为全速
-    UINT8 DeviceType;    // 设备类型
+typedef struct
+{
+    UINT8  DeviceStatus;  // 设备状态,0-无设备,1-有设备但尚未初始化,2-有设备但初始化枚举失败,3-有设备且初始化枚举成功
+    UINT8  DeviceAddress; // 设备被分配的USB地址
+    UINT8  DeviceSpeed;   // 0为低速,非0为全速
+    UINT8  DeviceType;    // 设备类型
     UINT16 DeviceVID;
     UINT16 DevicePID;
-    UINT8 GpVar[4]; // 通用变量
+    UINT8  GpVar[4]; // 通用变量
 } _DevOnHubPort;     // 假定:不超过1个外部HUB,每个外部HUB不超过HUB_MAX_PORTS个端口(多了不管)
 
-extern _RootHubDev ThisUsbDev;
+extern _RootHubDev   ThisUsbDev;
 extern _DevOnHubPort DevOnHubPort[HUB_MAX_PORTS]; // 假定:不超过1个外部HUB,每个外部HUB不超过HUB_MAX_PORTS个端口(多了不管)
-extern uint8_t UsbDevEndp0Size;             // USB设备的端点0的最大包尺寸 */
-extern uint8_t FoundNewDev;
+extern uint8_t       UsbDevEndp0Size;             // USB设备的端点0的最大包尺寸 */
+extern uint8_t       FoundNewDev;
 
 extern uint8_t *pHOST_RX_RAM_Addr;
 extern uint8_t *pHOST_TX_RAM_Addr;
@@ -230,7 +232,7 @@ uint8_t CtrlSetUsbIntercace(uint8_t cfg);
  * @brief   USB主机功能初始化
  */
 void USB_HostInit(void);
-uint8_t EnumAllHubPort(void);    // 枚举所有ROOT-HUB端口下外部HUB后的二级USB设备
+uint8_t EnumAllHubPort(void);// 枚举所有ROOT-HUB端口下外部HUB后的二级USB设备
 void SelectHubPort(uint8_t HubPortIndex); // HubPortIndex=0选择操作指定的ROOT-HUB端口,否则选择操作指定的ROOT-HUB端口的外部HUB的指定端口
 uint16_t SearchTypeDevice(uint8_t type); // 在ROOT-HUB以及外部HUB各端口上搜索指定类型的设备所在的端口号,输出端口号为0xFFFF则未搜索到.
 uint8_t SETorOFFNumLock(uint8_t *buf); // NumLock的点灯判断

@@ -32,7 +32,8 @@ extern "C" {
 /**
  * @brief  channel of PWM define
  */
-typedef enum {
+typedef enum
+{
     High_Level = 0, // 默认低电平，高电平有效
     Low_Level,      // 默认高电平，低电平有效
 } PWMX_PolarTypeDef;
@@ -40,7 +41,8 @@ typedef enum {
 /**
  * @brief  Configuration PWM4_11 Cycle size
  */
-typedef enum {
+typedef enum
+{
     PWMX_Cycle_256 = 0, // 256 个PWMX周期
     PWMX_Cycle_255,     // 255 个PWMX周期
     PWMX_Cycle_128,     // 128 个PWMX周期
@@ -129,8 +131,7 @@ void PWMX_CycleCfg(PWMX_CycleTypeDef cyc);
  * @param   pr      - select wave polar, refer to PWMX_PolarTypeDef
  * @param   s       - control pwmx function, ENABLE or DISABLE
  */
-void PWMX_ACTOUT(uint8_t ch, uint8_t da, PWMX_PolarTypeDef pr,
-        FunctionalState s);
+void PWMX_ACTOUT(uint8_t ch, uint8_t da, PWMX_PolarTypeDef pr, FunctionalState s);
 
 /**
  * @brief   PWM 交替输出模式配置

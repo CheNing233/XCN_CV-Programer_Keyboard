@@ -134,7 +134,7 @@ void DevEP4_IN_Deal(uint8_t l);
  * @return  0-未完成  (!0)-已完成
  */
 #define EP4_GetINSta()      (R8_UEP4_CTRL&UEP_T_RES_NAK)
-
+	 
 #ifdef __cplusplus
 }
 #endif

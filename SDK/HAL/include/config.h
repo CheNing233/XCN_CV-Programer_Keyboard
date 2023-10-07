@@ -23,6 +23,7 @@
 #else
 #include "CH57xBLE_LIB.H"
 #endif
+
 #include "CH57x_common.h"
 
 /*********************************************************************
@@ -123,10 +124,10 @@
 #define BLE_BUFF_MAX_LEN                    27
 #endif
 #ifndef BLE_BUFF_NUM
-#define BLE_BUFF_NUM                        100
+#define BLE_BUFF_NUM                        80
 #endif
 #ifndef BLE_TX_NUM_EVENT
-#define BLE_TX_NUM_EVENT                    255
+#define BLE_TX_NUM_EVENT                    20
 #endif
 #ifndef BLE_TX_POWER
 #define BLE_TX_POWER                        LL_TX_POWEER_0_DBM

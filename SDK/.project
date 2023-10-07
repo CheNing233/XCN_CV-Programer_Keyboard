@@ -23,41 +23,9 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>HAL</name>
-			<type>2</type>
-			<locationURI>PARENT-1-PROJECT_LOC/HAL</locationURI>
-		</link>
-		<link>
-			<name>LIB</name>
-			<type>2</type>
-			<locationURI>PARENT-1-PROJECT_LOC/LIB</locationURI>
-		</link>
-		<link>
-			<name>Ld</name>
-			<type>2</type>
-			<locationURI>PARENT-2-PROJECT_LOC/SRC/Ld</locationURI>
-		</link>
-		<link>
-			<name>RVMSIS</name>
-			<type>2</type>
-			<locationURI>PARENT-2-PROJECT_LOC/SRC/RVMSIS</locationURI>
-		</link>
-		<link>
-			<name>Startup</name>
-			<type>2</type>
-			<locationURI>PARENT-2-PROJECT_LOC/SRC/Startup</locationURI>
-		</link>
-		<link>
-			<name>StdPeriphDriver</name>
-			<type>2</type>
-			<locationURI>PARENT-2-PROJECT_LOC/SRC/StdPeriphDriver</locationURI>
-		</link>
-	</linkedResources>
 	<filteredResources>
 		<filter>
-			<id>1695504315895</id>
+			<id>1595986042669</id>
 			<name/>
 			<type>22</type>
 			<matcher>

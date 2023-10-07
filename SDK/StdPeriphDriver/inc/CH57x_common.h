@@ -18,7 +18,7 @@ extern "C" {
 #endif
 
 #ifndef NULL
-#define NULL    0
+  #define NULL    0
 #endif
 #define ALL            0xFFFF
 
@@ -28,19 +28,19 @@ extern "C" {
 #define Debug_UART3    3
 
 #ifdef DEBUG
-#include <stdio.h>
+  #include <stdio.h>
 #endif
 
-    /**
-     * @brief  系统主频时钟（Hz）
-     */
+/**
+ * @brief  系统主频时钟（Hz）
+ */
 #ifndef FREQ_SYS
-#define FREQ_SYS    60000000
+  #define FREQ_SYS    60000000
 #endif
 
-    /**
-     * @brief  32K时钟（Hz）
-     */
+/**
+ * @brief  32K时钟（Hz）
+ */
 #ifdef CLK_OSC32K
 #if ( CLK_OSC32K == 1 )
 #define CAB_LSIFQ       32000

@@ -20,7 +20,8 @@ extern "C" {
 /**
  * @brief  rtc interrupt event define
  */
-typedef enum {
+typedef enum
+{
     RST_STATUS_SW = 0, // 软件复位
     RST_STATUS_RPOR,   // 上电复位
     RST_STATUS_WTR,    // 看门狗超时复位
@@ -35,7 +36,8 @@ typedef enum {
 /**
  * @brief  rtc interrupt event define
  */
-typedef enum {
+typedef enum
+{
     INFO_ROM_READ = 0, // FlashROM 代码和数据区 是否可读
     INFO_RESET_EN = 2, // RST#外部手动复位输入功能是否开启
     INFO_BOOT_EN,      // 系统引导程序 BootLoader 是否开启
@@ -171,12 +173,14 @@ void mDelaymS(uint16_t t);
  * @NOTE: 进入安全访问模式后约16个系统主频周期都处于安全模式下，
  * 该有效期内可以改写一个或多个安全类寄存器，超出上述有效期后将自动终止安全模式。
  */
-__attribute__((always_inline)) static inline void sys_safe_access_enable(void) {
+ __attribute__((always_inline)) static inline void sys_safe_access_enable(void)
+{
     R8_SAFE_ACCESS_SIG = SAFE_ACCESS_SIG1;
     R8_SAFE_ACCESS_SIG = SAFE_ACCESS_SIG2;
 }
 
-__attribute__((always_inline)) static inline void sys_safe_access_disable(void) {
+__attribute__((always_inline)) static inline void sys_safe_access_disable(void)
+{
     R8_SAFE_ACCESS_SIG = 0;
 }
 

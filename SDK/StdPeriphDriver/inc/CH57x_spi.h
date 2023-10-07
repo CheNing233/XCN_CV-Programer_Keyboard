@@ -30,7 +30,8 @@ extern "C" {
 /**
  * @brief  Configuration data mode
  */
-typedef enum {
+typedef enum
+{
     Mode0_LowBitINFront = 0, // 模式0，低位在前
     Mode0_HighBitINFront,    // 模式0，高位在前
     Mode3_LowBitINFront,     // 模式3，低位在前
@@ -40,7 +41,8 @@ typedef enum {
 /**
  * @brief  Configuration SPI0 slave mode
  */
-typedef enum {
+typedef enum
+{
     Mode_DataStream = 0, // 数据流模式
     Mose_FirstCmd,       // 首字节命令模式
 } Slave_ModeTypeDef;

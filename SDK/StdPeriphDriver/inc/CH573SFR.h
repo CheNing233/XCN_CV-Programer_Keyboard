@@ -5,6 +5,7 @@
 /* V0.1 SpecialFunctionRegister */
 
 // multi-blocks: __BASE_TYPE__, __CH573SFR_H__, __CH573USBSFR_H__, __USB_TYPE__...
+
 #ifndef __BASE_TYPE__
 #define __BASE_TYPE__
 
@@ -30,86 +31,86 @@ extern "C" {
 #define CONST                   const
 #endif
 #ifndef BOOL
-typedef unsigned char BOOL;
+typedef unsigned char           BOOL;
 #endif
 #ifndef BOOLEAN
-typedef unsigned char BOOLEAN;
+typedef unsigned char           BOOLEAN;
 #endif
 #ifndef CHAR
-typedef char CHAR;
+typedef char                    CHAR;
 #endif
 #ifndef INT8
-typedef char INT8;
+typedef char                    INT8;
 #endif
 #ifndef INT16
-typedef short INT16;
+typedef short                   INT16;
 #endif
 #ifndef INT32
-typedef long INT32;
+typedef long                    INT32;
 #endif
 #ifndef UINT8
-typedef unsigned char UINT8;
+typedef unsigned char           UINT8;
 #endif
 #ifndef UINT16
-typedef unsigned short UINT16;
+typedef unsigned short          UINT16;
 #endif
 #ifndef UINT32
-typedef unsigned long UINT32;
+typedef unsigned long           UINT32;
 #endif
 #ifndef UINT64
-typedef unsigned long long UINT64;
+typedef unsigned long long      UINT64;
 #endif
 #ifndef UINT8V
-typedef unsigned char volatile UINT8V;
+typedef unsigned char volatile  UINT8V;
 #endif
 #ifndef UINT16V
 typedef unsigned short volatile UINT16V;
 #endif
 #ifndef UINT32V
-typedef unsigned long volatile UINT32V;
+typedef unsigned long volatile  UINT32V;
 #endif
 #ifndef UINT64V
-typedef unsigned long long volatile UINT64V;
+typedef unsigned long long volatile  UINT64V;
 #endif
 
 #ifndef PVOID
-typedef void *PVOID;
+typedef void                    *PVOID;
 #endif
 #ifndef PCHAR
-typedef char *PCHAR;
+typedef char                    *PCHAR;
 #endif
 #ifndef PCHAR
-typedef const char *PCCHAR;
+typedef const char              *PCCHAR;
 #endif
 #ifndef PINT8
-typedef char *PINT8;
+typedef char                    *PINT8;
 #endif
 #ifndef PINT16
-typedef short *PINT16;
+typedef short                   *PINT16;
 #endif
 #ifndef PINT32
-typedef long *PINT32;
+typedef long                    *PINT32;
 #endif
 #ifndef PUINT8
-typedef unsigned char *PUINT8;
+typedef unsigned char           *PUINT8;
 #endif
 #ifndef PUINT16
-typedef unsigned short *PUINT16;
+typedef unsigned short          *PUINT16;
 #endif
 #ifndef PUINT32
-typedef unsigned long *PUINT32;
+typedef unsigned long           *PUINT32;
 #endif
 #ifndef PUINT8V
-typedef volatile unsigned char *PUINT8V;
+typedef volatile unsigned char  *PUINT8V;
 #endif
 #ifndef PUINT16V
 typedef volatile unsigned short *PUINT16V;
 #endif
 #ifndef PUINT32V
-typedef volatile unsigned long *PUINT32V;
+typedef volatile unsigned long  *PUINT32V;
 #endif
 #ifndef PUINT64V
-typedef volatile unsigned long long *PUINT64V;
+typedef volatile unsigned long long  *PUINT64V;
 #endif
 
 /* ********************************************************************************************************************* */
@@ -147,6 +148,7 @@ typedef volatile unsigned long long *PUINT64V;
 
 #endif  // __BASE_TYPE__
 
+
 #ifndef __CH573SFR_H__
 #define __CH573SFR_H__
 
@@ -175,6 +177,7 @@ extern "C" {
 //      PWMx:    +5000H - 53FFH
 //      USB:     +8000H - 83FFH
 //      BLE:     +C000H - D3FFH
+
 // Register Bit Attribute / Bit Access Type
 //   RF:    Read only for Fixed value
 //   RO:    Read Only (internal change)
@@ -185,14 +188,15 @@ extern "C" {
 //   RW:    Read / Write
 //   RWA:   Read / Write under safe Accessing mode
 //   RW1:   Read / Write 1 to Clear
+
 /* Register name rule:
- R32_* for 32 bits register (UINT32,ULONG)
- R16_* for 16 bits register (UINT16,USHORT)
- R8_*  for  8 bits register (UINT8,UCHAR)
- RB_*  for bit or bit mask of 8 bit register
- BA_*  for base address point
- b*    for GPIO bit mask
- Others for register address offset */
+   R32_* for 32 bits register (UINT32,ULONG)
+   R16_* for 16 bits register (UINT16,USHORT)
+   R8_*  for  8 bits register (UINT8,UCHAR)
+   RB_*  for bit or bit mask of 8 bit register
+   BA_*  for base address point
+   b*    for GPIO bit mask
+   Others for register address offset */
 
 /* ********************************************************************************************************************* */
 
@@ -1073,38 +1077,41 @@ extern "C" {
 #ifndef TABLE_IRQN
 #define __PFIC_PRIO_BITS          2 /*!< uses 8 Bits for the Priority Levels    */
 #define __Vendor_SysTickConfig    0 /*!< Set to 1 if different SysTick Config is used */
-typedef enum IRQn {
-    Reset_IRQn = 1,
-    NMI_IRQn = 2, /*!<  Non Maskable Interrupt   */
-    EXC_IRQn = 3, /*!<  Exceptions Interrupt     */
-    SysTick_IRQn = 12, /*!<  System timer Interrupt  */
-    SWI_IRQn = 14, /*!<  software Interrupt */
-    TMR0_IRQn = 16,
-    GPIO_A_IRQn = 17,
-    GPIO_B_IRQn = 18,
-    SPI0_IRQn = 19,
-    BLEB_IRQn = 20,
-    BLEL_IRQn = 21,
-    USB_IRQn = 22,
-    TMR1_IRQn = 24,
-    TMR2_IRQn = 25,
-    UART0_IRQn = 26,
-    UART1_IRQn = 27,
-    RTC_IRQn = 28,
-    ADC_IRQn = 29,
-    PWMX_IRQn = 31,
-    TMR3_IRQn = 32,
-    UART2_IRQn = 33,
-    UART3_IRQn = 34,
-    WDOG_BAT_IRQn = 35
+typedef enum IRQn
+{
+  Reset_IRQn                    = 1,
+  NMI_IRQn                      = 2,      /*!<  Non Maskable Interrupt   */
+  EXC_IRQn                      = 3,      /*!<  Exceptions Interrupt     */
+  SysTick_IRQn                  = 12,	  /*!<  System timer Interrupt  */
+  SWI_IRQn                      = 14,     /*!<  software Interrupt */
+  TMR0_IRQn                     = 16,
+  GPIO_A_IRQn                   = 17,
+  GPIO_B_IRQn                   = 18,
+  SPI0_IRQn                     = 19,
+  BLEB_IRQn                     = 20,
+  BLEL_IRQn                     = 21,
+  USB_IRQn                      = 22,
+  TMR1_IRQn                     = 24,
+  TMR2_IRQn                     = 25,
+  UART0_IRQn                    = 26,
+  UART1_IRQn                    = 27,
+  RTC_IRQn                      = 28,
+  ADC_IRQn                      = 29,
+  PWMX_IRQn                     = 31,
+  TMR3_IRQn                     = 32,
+  UART2_IRQn                    = 33,
+  UART3_IRQn                    = 34,
+  WDOG_BAT_IRQn                 = 35
 } IRQn_Type;
 #endif
+
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif  // __CH573SFR_H__
+
 
 #ifndef __CH573USBSFR_H__
 #define __CH573USBSFR_H__
@@ -1117,7 +1124,7 @@ extern "C" {
 /*                         Peripheral memory map                              */
 /******************************************************************************/
 /* usb addresses         
- //      USB:     +8000H - 83FFH                                                    */
+//      USB:     +8000H - 83FFH                                                    */
 #define USB_BASE_ADDR              (0x40008000)
 
 /*       USB  */
@@ -1333,6 +1340,7 @@ extern "C" {
 #endif
 
 #endif //__CH573USBSFR_H__
+
 
 #ifndef __USB_TYPE__
 #define __USB_TYPE__
@@ -1566,14 +1574,14 @@ typedef struct __PACKED _USB_ENDPOINT_DESCR {
 } USB_ENDP_DESCR, *PUSB_ENDP_DESCR;
 
 typedef struct __PACKED _USB_CONFIG_DESCR_LONG {
-    USB_CFG_DESCR cfg_descr;
-    USB_ITF_DESCR itf_descr;
-    USB_ENDP_DESCR endp_descr[1];
+    USB_CFG_DESCR   cfg_descr;
+    USB_ITF_DESCR   itf_descr;
+    USB_ENDP_DESCR  endp_descr[1];
 } USB_CFG_DESCR_LONG, *PUSB_CFG_DESCR_LONG;
 
 typedef USB_CFG_DESCR_LONG *PXUSB_CFG_DESCR_LONG;
 
-typedef struct __PACKED _USB_HUB_DESCR {
+typedef struct __PACKED  _USB_HUB_DESCR {
     UINT8 bDescLength;
     UINT8 bDescriptorType;
     UINT8 bNbrPorts;
@@ -1585,9 +1593,9 @@ typedef struct __PACKED _USB_HUB_DESCR {
     UINT8 PortPwrCtrlMask;
 } USB_HUB_DESCR, *PUSB_HUB_DESCR;
 
-typedef USB_HUB_DESCR *PXUSB_HUB_DESCR;
+typedef USB_HUB_DESCR  *PXUSB_HUB_DESCR;
 
-typedef struct __PACKED _USB_HID_DESCR {
+typedef struct __PACKED  _USB_HID_DESCR {
     UINT8 bLength;
     UINT8 bDescriptorType;
     UINT16 bcdHID;
@@ -1600,26 +1608,26 @@ typedef struct __PACKED _USB_HID_DESCR {
 
 typedef USB_HID_DESCR *PXUSB_HID_DESCR;
 
-typedef struct __PACKED _UDISK_BOC_CBW { /* command of BulkOnly USB-FlashDisk */
+typedef struct __PACKED  _UDISK_BOC_CBW {         /* command of BulkOnly USB-FlashDisk */
     UINT32 mCBW_Sig;
     UINT32 mCBW_Tag;
-    UINT32 mCBW_DataLen; /* uppest byte of data length, always is 0 */
-    UINT8 mCBW_Flag; /* transfer direction and etc. */
+    UINT32 mCBW_DataLen;                /* uppest byte of data length, always is 0 */
+    UINT8 mCBW_Flag;                    /* transfer direction and etc. */
     UINT8 mCBW_LUN;
-    UINT8 mCBW_CB_Len; /* length of command block */
-    UINT8 mCBW_CB_Buf[16]; /* command block buffer */
+    UINT8 mCBW_CB_Len;                  /* length of command block */
+    UINT8 mCBW_CB_Buf[16];              /* command block buffer */
 } UDISK_BOC_CBW, *PUDISK_BOC_CBW;
 
-typedef UDISK_BOC_CBW *PXUDISK_BOC_CBW;
+typedef UDISK_BOC_CBW  *PXUDISK_BOC_CBW;
 
-typedef struct __PACKED _UDISK_BOC_CSW { /* status of BulkOnly USB-FlashDisk */
+typedef struct __PACKED  _UDISK_BOC_CSW {         /* status of BulkOnly USB-FlashDisk */
     UINT32 mCSW_Sig;
     UINT32 mCSW_Tag;
-    UINT32 mCSW_Residue; /* return: remainder bytes */
-    UINT8 mCSW_Status; /* return: result status */
+    UINT32 mCSW_Residue;                /* return: remainder bytes */
+    UINT8 mCSW_Status;                  /* return: result status */
 } UDISK_BOC_CSW, *PUDISK_BOC_CSW;
 
-typedef UDISK_BOC_CSW *PXUDISK_BOC_CSW;
+typedef UDISK_BOC_CSW  *PXUDISK_BOC_CSW;
 
 #ifdef __cplusplus
 }
