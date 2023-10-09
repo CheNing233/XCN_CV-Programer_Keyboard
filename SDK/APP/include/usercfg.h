@@ -21,8 +21,16 @@
 
 #define KEYCFG_ROM_RBT 0x0500
 
+typedef enum {
+    CMD_R_CHECK_VALID,
+    CMD_W_USERCFG,
+    CMD_R_USERCFG,
+    CMD_W_KEYSET,
+    CMD_R_KEYSET
+} cmd_index;
+
 typedef struct __PACKED _usercfg {
-    uint8_t Init_Flag;// 已初始化到ROM标志
+    uint8_t Init_Flag; // 已初始化到ROM标志
 
     uint32_t Proto_FreshState_Interval;// 协议状态刷新轮询间隔
     uint8_t Proto_USBBuffer_PushInterval;// USB推送间隔
@@ -43,7 +51,7 @@ typedef struct __PACKED _usercfg {
 
 } usercfg;
 
-typedef struct __PACKED _keycfg{
+typedef struct __PACKED _keycfg {
     uint8_t Init_Flag;
 
     uint8_t Set_Keys[8];
@@ -55,12 +63,9 @@ typedef struct __PACKED _keycfg{
     uint8_t FinishTsk_RlseCnt;
     uint8_t FinishTsk_HoldCnt;
 
-    uint32_t SwitchKeys_DelayCnt;
-
-    uint32_t NextPos_Relative;
-    uint8_t Reset_Flag;
+    uint32_t SwitchNext_DelayCnt;
+    uint16_t NextPos;
 } keycfg;
-
 
 extern usercfg UserCfg_RAM;
 
@@ -74,8 +79,11 @@ extern keycfg KeyCfg_RAM_RL;
 extern keycfg KeyCfg_RAM_RR;
 
 extern void UserCfg_Init();
+extern void UserCfg_Read_Setting();
+extern void UserCfg_Write_Setting(uint8_t* ram_addr);
 
+extern void KeyCfg_Read_Setting(uint8_t* dstp, uint16_t keyset_addr, uint16_t offset);
+extern void KeyCfg_Write_Setting(uint8_t* ram_addr, uint16_t keyset_addr, uint16_t offset);
 extern void KeyCfg_JumpNext(uint32_t StartPos, keycfg* P_KeyCfg);
-extern void KeyCfg_Reset(uint32_t StartPos, keycfg* P_KeyCfg);
 
 #endif /* INCLUDE_USERCFG_H_ */

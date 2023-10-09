@@ -32,8 +32,7 @@ extern "C" {
 /**
  * @brief  Configuration PWM effective level repeat times
  */
-typedef enum
-{
+typedef enum {
     PWM_Times_1 = 0, // PWM 有效输出重复1次数
     PWM_Times_4,     // PWM 有效输出重复4次数
     PWM_Times_8,     // PWM 有效输出重复8次数
@@ -43,8 +42,7 @@ typedef enum
 /**
  * @brief  Configuration Cap mode
  */
-typedef enum
-{
+typedef enum {
     CAP_NULL = 0,         // 不捕捉 & 不计数
     Edge_To_Edge,         // 任意边沿之间  &  计数任意边沿
     FallEdge_To_FallEdge, // 下降沿到下降沿  & 计数下降沿
@@ -54,8 +52,7 @@ typedef enum
 /**
  * @brief  Configuration DMA mode
  */
-typedef enum
-{
+typedef enum {
     Mode_Single = 0, // 单次模式
     Mode_LOOP,       // 循环模式
 } DMAModeTypeDef;

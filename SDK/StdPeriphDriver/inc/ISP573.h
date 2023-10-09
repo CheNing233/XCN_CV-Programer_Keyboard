@@ -5,19 +5,19 @@
 /* V1.0 FlashROM library for USER/BOOT */
 /* for the target in USER code area on the chip divided into USER code area and BOOT area */
 /* 用于具有用户代码区和引导区的芯片、操作目标为用户代码区的情况，
-   可以在用户代码中被调用（IAP，擦写自身），也可以在引导代码中被调用（更新用户代码） */
+ 可以在用户代码中被调用（IAP，擦写自身），也可以在引导代码中被调用（更新用户代码） */
 
 /* Flash-ROM feature:
-     for store program code, support block erasing, dword and page writing, dword verifying, unit for Length is byte,
-     minimal quantity for write or verify is one dword (4-bytes),
-     256 bytes/page for writing, FLASH_ROM_WRITE support one dword or more dword writing, but multiple of 256 is the best,
-     4KB (4096 bytes) bytes/block for erasing, so multiple of 4096 is the best */
+ for store program code, support block erasing, dword and page writing, dword verifying, unit for Length is byte,
+ minimal quantity for write or verify is one dword (4-bytes),
+ 256 bytes/page for writing, FLASH_ROM_WRITE support one dword or more dword writing, but multiple of 256 is the best,
+ 4KB (4096 bytes) bytes/block for erasing, so multiple of 4096 is the best */
 
 /* Data-Flash(EEPROM) feature:
-     for store data, support block erasing, byte and page writing, byte reading,
-     minimal quantity for write or read is one byte,
-     256 bytes/page for writing, EEPROM_WRITE support one byte or more byte writing, but multiple of 256 is the best,
-     0.25KB/4KB (256/4096 bytes) bytes/block for erasing, so multiple of 256 or 4096 is the best */
+ for store data, support block erasing, byte and page writing, byte reading,
+ minimal quantity for write or read is one byte,
+ 256 bytes/page for writing, EEPROM_WRITE support one byte or more byte writing, but multiple of 256 is the best,
+ 0.25KB/4KB (256/4096 bytes) bytes/block for erasing, so multiple of 256 or 4096 is the best */
 
 #ifndef EEPROM_PAGE_SIZE
 #define EEPROM_PAGE_SIZE      256               // Flash-ROM & Data-Flash page size for writing
@@ -44,7 +44,7 @@
 #define CMD_FLASH_ROM_PWR_DOWN    0x0D  // power-down FlashROM, without parameter
 #define CMD_FLASH_ROM_PWR_UP      0x0C  // power-up FlashROM, without parameter
 #define CMD_FLASH_ROM_LOCK        0x08  // lock(protect)/unlock FlashROM data block, return 0 if success, parameter @StartAddr
-                                      // StartAddr: 0=unlock all, 1=lock boot code, 3=lock all code and data
+// StartAddr: 0=unlock all, 1=lock boot code, 3=lock all code and data
 
 #define CMD_EEPROM_ERASE          0x09  // erase Data-Flash block, return 0 if success, parameter @StartAddr,Length
 #define CMD_EEPROM_WRITE          0x0A  // write Data-Flash data block, return 0 if success, parameter @StartAddr,Buffer,Length

@@ -49,8 +49,7 @@ extern "C" {
 /**
  * @brief  Configuration GPIO Mode
  */
-typedef enum
-{
+typedef enum {
     GPIO_ModeIN_Floating, //浮空输入
     GPIO_ModeIN_PU,       //上拉输入
     GPIO_ModeIN_PD,       //下拉输入
@@ -62,8 +61,7 @@ typedef enum
 /**
  * @brief  Configuration GPIO IT Mode
  */
-typedef enum
-{
+typedef enum {
     GPIO_ITMode_LowLevel,  //低电平触发
     GPIO_ITMode_HighLevel, //高电平触发
     GPIO_ITMode_FallEdge,  //下降沿触发

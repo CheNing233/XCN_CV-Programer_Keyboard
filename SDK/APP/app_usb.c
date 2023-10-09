@@ -13,10 +13,10 @@
 #include "usercfg.h"
 
 // 端点缓存区
-__attribute__((aligned(4)))          uint8_t EP0_Databuf[64 + 64 + 64]; //ep0(64)+ep4_out(64)+ep4_in(64)
-__attribute__((aligned(4)))          uint8_t EP1_Databuf[64 + 64]; //ep1_out(64)+ep1_in(64)
-__attribute__((aligned(4)))          uint8_t EP2_Databuf[64 + 64]; //ep2_out(64)+ep2_in(64)
-__attribute__((aligned(4)))          uint8_t EP3_Databuf[64 + 64]; //ep3_out(64)+ep3_in(64)
+__attribute__((aligned(4)))               uint8_t EP0_Databuf[64 + 64 + 64]; //ep0(64)+ep4_out(64)+ep4_in(64)
+__attribute__((aligned(4)))               uint8_t EP1_Databuf[64 + 64]; //ep1_out(64)+ep1_in(64)
+__attribute__((aligned(4)))               uint8_t EP2_Databuf[64 + 64]; //ep2_out(64)+ep2_in(64)
+__attribute__((aligned(4)))               uint8_t EP3_Databuf[64 + 64]; //ep3_out(64)+ep3_in(64)
 
 /*
  * @brief 用户代码
@@ -39,6 +39,155 @@ void USB_CB_LightChange(uint8_t light_state) {
 
 }
 
+void USB_BulkTrans(uint8_t length, uint8_t cmdkey) {
+
+//
+//    if (pEP4_OUT_DataBuf[0] == 'w') {
+//        //擦除数据
+//        //这里的length 是字节,但是实际的擦除是按照256字节高位对齐,比如传入257字节,实际是擦除了512字节.
+//        //擦除后的区域,使用EEPROM_READ读出来默认是0xff,使用指针方式绝对地址读取,非0xff
+//        //传入的地址是相对地址,0对应dataflash的起始地址
+//        len = pEP4_OUT_DataBuf[1];
+//
+//        EEPROM_ERASE(0, 256);
+//
+//        //写入数据
+//        //这里的buffer是需要写入的指针数据,不需要进行4字节对齐,数据长度是1的倍数,数据需要在RAM里面
+//        //传入的地址是相对地址,0对应dataflash的起始地址
+//        EEPROM_WRITE(0, pEP4_OUT_DataBuf+2, len);
+//
+//        // ACK
+//        pEP3_IN_DataBuf[0] = 66;
+//        DevEP3_IN_Deal(1);
+//    }
+//
+//    if (pEP4_OUT_DataBuf[0] == 'r') {
+//        len = pEP4_OUT_DataBuf[1];
+//
+//        EEPROM_READ(0, pEP3_IN_DataBuf, len);
+//        DevEP3_IN_Deal(len);
+//    }
+//
+//    if (pEP4_OUT_DataBuf[0] == 'u') {
+//
+//        tmos_memcpy(pEP3_IN_DataBuf, &UserCfg_RAM, sizeof(usercfg));
+//
+//        DevEP3_IN_Deal(sizeof(usercfg));
+//
+//    }
+
+    uint16_t keyset_addr = 0;
+
+    keycfg temp_keycfg = {
+        0
+    };
+
+    switch (cmdkey) {
+    case CMD_R_CHECK_VALID:
+        pEP3_IN_DataBuf[0] = 233;
+        pEP3_IN_DataBuf[1] = 0;
+        pEP3_IN_DataBuf[2] = 0;
+        pEP3_IN_DataBuf[3] = 1;
+
+        DevEP3_IN_Deal(4);
+        break;
+
+    case CMD_R_USERCFG:
+        UserCfg_Read_Setting();
+        tmos_memcpy(pEP3_IN_DataBuf, &UserCfg_RAM, sizeof(usercfg));
+        DevEP3_IN_Deal(sizeof(usercfg));
+        break;
+
+    case CMD_W_USERCFG:
+        tmos_memcpy(&UserCfg_RAM, pEP4_OUT_DataBuf + 1, length - 1);
+        UserCfg_Write_Setting(((uint8_t*) &UserCfg_RAM));
+        pEP3_IN_DataBuf[0] = length;
+        DevEP3_IN_Deal(1);
+        break;
+
+    case CMD_R_KEYSET:
+        switch (pEP4_OUT_DataBuf[1]) {
+            case 0:
+                keyset_addr = KEYCFG_ROM_X;
+                break;
+            case 1:
+                keyset_addr = KEYCFG_ROM_C;
+                break;
+            case 2:
+                keyset_addr = KEYCFG_ROM_V;
+                break;
+            case 3:
+                keyset_addr = KEYCFG_ROM_CTRL;
+                break;
+            case 4:
+                keyset_addr = KEYCFG_ROM_ENTER;
+                break;
+            case 5:
+                keyset_addr = KEYCFG_ROM_RBT;
+                break;
+            case 6:
+                keyset_addr = KEYCFG_ROM_RL;
+                break;
+            case 7:
+                keyset_addr = KEYCFG_ROM_RR;
+                break;
+        }
+
+        if(keyset_addr == 0)
+            break;
+
+        KeyCfg_Read_Setting(((uint8_t*)&temp_keycfg), keyset_addr, pEP4_OUT_DataBuf[2]);
+
+        if(temp_keycfg.Init_Flag != sizeof(keycfg))
+            break;
+
+        tmos_memcpy(pEP3_IN_DataBuf, &temp_keycfg, sizeof(keycfg));
+        DevEP3_IN_Deal(sizeof(keycfg));
+        break;
+    case CMD_W_KEYSET:
+        switch (pEP4_OUT_DataBuf[1]) {
+            case 0:
+                keyset_addr = KEYCFG_ROM_X;
+                break;
+            case 1:
+                keyset_addr = KEYCFG_ROM_C;
+                break;
+            case 2:
+                keyset_addr = KEYCFG_ROM_V;
+                break;
+            case 3:
+                keyset_addr = KEYCFG_ROM_CTRL;
+                break;
+            case 4:
+                keyset_addr = KEYCFG_ROM_ENTER;
+                break;
+            case 5:
+                keyset_addr = KEYCFG_ROM_RBT;
+                break;
+            case 6:
+                keyset_addr = KEYCFG_ROM_RL;
+                break;
+            case 7:
+                keyset_addr = KEYCFG_ROM_RR;
+                break;
+        }
+
+        if(keyset_addr == 0)
+            break;
+
+        tmos_memcpy(&temp_keycfg, pEP4_OUT_DataBuf + 3, sizeof(keycfg));
+
+        KeyCfg_Write_Setting(((uint8_t*)&temp_keycfg), keyset_addr, pEP4_OUT_DataBuf[2]);
+
+        pEP3_IN_DataBuf[0] = length;
+        DevEP3_IN_Deal(1);
+
+        break;
+    default:
+        break;
+    }
+}
+
 __attribute__((interrupt("WCH-Interrupt-fast")))
 __attribute__((section(".highcode"))) void USB_IRQHandler(void) {
     // USB中断服务程序,使用寄存器组1
@@ -49,71 +198,22 @@ __attribute__((section(".highcode"))) void USB_IRQHandler(void) {
  * @brief 核心代码
  */
 
-void DevEP1_OUT_Deal(uint8_t Upload_Length) {
-    uint8_t i;
-
-    for (i = 0; i < Upload_Length; i++) {
-        pEP1_IN_DataBuf[i] = ~pEP1_OUT_DataBuf[i];
-    }
-    DevEP1_IN_Deal(Upload_Length);
+void DevEP1_OUT_Deal(uint8_t l) {
+    return;
 }
 
-void DevEP2_OUT_Deal(uint8_t l) { /* 用户可自定义 */
-    uint8_t i;
-
-    for (i = 0; i < l; i++) {
-        pEP2_IN_DataBuf[i] = ~pEP2_OUT_DataBuf[i];
-    }
-    DevEP2_IN_Deal(l);
+void DevEP2_OUT_Deal(uint8_t l) {
+    return;
 }
 
-#define EN8_A GPIO_Pin_4 //PB4
-#define EN8_B GPIO_Pin_7 //PB7
-#define EN8_C GPIO_Pin_12 //PA12
-
-void DevEP3_OUT_Deal(uint8_t l) { /* 用户可自定义 */
+void DevEP3_OUT_Deal(uint8_t l) {
     return;
 }
 
 // OUT EP
 void DevEP4_OUT_Deal(uint8_t l) { /* 用户可自定义 */
-
-    uint8_t len = 0;
-
-    if (pEP4_OUT_DataBuf[0] == 'w') {
-        //擦除数据
-        //这里的length 是字节,但是实际的擦除是按照256字节高位对齐,比如传入257字节,实际是擦除了512字节.
-        //擦除后的区域,使用EEPROM_READ读出来默认是0xff,使用指针方式绝对地址读取,非0xff
-        //传入的地址是相对地址,0对应dataflash的起始地址
-        len = pEP4_OUT_DataBuf[1];
-
-        EEPROM_ERASE(0, 256);
-
-        //写入数据
-        //这里的buffer是需要写入的指针数据,不需要进行4字节对齐,数据长度是1的倍数,数据需要在RAM里面
-        //传入的地址是相对地址,0对应dataflash的起始地址
-        EEPROM_WRITE(0, pEP4_OUT_DataBuf+2, len);
-
-        // ACK
-        pEP3_IN_DataBuf[0] = 66;
-        DevEP3_IN_Deal(1);
-    }
-
-    if (pEP4_OUT_DataBuf[0] == 'r') {
-        len = pEP4_OUT_DataBuf[1];
-
-        EEPROM_READ(0, pEP3_IN_DataBuf, len);
-        DevEP3_IN_Deal(len);
-    }
-
-    if (pEP4_OUT_DataBuf[0] == 'u') {
-
-        tmos_memcpy(pEP3_IN_DataBuf, &UserCfg_RAM, sizeof(usercfg));
-
-        DevEP3_IN_Deal(sizeof(usercfg));
-
-    }
-
+    USB_BulkTrans(l, pEP4_OUT_DataBuf[0]);
+    return;
 }
 
 uint8_t DevConfig, Ready;
@@ -146,8 +246,7 @@ void USB_DevTransProcess(void) {
                     R8_UEP0_CTRL ^= RB_UEP_T_TOG; // 翻转
                     break;
                 case USB_SET_ADDRESS:
-                    R8_USB_DEV_AD = (R8_USB_DEV_AD & RB_UDA_GP_BIT)
-                            | SetupReqLen;
+                    R8_USB_DEV_AD = (R8_USB_DEV_AD & RB_UDA_GP_BIT) | SetupReqLen;
                     R8_UEP0_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK;
                     break;
 
@@ -234,16 +333,14 @@ void USB_DevTransProcess(void) {
         }
         if (R8_USB_INT_ST & RB_UIS_SETUP_ACT) // Setup包处理
         {
-            R8_UEP0_CTRL = RB_UEP_R_TOG | RB_UEP_T_TOG | UEP_R_RES_ACK
-                    | UEP_T_RES_NAK;
+            R8_UEP0_CTRL = RB_UEP_R_TOG | RB_UEP_T_TOG | UEP_R_RES_ACK | UEP_T_RES_NAK;
             SetupReqLen = pSetupReqPak->wLength;
             SetupReqCode = pSetupReqPak->bRequest;
             chtype = pSetupReqPak->bRequestType;
 
             len = 0;
             errflag = 0;
-            if ((pSetupReqPak->bRequestType & USB_REQ_TYP_MASK)
-                    != USB_REQ_TYP_STANDARD) {
+            if ((pSetupReqPak->bRequestType & USB_REQ_TYP_MASK) != USB_REQ_TYP_STANDARD) {
                 /* 非标准请求 */
                 /* 其它请求,如类请求，产商请求等 */
                 if (pSetupReqPak->bRequestType & 0x40) {
@@ -288,6 +385,10 @@ void USB_DevTransProcess(void) {
 
                     case USB_DESCR_TYP_CONFIG: {
                         pDescr = USB_Config_Descr;
+
+                        USB_Config_Descr[33] = UserCfg_RAM.USB_UploadRate;
+                        USB_Config_Descr[58] = UserCfg_RAM.USB_UploadRate;
+
                         len = USB_Config_Descr[2];
                     }
                         break;
@@ -314,11 +415,11 @@ void USB_DevTransProcess(void) {
 
                     case USB_DESCR_TYP_REPORT: {
                         if (((pSetupReqPak->wIndex) & 0xff) == 0) //接口0报表描述符
-                                {
+                            {
                             pDescr = HID_KeyBoard_RepDesc; //数据准备上传
                             len = sizeof(HID_KeyBoard_RepDesc);
                         } else if (((pSetupReqPak->wIndex) & 0xff) == 1) //接口1报表描述符
-                                {
+                            {
                             pDescr = HID_MediaCtrl_RepDesc; //数据准备上传
                             len = sizeof(HID_MediaCtrl_RepDesc);
 
@@ -381,46 +482,32 @@ void USB_DevTransProcess(void) {
                     break;
 
                 case USB_CLEAR_FEATURE: {
-                    if ((pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK)
-                            == USB_REQ_RECIP_ENDP) // 端点
+                    if ((pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK) == USB_REQ_RECIP_ENDP) // 端点
                     {
                         switch ((pSetupReqPak->wIndex) & 0xff) {
                         case 0x83:
-                            R8_UEP3_CTRL = (R8_UEP3_CTRL
-                                    & ~(RB_UEP_T_TOG | MASK_UEP_T_RES))
-                                    | UEP_T_RES_NAK;
+                            R8_UEP3_CTRL = (R8_UEP3_CTRL & ~(RB_UEP_T_TOG | MASK_UEP_T_RES)) | UEP_T_RES_NAK;
                             break;
                         case 0x03:
-                            R8_UEP3_CTRL = (R8_UEP3_CTRL
-                                    & ~(RB_UEP_R_TOG | MASK_UEP_R_RES))
-                                    | UEP_R_RES_ACK;
+                            R8_UEP3_CTRL = (R8_UEP3_CTRL & ~(RB_UEP_R_TOG | MASK_UEP_R_RES)) | UEP_R_RES_ACK;
                             break;
                         case 0x82:
-                            R8_UEP2_CTRL = (R8_UEP2_CTRL
-                                    & ~(RB_UEP_T_TOG | MASK_UEP_T_RES))
-                                    | UEP_T_RES_NAK;
+                            R8_UEP2_CTRL = (R8_UEP2_CTRL & ~(RB_UEP_T_TOG | MASK_UEP_T_RES)) | UEP_T_RES_NAK;
                             break;
                         case 0x02:
-                            R8_UEP2_CTRL = (R8_UEP2_CTRL
-                                    & ~(RB_UEP_R_TOG | MASK_UEP_R_RES))
-                                    | UEP_R_RES_ACK;
+                            R8_UEP2_CTRL = (R8_UEP2_CTRL & ~(RB_UEP_R_TOG | MASK_UEP_R_RES)) | UEP_R_RES_ACK;
                             break;
                         case 0x81:
-                            R8_UEP1_CTRL = (R8_UEP1_CTRL
-                                    & ~(RB_UEP_T_TOG | MASK_UEP_T_RES))
-                                    | UEP_T_RES_NAK;
+                            R8_UEP1_CTRL = (R8_UEP1_CTRL & ~(RB_UEP_T_TOG | MASK_UEP_T_RES)) | UEP_T_RES_NAK;
                             break;
                         case 0x01:
-                            R8_UEP1_CTRL = (R8_UEP1_CTRL
-                                    & ~(RB_UEP_R_TOG | MASK_UEP_R_RES))
-                                    | UEP_R_RES_ACK;
+                            R8_UEP1_CTRL = (R8_UEP1_CTRL & ~(RB_UEP_R_TOG | MASK_UEP_R_RES)) | UEP_R_RES_ACK;
                             break;
                         default:
                             errflag = 0xFF; // 不支持的端点
                             break;
                         }
-                    } else if ((pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK)
-                            == USB_REQ_RECIP_DEVICE) {
+                    } else if ((pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK) == USB_REQ_RECIP_DEVICE) {
                         if (pSetupReqPak->wValue == 1) {
                             USB_SleepStatus &= ~0x01;
                         }
@@ -431,47 +518,33 @@ void USB_DevTransProcess(void) {
                     break;
 
                 case USB_SET_FEATURE:
-                    if ((pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK)
-                            == USB_REQ_RECIP_ENDP) {
+                    if ((pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK) == USB_REQ_RECIP_ENDP) {
                         /* 端点 */
                         switch (pSetupReqPak->wIndex) {
                         case 0x83:
-                            R8_UEP3_CTRL = (R8_UEP3_CTRL
-                                    & ~(RB_UEP_T_TOG | MASK_UEP_T_RES))
-                                    | UEP_T_RES_STALL;
+                            R8_UEP3_CTRL = (R8_UEP3_CTRL & ~(RB_UEP_T_TOG | MASK_UEP_T_RES)) | UEP_T_RES_STALL;
                             break;
                         case 0x03:
-                            R8_UEP3_CTRL = (R8_UEP3_CTRL
-                                    & ~(RB_UEP_R_TOG | MASK_UEP_R_RES))
-                                    | UEP_R_RES_STALL;
+                            R8_UEP3_CTRL = (R8_UEP3_CTRL & ~(RB_UEP_R_TOG | MASK_UEP_R_RES)) | UEP_R_RES_STALL;
                             break;
                         case 0x82:
-                            R8_UEP2_CTRL = (R8_UEP2_CTRL
-                                    & ~(RB_UEP_T_TOG | MASK_UEP_T_RES))
-                                    | UEP_T_RES_STALL;
+                            R8_UEP2_CTRL = (R8_UEP2_CTRL & ~(RB_UEP_T_TOG | MASK_UEP_T_RES)) | UEP_T_RES_STALL;
                             break;
                         case 0x02:
-                            R8_UEP2_CTRL = (R8_UEP2_CTRL
-                                    & ~(RB_UEP_R_TOG | MASK_UEP_R_RES))
-                                    | UEP_R_RES_STALL;
+                            R8_UEP2_CTRL = (R8_UEP2_CTRL & ~(RB_UEP_R_TOG | MASK_UEP_R_RES)) | UEP_R_RES_STALL;
                             break;
                         case 0x81:
-                            R8_UEP1_CTRL = (R8_UEP1_CTRL
-                                    & ~(RB_UEP_T_TOG | MASK_UEP_T_RES))
-                                    | UEP_T_RES_STALL;
+                            R8_UEP1_CTRL = (R8_UEP1_CTRL & ~(RB_UEP_T_TOG | MASK_UEP_T_RES)) | UEP_T_RES_STALL;
                             break;
                         case 0x01:
-                            R8_UEP1_CTRL = (R8_UEP1_CTRL
-                                    & ~(RB_UEP_R_TOG | MASK_UEP_R_RES))
-                                    | UEP_R_RES_STALL;
+                            R8_UEP1_CTRL = (R8_UEP1_CTRL & ~(RB_UEP_R_TOG | MASK_UEP_R_RES)) | UEP_R_RES_STALL;
                             break;
                         default:
                             /* 不支持的端点 */
                             errflag = 0xFF; // 不支持的端点
                             break;
                         }
-                    } else if ((pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK)
-                            == USB_REQ_RECIP_DEVICE) {
+                    } else if ((pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK) == USB_REQ_RECIP_DEVICE) {
                         if (pSetupReqPak->wValue == 1) {
                             /* 设置睡眠 */
                             USB_SleepStatus |= 0x01;
@@ -491,55 +564,47 @@ void USB_DevTransProcess(void) {
                     break;
 
                 case USB_GET_STATUS:
-                    if ((pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK)
-                            == USB_REQ_RECIP_ENDP) {
+                    if ((pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK) == USB_REQ_RECIP_ENDP) {
                         /* 端点 */
                         pEP0_DataBuf[0] = 0x00;
                         switch (pSetupReqPak->wIndex) {
                         case 0x83:
-                            if ((R8_UEP3_CTRL & (RB_UEP_T_TOG | MASK_UEP_T_RES))
-                                    == UEP_T_RES_STALL) {
+                            if ((R8_UEP3_CTRL & (RB_UEP_T_TOG | MASK_UEP_T_RES)) == UEP_T_RES_STALL) {
                                 pEP0_DataBuf[0] = 0x01;
                             }
                             break;
 
                         case 0x03:
-                            if ((R8_UEP3_CTRL & (RB_UEP_R_TOG | MASK_UEP_R_RES))
-                                    == UEP_R_RES_STALL) {
+                            if ((R8_UEP3_CTRL & (RB_UEP_R_TOG | MASK_UEP_R_RES)) == UEP_R_RES_STALL) {
                                 pEP0_DataBuf[0] = 0x01;
                             }
                             break;
 
                         case 0x82:
-                            if ((R8_UEP2_CTRL & (RB_UEP_T_TOG | MASK_UEP_T_RES))
-                                    == UEP_T_RES_STALL) {
+                            if ((R8_UEP2_CTRL & (RB_UEP_T_TOG | MASK_UEP_T_RES)) == UEP_T_RES_STALL) {
                                 pEP0_DataBuf[0] = 0x01;
                             }
                             break;
 
                         case 0x02:
-                            if ((R8_UEP2_CTRL & (RB_UEP_R_TOG | MASK_UEP_R_RES))
-                                    == UEP_R_RES_STALL) {
+                            if ((R8_UEP2_CTRL & (RB_UEP_R_TOG | MASK_UEP_R_RES)) == UEP_R_RES_STALL) {
                                 pEP0_DataBuf[0] = 0x01;
                             }
                             break;
 
                         case 0x81:
-                            if ((R8_UEP1_CTRL & (RB_UEP_T_TOG | MASK_UEP_T_RES))
-                                    == UEP_T_RES_STALL) {
+                            if ((R8_UEP1_CTRL & (RB_UEP_T_TOG | MASK_UEP_T_RES)) == UEP_T_RES_STALL) {
                                 pEP0_DataBuf[0] = 0x01;
                             }
                             break;
 
                         case 0x01:
-                            if ((R8_UEP1_CTRL & (RB_UEP_R_TOG | MASK_UEP_R_RES))
-                                    == UEP_R_RES_STALL) {
+                            if ((R8_UEP1_CTRL & (RB_UEP_R_TOG | MASK_UEP_R_RES)) == UEP_R_RES_STALL) {
                                 pEP0_DataBuf[0] = 0x01;
                             }
                             break;
                         }
-                    } else if ((pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK)
-                            == USB_REQ_RECIP_DEVICE) {
+                    } else if ((pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK) == USB_REQ_RECIP_DEVICE) {
                         pEP0_DataBuf[0] = 0x00;
                         if (USB_SleepStatus) {
                             pEP0_DataBuf[0] = 0x02;
@@ -559,20 +624,18 @@ void USB_DevTransProcess(void) {
                 }
             }
             if (errflag == 0xff) // 错误或不支持
-                    {
+                {
                 //                  SetupReqCode = 0xFF;
-                R8_UEP0_CTRL = RB_UEP_R_TOG | RB_UEP_T_TOG | UEP_R_RES_STALL
-                        | UEP_T_RES_STALL; // STALL
+                R8_UEP0_CTRL = RB_UEP_R_TOG | RB_UEP_T_TOG | UEP_R_RES_STALL | UEP_T_RES_STALL; // STALL
             } else {
                 if (chtype & 0x80) // 上传
-                        {
+                    {
                     len = (SetupReqLen > DevEP0SIZE) ? DevEP0SIZE : SetupReqLen;
                     SetupReqLen -= len;
                 } else
                     len = 0; // 下传
                 R8_UEP0_T_LEN = len;
-                R8_UEP0_CTRL = RB_UEP_R_TOG | RB_UEP_T_TOG | UEP_R_RES_ACK
-                        | UEP_T_RES_ACK; // 默认数据包是DATA1
+                R8_UEP0_CTRL = RB_UEP_R_TOG | RB_UEP_T_TOG | UEP_R_RES_ACK | UEP_T_RES_ACK; // 默认数据包是DATA1
             }
 
             R8_USB_INT_FG = RB_UIF_TRANSFER;

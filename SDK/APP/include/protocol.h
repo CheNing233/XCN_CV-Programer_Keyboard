@@ -4,8 +4,7 @@
 #define PROTO_SW_PIN GPIO_Pin_9
 
 typedef enum _Board_Protocol_Use {
-    Board_Use_Init,
-    Board_Use_USB, Board_Use_BLE
+    Board_Use_Init, Board_Use_USB, Board_Use_BLE
 } Board_Protocol_Use;
 
 extern Board_Protocol_Use Protocol_SW;

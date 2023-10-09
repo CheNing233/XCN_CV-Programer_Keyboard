@@ -14,7 +14,6 @@
  * INCLUDES
  */
 
-
 #include "CONFIG.h"
 #include "battservice.h"
 #include "scanparamservice.h"
@@ -107,12 +106,10 @@ static void hidDev_ProcessTMOSMsg(tmos_event_hdr_t *pMsg);
 static void hidDevProcessGattMsg(gattMsgEvent_t *pMsg);
 static void hidDevDisconnected(void);
 static void hidDevGapStateCB(gapRole_States_t newState, gapRoleEvent_t *pEvent);
-static void hidDevParamUpdateCB(uint16_t connHandle, uint16_t connInterval,
-        uint16_t connSlaveLatency, uint16_t connTimeout);
-static void hidDevPairStateCB(uint16_t connHandle, uint8_t state,
-        uint8_t status);
-static void hidDevPasscodeCB(uint8_t *deviceAddr, uint16_t connectionHandle,
-        uint8_t uiInputs, uint8_t uiOutputs);
+static void hidDevParamUpdateCB(uint16_t connHandle, uint16_t connInterval, uint16_t connSlaveLatency,
+    uint16_t connTimeout);
+static void hidDevPairStateCB(uint16_t connHandle, uint8_t state, uint8_t status);
+static void hidDevPasscodeCB(uint8_t *deviceAddr, uint16_t connectionHandle, uint8_t uiInputs, uint8_t uiOutputs);
 static void hidDevBattCB(uint8_t event);
 static void hidDevScanParamCB(uint8_t event);
 static void hidDevBattPeriodicTask(void);
@@ -121,8 +118,7 @@ static hidRptMap_t *hidDevRptByHandle(uint16_t handle);
 static hidRptMap_t *hidDevRptById(uint8_t id, uint8_t type);
 static hidRptMap_t *hidDevRptByCccdHandle(uint16_t handle);
 
-static uint8_t hidDevSendReport(uint8_t id, uint8_t type, uint8_t len,
-        uint8_t *pData);
+static uint8_t hidDevSendReport(uint8_t id, uint8_t type, uint8_t len, uint8_t *pData);
 static void hidDevHighAdvertising(void);
 static void hidDevLowAdvertising(void);
 static void hidDevInitialAdvertising(void);
@@ -134,8 +130,8 @@ static uint8_t HidDev_sendNoti(uint16_t handle, uint8_t len, uint8_t *pData);
 
 // GAP Role Callbacks
 static gapRolesCBs_t hidDev_PeripheralCBs = { hidDevGapStateCB, // Profile State Change Callbacks
-        NULL,             // When a valid RSSI is read from controller
-        hidDevParamUpdateCB };
+    NULL,             // When a valid RSSI is read from controller
+    hidDevParamUpdateCB };
 
 // Bond Manager Callbacks
 static gapBondCBs_t hidDevBondCB = { hidDevPasscodeCB, hidDevPairStateCB };
@@ -221,8 +217,7 @@ uint16_t HidDev_ProcessEvent(uint8_t task_id, uint16_t events) {
 
     if (events & START_DEVICE_EVT) {
         // Start the Device
-        GAPRole_PeripheralStartDevice(hidDevTaskId, &hidDevBondCB,
-                &hidDev_PeripheralCBs);
+        GAPRole_PeripheralStartDevice(hidDevTaskId, &hidDevBondCB, &hidDev_PeripheralCBs);
 
         return (events ^ START_DEVICE_EVT);
     }
@@ -432,9 +427,8 @@ void HidDev_PasscodeRsp(uint8_t status, uint32_t passcode) {
  *
  * @return      Success or Failure
  */
-bStatus_t HidDev_ReadAttrCB(uint16_t connHandle, gattAttribute_t *pAttr,
-        uint8_t *pValue, uint16_t *pLen, uint16_t offset, uint16_t maxLen,
-        uint8_t method) {
+bStatus_t HidDev_ReadAttrCB(uint16_t connHandle, gattAttribute_t *pAttr, uint8_t *pValue, uint16_t *pLen,
+    uint16_t offset, uint16_t maxLen, uint8_t method) {
     bStatus_t status = SUCCESS;
     hidRptMap_t *pRpt;
 
@@ -445,8 +439,8 @@ bStatus_t HidDev_ReadAttrCB(uint16_t connHandle, gattAttribute_t *pAttr,
         return (ATT_ERR_ATTR_NOT_LONG);
     }
 
-    if (uuid == REPORT_UUID || uuid == BOOT_KEY_INPUT_UUID
-            || uuid == BOOT_KEY_OUTPUT_UUID || uuid == BOOT_MOUSE_INPUT_UUID) {
+    if (uuid == REPORT_UUID || uuid == BOOT_KEY_INPUT_UUID || uuid == BOOT_KEY_OUTPUT_UUID
+        || uuid == BOOT_MOUSE_INPUT_UUID) {
         // find report ID in table
         if ((pRpt = hidDevRptByHandle(pAttr->handle)) != NULL) {
             // execute report callback
@@ -496,8 +490,8 @@ bStatus_t HidDev_ReadAttrCB(uint16_t connHandle, gattAttribute_t *pAttr,
  *
  * @return  Success or Failure
  */
-bStatus_t HidDev_WriteAttrCB(uint16_t connHandle, gattAttribute_t *pAttr,
-        uint8_t *pValue, uint16_t len, uint16_t offset, uint8_t method) {
+bStatus_t HidDev_WriteAttrCB(uint16_t connHandle, gattAttribute_t *pAttr, uint8_t *pValue, uint16_t len,
+    uint16_t offset, uint8_t method) {
     uint16_t uuid;
     bStatus_t status = SUCCESS;
     hidRptMap_t *pRpt;
@@ -519,12 +513,11 @@ bStatus_t HidDev_WriteAttrCB(uint16_t connHandle, gattAttribute_t *pAttr,
     } else if (uuid == HID_CTRL_PT_UUID) {
         // Validate length and value range
         if (len == 1) {
-            if (pValue[0] == HID_CMD_SUSPEND
-                    || pValue[0] == HID_CMD_EXIT_SUSPEND) {
+            if (pValue[0] == HID_CMD_SUSPEND || pValue[0] == HID_CMD_EXIT_SUSPEND) {
                 // execute HID app event callback
-                (*pHidDevCB->evtCB)(
-                        (pValue[0] == HID_CMD_SUSPEND) ?
-                                HID_DEV_SUSPEND_EVT : HID_DEV_EXIT_SUSPEND_EVT);
+                (*pHidDevCB->evtCB)((pValue[0] == HID_CMD_SUSPEND) ?
+                HID_DEV_SUSPEND_EVT :
+                                                                     HID_DEV_EXIT_SUSPEND_EVT);
             } else {
                 status = ATT_ERR_INVALID_VALUE;
             }
@@ -532,8 +525,7 @@ bStatus_t HidDev_WriteAttrCB(uint16_t connHandle, gattAttribute_t *pAttr,
             status = ATT_ERR_INVALID_VALUE_SIZE;
         }
     } else if (uuid == GATT_CLIENT_CHAR_CFG_UUID) {
-        status = GATTServApp_ProcessCCCWriteReq(connHandle, pAttr, pValue, len,
-                offset, GATT_CLIENT_CFG_NOTIFY);
+        status = GATTServApp_ProcessCCCWriteReq(connHandle, pAttr, pValue, len, offset, GATT_CLIENT_CFG_NOTIFY);
         if (status == SUCCESS) {
             uint16_t charCfg = BUILD_UINT16(pValue[0], pValue[1]);
 
@@ -541,21 +533,20 @@ bStatus_t HidDev_WriteAttrCB(uint16_t connHandle, gattAttribute_t *pAttr,
             if ((pRpt = hidDevRptByCccdHandle(pAttr->handle)) != NULL) {
                 // execute report callback
                 (*pHidDevCB->reportCB)(pRpt->id, pRpt->type, uuid,
-                        (charCfg == GATT_CLIENT_CFG_NOTIFY) ?
-                                HID_DEV_OPER_ENABLE : HID_DEV_OPER_DISABLE,
-                        &len, pValue);
+                    (charCfg == GATT_CLIENT_CFG_NOTIFY) ?
+                    HID_DEV_OPER_ENABLE :
+                                                          HID_DEV_OPER_DISABLE, &len, pValue);
             }
         }
     } else if (uuid == PROTOCOL_MODE_UUID) {
         if (len == HID_PROTOCOL_MODE_LEN) {
-            if (pValue[0] == HID_PROTOCOL_MODE_BOOT
-                    || pValue[0] == HID_PROTOCOL_MODE_REPORT) {
+            if (pValue[0] == HID_PROTOCOL_MODE_BOOT || pValue[0] == HID_PROTOCOL_MODE_REPORT) {
                 pAttr->pValue[0] = pValue[0];
 
                 // execute HID app event callback
-                (*pHidDevCB->evtCB)(
-                        (pValue[0] == HID_PROTOCOL_MODE_BOOT) ?
-                                HID_DEV_SET_BOOT_EVT : HID_DEV_SET_REPORT_EVT);
+                (*pHidDevCB->evtCB)((pValue[0] == HID_PROTOCOL_MODE_BOOT) ?
+                HID_DEV_SET_BOOT_EVT :
+                                                                            HID_DEV_SET_REPORT_EVT);
             } else {
                 status = ATT_ERR_INVALID_VALUE;
             }
@@ -616,14 +607,11 @@ static void hidDevHandleConnStatusCB(uint16_t connHandle, uint8_t changeType) {
     // Make sure this is not loopback connection
     if (connHandle != LOOPBACK_CONNHANDLE) {
         if ((changeType == LINKDB_STATUS_UPDATE_REMOVED)
-                || ((changeType == LINKDB_STATUS_UPDATE_STATEFLAGS)
-                        && (!linkDB_Up(connHandle)))) {
+            || ((changeType == LINKDB_STATUS_UPDATE_STATEFLAGS) && (!linkDB_Up(connHandle)))) {
             for (i = hidDevRptTblLen; i > 0; i--, p++) {
                 if (p->cccdHandle != 0) {
-                    if ((pAttr = GATT_FindHandle(p->cccdHandle, &retHandle))
-                            != NULL) {
-                        GATTServApp_InitCharCfg(connHandle,
-                                (gattCharCfg_t *) pAttr->pValue);
+                    if ((pAttr = GATT_FindHandle(p->cccdHandle, &retHandle)) != NULL) {
+                        GATTServApp_InitCharCfg(connHandle, (gattCharCfg_t *) pAttr->pValue);
                     }
                 }
             }
@@ -649,8 +637,7 @@ static void hidDevDisconnected(void) {
     hidProtocolMode = HID_PROTOCOL_MODE_REPORT;
 
     // if bonded and normally connectable start advertising
-    if ((hidDevBondCount() > 0)
-            && (pHidDevCfg->hidFlags & HID_FLAGS_NORMALLY_CONNECTABLE)) {
+    if ((hidDevBondCount() > 0) && (pHidDevCfg->hidFlags & HID_FLAGS_NORMALLY_CONNECTABLE)) {
         hidDevLowAdvertising();
     }
 }
@@ -681,8 +668,7 @@ static void hidDevGapStateCB(gapRole_States_t newState, gapRoleEvent_t *pEvent) 
         GAPRole_SetParameter(GAPROLE_ADVERT_ENABLED, sizeof(uint8_t), &param);
     }
     // if disconnected
-    else if (hidDevGapState == GAPROLE_CONNECTED
-            && newState != GAPROLE_CONNECTED) {
+    else if (hidDevGapState == GAPROLE_CONNECTED && newState != GAPROLE_CONNECTED) {
         hidDevDisconnected();
 
         if (pairingStatus == SMP_PAIRING_FAILED_CONFIRM_VALUE) {
@@ -717,10 +703,10 @@ static void hidDevGapStateCB(gapRole_States_t newState, gapRoleEvent_t *pEvent) 
  *
  * @return  none
  */
-static void hidDevParamUpdateCB(uint16_t connHandle, uint16_t connInterval,
-        uint16_t connSlaveLatency, uint16_t connTimeout) {
+static void hidDevParamUpdateCB(uint16_t connHandle, uint16_t connInterval, uint16_t connSlaveLatency,
+    uint16_t connTimeout) {
     PRINT("Update %d - Int 0x%x - Latency %d\n", connHandle, connInterval,
-            connSlaveLatency);
+        connSlaveLatency);
 }
 
 /*********************************************************************
@@ -730,8 +716,7 @@ static void hidDevParamUpdateCB(uint16_t connHandle, uint16_t connInterval,
  *
  * @return  none
  */
-static void hidDevPairStateCB(uint16_t connHandle, uint8_t state,
-        uint8_t status) {
+static void hidDevPairStateCB(uint16_t connHandle, uint8_t state, uint8_t status) {
     if (state == GAPBOND_PAIRING_STATE_COMPLETE) {
         if (status == SUCCESS) {
             hidDevConnSecure = TRUE;
@@ -762,12 +747,10 @@ static void hidDevPairStateCB(uint16_t connHandle, uint8_t state,
  *
  * @return  none
  */
-static void hidDevPasscodeCB(uint8_t *deviceAddr, uint16_t connectionHandle,
-        uint8_t uiInputs, uint8_t uiOutputs) {
+static void hidDevPasscodeCB(uint8_t *deviceAddr, uint16_t connectionHandle, uint8_t uiInputs, uint8_t uiOutputs) {
     if (pHidDevCB && pHidDevCB->passcodeCB) {
         // execute HID app passcode callback
-        (*pHidDevCB->passcodeCB)(deviceAddr, connectionHandle, uiInputs,
-                uiOutputs);
+        (*pHidDevCB->passcodeCB)(deviceAddr, connectionHandle, uiInputs, uiOutputs);
     } else {
         uint32_t passkey;
         GAPBondMgr_GetParameter(GAPBOND_PERI_DEFAULT_PASSCODE, &passkey);
@@ -903,8 +886,7 @@ static hidRptMap_t *hidDevRptById(uint8_t id, uint8_t type) {
  *
  * @return  None.
  */
-static uint8_t hidDevSendReport(uint8_t id, uint8_t type, uint8_t len,
-        uint8_t *pData) {
+static uint8_t hidDevSendReport(uint8_t id, uint8_t type, uint8_t len, uint8_t *pData) {
     hidRptMap_t *pRpt;
     gattAttribute_t *pAttr;
     uint16_t retHandle;
@@ -916,8 +898,7 @@ static uint8_t hidDevSendReport(uint8_t id, uint8_t type, uint8_t len,
         if ((pAttr = GATT_FindHandle(pRpt->cccdHandle, &retHandle)) != NULL) {
             uint16_t value;
 
-            value = GATTServApp_ReadCharCfg(gapConnHandle,
-                    (gattCharCfg_t *) pAttr->pValue);
+            value = GATTServApp_ReadCharCfg(gapConnHandle, (gattCharCfg_t *) pAttr->pValue);
             if (value & GATT_CLIENT_CFG_NOTIFY) {
                 // Send report notification
                 state = HidDev_sendNoti(pRpt->handle, len, pData);
@@ -942,8 +923,7 @@ static uint8_t HidDev_sendNoti(uint16_t handle, uint8_t len, uint8_t *pData) {
     uint8_t status;
     attHandleValueNoti_t noti;
 
-    noti.pValue = GATT_bm_alloc(gapConnHandle, ATT_HANDLE_VALUE_NOTI, len, NULL,
-            0);
+    noti.pValue = GATT_bm_alloc(gapConnHandle, ATT_HANDLE_VALUE_NOTI, len, NULL, 0);
     if (noti.pValue != NULL) {
         noti.handle = handle;
         noti.len = len;

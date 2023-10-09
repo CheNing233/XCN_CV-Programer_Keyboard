@@ -23,12 +23,11 @@
  *
  * @return  state.
  */
-uint32_t CH57X_LowPower(uint32_t time)
-{
+uint32_t CH57X_LowPower(uint32_t time) {
 #if(defined(HAL_SLEEP)) && (HAL_SLEEP == TRUE)
     uint32_t time_sleep, time_curr;
     unsigned long irq_status;
-    
+
     SYS_DisableAllIrq(&irq_status);
     time_curr = RTC_GetCycle32k();
     // 检测睡眠时间
@@ -39,7 +38,7 @@ uint32_t CH57X_LowPower(uint32_t time)
     }
 
     // 若睡眠时间小于最小睡眠时间或大于最大睡眠时间，则不睡眠
-    if ((time_sleep < SLEEP_RTC_MIN_TIME) || 
+    if ((time_sleep < SLEEP_RTC_MIN_TIME) ||
         (time_sleep > SLEEP_RTC_MAX_TIME)) {
         SYS_RecoverIrq(irq_status);
         return 2;
@@ -89,14 +88,13 @@ uint32_t CH57X_LowPower(uint32_t time)
  *
  * @return  None.
  */
-void HAL_SleepInit(void)
-{
+void HAL_SleepInit(void) {
 #if(defined(HAL_SLEEP)) && (HAL_SLEEP == TRUE)
     sys_safe_access_enable();
     R8_SLP_WAKE_CTRL |= RB_SLP_RTC_WAKE; // RTC唤醒
     sys_safe_access_enable();
-    R8_RTC_MODE_CTRL |= RB_RTC_TRIG_EN;  // 触发模式
-    sys_safe_access_disable();            //
+    R8_RTC_MODE_CTRL |= RB_RTC_TRIG_EN;// 触发模式
+    sys_safe_access_disable();//
     PFIC_EnableIRQ(RTC_IRQn);
 #endif
 }

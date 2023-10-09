@@ -32,8 +32,7 @@ extern "C" {
 /**
  * @brief  channel of PWM define
  */
-typedef enum
-{
+typedef enum {
     High_Level = 0, // 默认低电平，高电平有效
     Low_Level,      // 默认高电平，低电平有效
 } PWMX_PolarTypeDef;
@@ -41,8 +40,7 @@ typedef enum
 /**
  * @brief  Configuration PWM4_11 Cycle size
  */
-typedef enum
-{
+typedef enum {
     PWMX_Cycle_256 = 0, // 256 个PWMX周期
     PWMX_Cycle_255,     // 255 个PWMX周期
     PWMX_Cycle_128,     // 128 个PWMX周期

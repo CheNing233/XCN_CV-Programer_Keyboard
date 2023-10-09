@@ -9,10 +9,13 @@ import usb.backend.libusb1
 be_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "libusb-1.0.dll")
 
 backend = usb.backend.libusb1.get_backend(find_library=lambda x: be_path)
+
 dev = usb.core.find(idVendor=0x413D, idProduct=0x2107, backend=backend)
 
 # dev = usb.core.find()
 # print(dev)
+
+
 
 if dev is None:
     raise ValueError("Device not found")
@@ -26,7 +29,8 @@ dev.set_configuration()
 
 RSTATE = False
 
-msg_w = (ord('w'),6,0,0,0,0,0,0)
+msg_w = (0,)
+print(msg_w)
 msg_r = (ord('r'),64)
 
 msg = msg_r if RSTATE else msg_w

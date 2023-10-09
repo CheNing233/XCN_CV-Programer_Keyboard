@@ -26,17 +26,16 @@ uint8_t *pEP3_RAM_Addr;
  *
  * @return  none
  */
-void USB_DeviceInit(void)
-{
+void USB_DeviceInit(void) {
     R8_USB_CTRL = 0x00; // 先设定模式,取消 RB_UC_CLR_ALL
 
     R8_UEP4_1_MOD = RB_UEP4_RX_EN | RB_UEP4_TX_EN | RB_UEP1_RX_EN | RB_UEP1_TX_EN; // 端点4 OUT+IN,端点1 OUT+IN
     R8_UEP2_3_MOD = RB_UEP2_RX_EN | RB_UEP2_TX_EN | RB_UEP3_RX_EN | RB_UEP3_TX_EN; // 端点2 OUT+IN,端点3 OUT+IN
 
-    R16_UEP0_DMA = (uint16_t)(uint32_t)pEP0_RAM_Addr;
-    R16_UEP1_DMA = (uint16_t)(uint32_t)pEP1_RAM_Addr;
-    R16_UEP2_DMA = (uint16_t)(uint32_t)pEP2_RAM_Addr;
-    R16_UEP3_DMA = (uint16_t)(uint32_t)pEP3_RAM_Addr;
+    R16_UEP0_DMA = (uint16_t) (uint32_t) pEP0_RAM_Addr;
+    R16_UEP1_DMA = (uint16_t) (uint32_t) pEP1_RAM_Addr;
+    R16_UEP2_DMA = (uint16_t) (uint32_t) pEP2_RAM_Addr;
+    R16_UEP3_DMA = (uint16_t) (uint32_t) pEP3_RAM_Addr;
 
     R8_UEP0_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK;
     R8_UEP1_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK | RB_UEP_AUTO_TOG;
@@ -61,8 +60,7 @@ void USB_DeviceInit(void)
  *
  * @return  none
  */
-void DevEP1_IN_Deal(uint8_t l)
-{
+void DevEP1_IN_Deal(uint8_t l) {
     R8_UEP1_T_LEN = l;
     R8_UEP1_CTRL = (R8_UEP1_CTRL & ~MASK_UEP_T_RES) | UEP_T_RES_ACK;
 }
@@ -76,8 +74,7 @@ void DevEP1_IN_Deal(uint8_t l)
  *
  * @return  none
  */
-void DevEP2_IN_Deal(uint8_t l)
-{
+void DevEP2_IN_Deal(uint8_t l) {
     R8_UEP2_T_LEN = l;
     R8_UEP2_CTRL = (R8_UEP2_CTRL & ~MASK_UEP_T_RES) | UEP_T_RES_ACK;
 }
@@ -91,8 +88,7 @@ void DevEP2_IN_Deal(uint8_t l)
  *
  * @return  none
  */
-void DevEP3_IN_Deal(uint8_t l)
-{
+void DevEP3_IN_Deal(uint8_t l) {
     R8_UEP3_T_LEN = l;
     R8_UEP3_CTRL = (R8_UEP3_CTRL & ~MASK_UEP_T_RES) | UEP_T_RES_ACK;
 }
@@ -106,8 +102,7 @@ void DevEP3_IN_Deal(uint8_t l)
  *
  * @return  none
  */
-void DevEP4_IN_Deal(uint8_t l)
-{
+void DevEP4_IN_Deal(uint8_t l) {
     R8_UEP4_T_LEN = l;
     R8_UEP4_CTRL = (R8_UEP4_CTRL & ~MASK_UEP_T_RES) | UEP_T_RES_ACK;
 }

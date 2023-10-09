@@ -41,12 +41,10 @@
  * GLOBAL VARIABLES
  */
 // Battery service
-const uint8_t battServUUID[ATT_BT_UUID_SIZE] = { LO_UINT16(BATT_SERV_UUID),
-        HI_UINT16(BATT_SERV_UUID) };
+const uint8_t battServUUID[ATT_BT_UUID_SIZE] = { LO_UINT16(BATT_SERV_UUID), HI_UINT16(BATT_SERV_UUID) };
 
 // Battery level characteristic
-const uint8_t battLevelUUID[ATT_BT_UUID_SIZE] = { LO_UINT16(BATT_LEVEL_UUID),
-        HI_UINT16(BATT_LEVEL_UUID) };
+const uint8_t battLevelUUID[ATT_BT_UUID_SIZE] = { LO_UINT16(BATT_LEVEL_UUID), HI_UINT16(BATT_LEVEL_UUID) };
 
 /*********************************************************************
  * EXTERNAL VARIABLES
@@ -103,37 +101,35 @@ HID_RPT_ID_BATT_LEVEL_IN, HID_REPORT_TYPE_INPUT };
 
 static gattAttribute_t battAttrTbl[] = {
 // Battery Service
-        { { ATT_BT_UUID_SIZE, primaryServiceUUID }, /* type */
-        GATT_PERMIT_READ, /* permissions */
-        0, /* handle */
-        (uint8_t *) &battService /* pValue */
-        },
+    { { ATT_BT_UUID_SIZE, primaryServiceUUID }, /* type */
+    GATT_PERMIT_READ, /* permissions */
+    0, /* handle */
+    (uint8_t *) &battService /* pValue */
+    },
 
-        // Battery Level Declaration
-        { { ATT_BT_UUID_SIZE, characterUUID },
-        GATT_PERMIT_READ, 0, &battLevelProps },
+    // Battery Level Declaration
+    { { ATT_BT_UUID_SIZE, characterUUID },
+    GATT_PERMIT_READ, 0, &battLevelProps },
 
-        // Battery Level Value
-        { { ATT_BT_UUID_SIZE, battLevelUUID },
-        GATT_PERMIT_READ, 0, &battLevel },
+    // Battery Level Value
+    { { ATT_BT_UUID_SIZE, battLevelUUID },
+    GATT_PERMIT_READ, 0, &battLevel },
 
-        // Battery Level Client Characteristic Configuration
-        { { ATT_BT_UUID_SIZE, clientCharCfgUUID },
-        GATT_PERMIT_READ | GATT_PERMIT_WRITE, 0,
-                (uint8_t *) &battLevelClientCharCfg },
+    // Battery Level Client Characteristic Configuration
+    { { ATT_BT_UUID_SIZE, clientCharCfgUUID },
+    GATT_PERMIT_READ | GATT_PERMIT_WRITE, 0, (uint8_t *) &battLevelClientCharCfg },
 
-        // HID Report Reference characteristic descriptor, batter level input
-        { { ATT_BT_UUID_SIZE, reportRefUUID },
-        GATT_PERMIT_READ, 0, hidReportRefBattLevel } };
+    // HID Report Reference characteristic descriptor, batter level input
+    { { ATT_BT_UUID_SIZE, reportRefUUID },
+    GATT_PERMIT_READ, 0, hidReportRefBattLevel } };
 
 /*********************************************************************
  * LOCAL FUNCTIONS
  */
-static bStatus_t battReadAttrCB(uint16_t connHandle, gattAttribute_t *pAttr,
-        uint8_t *pValue, uint16_t *pLen, uint16_t offset, uint16_t maxLen,
-        uint8_t method);
-static bStatus_t battWriteAttrCB(uint16_t connHandle, gattAttribute_t *pAttr,
-        uint8_t *pValue, uint16_t len, uint16_t offset, uint8_t method);
+static bStatus_t battReadAttrCB(uint16_t connHandle, gattAttribute_t *pAttr, uint8_t *pValue, uint16_t *pLen,
+    uint16_t offset, uint16_t maxLen, uint8_t method);
+static bStatus_t battWriteAttrCB(uint16_t connHandle, gattAttribute_t *pAttr, uint8_t *pValue, uint16_t len,
+    uint16_t offset, uint8_t method);
 static void battNotifyCB(linkDBItem_t *pLinkItem);
 static uint8_t battMeasure(void);
 static void battNotifyLevel(void);
@@ -143,9 +139,9 @@ static void battNotifyLevel(void);
  */
 // Battery Service Callbacks
 gattServiceCBs_t battCBs = { battReadAttrCB,  // Read callback function pointer
-        battWriteAttrCB, // Write callback function pointer
-        NULL             // Authorization callback function pointer
-        };
+    battWriteAttrCB, // Write callback function pointer
+    NULL             // Authorization callback function pointer
+    };
 
 /*********************************************************************
  * PUBLIC FUNCTIONS
@@ -166,9 +162,8 @@ bStatus_t Batt_AddService(void) {
     GATTServApp_InitCharCfg(INVALID_CONNHANDLE, battLevelClientCharCfg);
 
     // Register GATT attribute list and CBs with GATT Server App
-    status = GATTServApp_RegisterService(battAttrTbl,
-            GATT_NUM_ATTRS(battAttrTbl),
-            GATT_MAX_ENCRYPT_KEY_SIZE, &battCBs);
+    status = GATTServApp_RegisterService(battAttrTbl, GATT_NUM_ATTRS(battAttrTbl),
+    GATT_MAX_ENCRYPT_KEY_SIZE, &battCBs);
 
     return (status);
 }
@@ -311,9 +306,8 @@ bStatus_t Batt_MeasLevel(void) {
  *
  * @return  none.
  */
-void Batt_Setup(uint8_t adc_ch, uint16_t minVal, uint16_t maxVal,
-        battServiceSetupCB_t sCB, battServiceTeardownCB_t tCB,
-        battServiceCalcCB_t cCB) {
+void Batt_Setup(uint8_t adc_ch, uint16_t minVal, uint16_t maxVal, battServiceSetupCB_t sCB, battServiceTeardownCB_t tCB,
+    battServiceCalcCB_t cCB) {
     //battServiceAdcCh = adc_ch;
     battMinLevel = minVal;
     battMaxLevel = maxVal;
@@ -337,9 +331,8 @@ void Batt_Setup(uint8_t adc_ch, uint16_t minVal, uint16_t maxVal,
  *
  * @return      Success or Failure
  */
-static bStatus_t battReadAttrCB(uint16_t connHandle, gattAttribute_t *pAttr,
-        uint8_t *pValue, uint16_t *pLen, uint16_t offset, uint16_t maxLen,
-        uint8_t method) {
+static bStatus_t battReadAttrCB(uint16_t connHandle, gattAttribute_t *pAttr, uint8_t *pValue, uint16_t *pLen,
+    uint16_t offset, uint16_t maxLen, uint8_t method) {
     uint16_t uuid;
     bStatus_t status = SUCCESS;
 
@@ -387,23 +380,21 @@ static bStatus_t battReadAttrCB(uint16_t connHandle, gattAttribute_t *pAttr,
  *
  * @return  Success or Failure
  */
-static bStatus_t battWriteAttrCB(uint16_t connHandle, gattAttribute_t *pAttr,
-        uint8_t *pValue, uint16_t len, uint16_t offset, uint8_t method) {
+static bStatus_t battWriteAttrCB(uint16_t connHandle, gattAttribute_t *pAttr, uint8_t *pValue, uint16_t len,
+    uint16_t offset, uint8_t method) {
     bStatus_t status = SUCCESS;
 
     uint16_t uuid = BUILD_UINT16(pAttr->type.uuid[0], pAttr->type.uuid[1]);
     switch (uuid) {
     case GATT_CLIENT_CHAR_CFG_UUID:
-        status = GATTServApp_ProcessCCCWriteReq(connHandle, pAttr, pValue, len,
-                offset, GATT_CLIENT_CFG_NOTIFY);
+        status = GATTServApp_ProcessCCCWriteReq(connHandle, pAttr, pValue, len, offset, GATT_CLIENT_CFG_NOTIFY);
         if (status == SUCCESS) {
             uint16_t charCfg = BUILD_UINT16(pValue[0], pValue[1]);
 
             if (battServiceCB) {
-                (*battServiceCB)(
-                        (charCfg == GATT_CFG_NO_OPERATION) ?
-                                BATT_LEVEL_NOTI_DISABLED :
-                                BATT_LEVEL_NOTI_ENABLED);
+                (*battServiceCB)((charCfg == GATT_CFG_NO_OPERATION) ?
+                BATT_LEVEL_NOTI_DISABLED :
+                                                                      BATT_LEVEL_NOTI_ENABLED);
             }
         }
         break;
@@ -427,21 +418,20 @@ static bStatus_t battWriteAttrCB(uint16_t connHandle, gattAttribute_t *pAttr,
  */
 static void battNotifyCB(linkDBItem_t *pLinkItem) {
     if (pLinkItem->stateFlags & LINK_CONNECTED) {
-        uint16_t value = GATTServApp_ReadCharCfg(pLinkItem->connectionHandle,
-                battLevelClientCharCfg);
+        uint16_t value = GATTServApp_ReadCharCfg(pLinkItem->connectionHandle, battLevelClientCharCfg);
         if (value & GATT_CLIENT_CFG_NOTIFY) {
             attHandleValueNoti_t noti;
 
             noti.pValue = GATT_bm_alloc(pLinkItem->connectionHandle,
-                    ATT_HANDLE_VALUE_NOTI,
-                    BATT_LEVEL_VALUE_LEN, NULL, 0);
+            ATT_HANDLE_VALUE_NOTI,
+            BATT_LEVEL_VALUE_LEN, NULL, 0);
             if (noti.pValue != NULL) {
                 noti.handle = battAttrTbl[BATT_LEVEL_VALUE_IDX].handle;
                 noti.len = BATT_LEVEL_VALUE_LEN;
                 noti.pValue[0] = battLevel;
 
                 if (GATT_Notification(pLinkItem->connectionHandle, &noti,
-                        FALSE) != SUCCESS) {
+                FALSE) != SUCCESS) {
                     GATT_bm_free((gattMsg_t *) &noti, ATT_HANDLE_VALUE_NOTI);
                 }
             }
@@ -487,8 +477,7 @@ static uint8_t battMeasure(void) {
             // range += (range & 1);
             range >>= 2; // divide by 4
 
-            percent = (uint8_t) ((((adc - battMinLevel) * 25) + (range - 1))
-                    / range);
+            percent = (uint8_t) ((((adc - battMinLevel) * 25) + (range - 1)) / range);
         }
     }
 
@@ -523,8 +512,7 @@ void Batt_HandleConnStatusCB(uint16_t connHandle, uint8_t changeType) {
     if (connHandle != LOOPBACK_CONNHANDLE) {
         // Reset Client Char Config if connection has dropped
         if ((changeType == LINKDB_STATUS_UPDATE_REMOVED)
-                || ((changeType == LINKDB_STATUS_UPDATE_STATEFLAGS)
-                        && (!linkDB_Up(connHandle)))) {
+            || ((changeType == LINKDB_STATUS_UPDATE_STATEFLAGS) && (!linkDB_Up(connHandle)))) {
             GATTServApp_InitCharCfg(connHandle, battLevelClientCharCfg);
         }
     }

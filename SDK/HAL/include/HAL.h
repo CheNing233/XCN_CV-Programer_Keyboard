@@ -22,7 +22,6 @@ extern "C" {
 #include "RTC.h"
 #include "SLEEP.h"
 
-
 /* hal task Event */
 #define LED_BLINK_EVENT       0x0001
 #define HAL_KEY_EVENT         0x0002

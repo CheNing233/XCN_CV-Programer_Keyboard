@@ -54,20 +54,15 @@ extern "C" {
 /**
  * @brief  wakeup mode define
  */
-typedef enum
-{
-    Edge_LongDelay = 0,
-    Edge_ShortDelay,
-    Level_LongDelay,
-    Level_ShortDelay,
+typedef enum {
+    Edge_LongDelay = 0, Edge_ShortDelay, Level_LongDelay, Level_ShortDelay,
 
 } WakeUP_ModeypeDef;
 
 /**
  * @brief  wakeup mode define
  */
-typedef enum
-{
+typedef enum {
     /* 下面等级将使用高精度监控，210uA消耗 */
     HALevel_1V9 = 0, // 1.7-1.9
     HALevel_2V1,     // 1.9-2.1

@@ -121,8 +121,7 @@ extern bStatus_t ScanParam_GetParameter(uint8_t param, void *value);
  */
 extern void ScanParam_RefreshNotify(uint16_t connHandle);
 
-extern void ScanParam_HandleConnStatusCB(uint16_t connHandle,
-        uint8_t changeType);
+extern void ScanParam_HandleConnStatusCB(uint16_t connHandle, uint8_t changeType);
 
 /*********************************************************************
  *********************************************************************/

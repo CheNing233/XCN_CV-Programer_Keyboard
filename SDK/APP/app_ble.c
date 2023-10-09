@@ -95,34 +95,31 @@ static uint8_t hidEmuTaskId = INVALID_TASK_ID;
 
 // GAP - SCAN RSP data (max size = 31 bytes)
 static uint8_t scanRspData[] = {
-        // complete name
-        0x15,// length of this data
-        GAP_ADTYPE_LOCAL_NAME_COMPLETE, 'X', 'C', 'N', ' ', 'K', 'e', 'y', 'b',
-        'o', 'a', 'r', 'd', ' ', 'V', '5', '7', '3', 'B', 'L', 'E',
-        // connection interval range
-        0x05,// length of this data
-        GAP_ADTYPE_SLAVE_CONN_INTERVAL_RANGE, LO_UINT16(
-                DEFAULT_DESIRED_MIN_CONN_INTERVAL), // 100ms
-        HI_UINT16(DEFAULT_DESIRED_MIN_CONN_INTERVAL), LO_UINT16(
-                DEFAULT_DESIRED_MAX_CONN_INTERVAL), // 1s
-        HI_UINT16(DEFAULT_DESIRED_MAX_CONN_INTERVAL),
+    // complete name
+    0x15,// length of this data
+    GAP_ADTYPE_LOCAL_NAME_COMPLETE, 'X', 'C', 'N', ' ', 'K', 'e', 'y', 'b', 'o', 'a', 'r', 'd', ' ', 'V', '5', '7', '3',
+    'B', 'L', 'E',
+    // connection interval range
+    0x05,// length of this data
+    GAP_ADTYPE_SLAVE_CONN_INTERVAL_RANGE, LO_UINT16(DEFAULT_DESIRED_MIN_CONN_INTERVAL), // 100ms
+    HI_UINT16(DEFAULT_DESIRED_MIN_CONN_INTERVAL), LO_UINT16(DEFAULT_DESIRED_MAX_CONN_INTERVAL), // 1s
+    HI_UINT16(DEFAULT_DESIRED_MAX_CONN_INTERVAL),
 
-        // Tx power level
-        0x02,// length of this data
-        GAP_ADTYPE_POWER_LEVEL, 0 // 0dBm
-        };
+    // Tx power level
+    0x02,// length of this data
+    GAP_ADTYPE_POWER_LEVEL, 0 // 0dBm
+    };
 
 // Advertising data
 static uint8_t advertData[] = {
 // flags
-        0x02,// length of this data
-        GAP_ADTYPE_FLAGS,
-        GAP_ADTYPE_FLAGS_LIMITED | GAP_ADTYPE_FLAGS_BREDR_NOT_SUPPORTED,
+    0x02,// length of this data
+    GAP_ADTYPE_FLAGS,
+    GAP_ADTYPE_FLAGS_LIMITED | GAP_ADTYPE_FLAGS_BREDR_NOT_SUPPORTED,
 
-        // appearance
-        0x03,// length of this data
-        GAP_ADTYPE_APPEARANCE, LO_UINT16(GAP_APPEARE_HID_KEYBOARD), HI_UINT16(
-                GAP_APPEARE_HID_KEYBOARD) };
+    // appearance
+    0x03,// length of this data
+    GAP_ADTYPE_APPEARANCE, LO_UINT16(GAP_APPEARE_HID_KEYBOARD), HI_UINT16(GAP_APPEARE_HID_KEYBOARD) };
 
 // Device name attribute value
 static CONST uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "XCN Keyboard V573BLE";
@@ -130,8 +127,8 @@ static CONST uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "XCN Keyboard V573BLE"
 // HID Dev configuration
 static hidDevCfg_t hidEmuCfg = {
 DEFAULT_HID_IDLE_TIMEOUT, // Idle timeout
-        HID_FEATURE_FLAGS         // HID feature flags
-        };
+    HID_FEATURE_FLAGS         // HID feature flags
+    };
 
 static uint16_t hidEmuConnHandle = GAP_CONNHANDLE_INIT;
 
@@ -141,8 +138,7 @@ static uint16_t hidEmuConnHandle = GAP_CONNHANDLE_INIT;
 
 static void hidEmu_ProcessTMOSMsg(tmos_event_hdr_t *pMsg);
 static uint8_t hidEmuRcvReport(uint8_t len, uint8_t *pData);
-static uint8_t hidEmuRptCB(uint8_t id, uint8_t type, uint16_t uuid,
-        uint8_t oper, uint16_t *pLen, uint8_t *pData);
+static uint8_t hidEmuRptCB(uint8_t id, uint8_t type, uint16_t uuid, uint8_t oper, uint16_t *pLen, uint8_t *pData);
 static void hidEmuEvtCB(uint8_t evt);
 static void hidEmuStateCB(gapRole_States_t newState, gapRoleEvent_t *pEvent);
 
@@ -179,18 +175,14 @@ void HidEmu_Init() {
         uint8_t initial_advertising_enable = TRUE;
 
         // Set the GAP Role Parameters
-        GAPRole_SetParameter(GAPROLE_ADVERT_ENABLED, sizeof(uint8_t),
-                &initial_advertising_enable);
+        GAPRole_SetParameter(GAPROLE_ADVERT_ENABLED, sizeof(uint8_t), &initial_advertising_enable);
 
-        GAPRole_SetParameter(GAPROLE_ADVERT_DATA, sizeof(advertData),
-                advertData);
-        GAPRole_SetParameter(GAPROLE_SCAN_RSP_DATA, sizeof(scanRspData),
-                scanRspData);
+        GAPRole_SetParameter(GAPROLE_ADVERT_DATA, sizeof(advertData), advertData);
+        GAPRole_SetParameter(GAPROLE_SCAN_RSP_DATA, sizeof(scanRspData), scanRspData);
     }
 
     // Set the GAP Characteristics
-    GGS_SetParameter(GGS_DEVICE_NAME_ATT, GAP_DEVICE_NAME_LEN,
-            (void *) attDeviceName);
+    GGS_SetParameter(GGS_DEVICE_NAME_ATT, GAP_DEVICE_NAME_LEN, (void *) attDeviceName);
 
     // Setup the GAP Bond Manager
     {
@@ -199,23 +191,17 @@ void HidEmu_Init() {
         uint8_t mitm = DEFAULT_MITM_MODE;
         uint8_t ioCap = DEFAULT_IO_CAPABILITIES;
         uint8_t bonding = DEFAULT_BONDING_MODE;
-        GAPBondMgr_SetParameter(GAPBOND_PERI_DEFAULT_PASSCODE, sizeof(uint32_t),
-                &passkey);
-        GAPBondMgr_SetParameter(GAPBOND_PERI_PAIRING_MODE, sizeof(uint8_t),
-                &pairMode);
-        GAPBondMgr_SetParameter(GAPBOND_PERI_MITM_PROTECTION, sizeof(uint8_t),
-                &mitm);
-        GAPBondMgr_SetParameter(GAPBOND_PERI_IO_CAPABILITIES, sizeof(uint8_t),
-                &ioCap);
-        GAPBondMgr_SetParameter(GAPBOND_PERI_BONDING_ENABLED, sizeof(uint8_t),
-                &bonding);
+        GAPBondMgr_SetParameter(GAPBOND_PERI_DEFAULT_PASSCODE, sizeof(uint32_t), &passkey);
+        GAPBondMgr_SetParameter(GAPBOND_PERI_PAIRING_MODE, sizeof(uint8_t), &pairMode);
+        GAPBondMgr_SetParameter(GAPBOND_PERI_MITM_PROTECTION, sizeof(uint8_t), &mitm);
+        GAPBondMgr_SetParameter(GAPBOND_PERI_IO_CAPABILITIES, sizeof(uint8_t), &ioCap);
+        GAPBondMgr_SetParameter(GAPBOND_PERI_BONDING_ENABLED, sizeof(uint8_t), &bonding);
     }
 
     // Setup Battery Characteristic Values
     {
         uint8_t critical = DEFAULT_BATT_CRITICAL_LEVEL;
-        Batt_SetParameter(BATT_PARAM_CRITICAL_LEVEL, sizeof(uint8_t),
-                &critical);
+        Batt_SetParameter(BATT_PARAM_CRITICAL_LEVEL, sizeof(uint8_t), &critical);
     }
 
     // Set up HID keyboard service
@@ -301,7 +287,6 @@ static void hidEmu_ProcessTMOSMsg(tmos_event_hdr_t *pMsg) {
     }
 }
 
-
 /*********************************************************************
  * @fn      hidEmuSendKbdReport
  *
@@ -316,18 +301,18 @@ void hidEmuSendReport() {
     static uint8_t i = 0;
     i++;
 
-    if(i % 2 == 0){
+    if (i % 2 == 0) {
         HidDev_Report(HID_RPT_ID_KEY_IN, HID_REPORT_TYPE_INPUT,
-                    HID_KEYBOARD_IN_RPT_LEN, ReportBuf_Keyboard);
+        HID_KEYBOARD_IN_RPT_LEN, ReportBuf_Keyboard);
 
         HidDev_Report(HID_RPT_ID_CONSUMER_IN, HID_REPORT_TYPE_INPUT,
-                        HID_CONSUMER_IN_RPT_LEN, ReportBuf_Consumer);
+        HID_CONSUMER_IN_RPT_LEN, ReportBuf_Consumer);
     } else {
         HidDev_Report(HID_RPT_ID_CONSUMER_IN, HID_REPORT_TYPE_INPUT,
-                                HID_CONSUMER_IN_RPT_LEN, ReportBuf_Consumer);
+        HID_CONSUMER_IN_RPT_LEN, ReportBuf_Consumer);
 
         HidDev_Report(HID_RPT_ID_KEY_IN, HID_REPORT_TYPE_INPUT,
-                            HID_KEYBOARD_IN_RPT_LEN, ReportBuf_Keyboard);
+        HID_KEYBOARD_IN_RPT_LEN, ReportBuf_Keyboard);
     }
 
 }
@@ -425,8 +410,7 @@ static uint8_t hidEmuRcvReport(uint8_t len, uint8_t *pData) {
  *
  * @return  GATT status code.
  */
-static uint8_t hidEmuRptCB(uint8_t id, uint8_t type, uint16_t uuid,
-        uint8_t oper, uint16_t *pLen, uint8_t *pData) {
+static uint8_t hidEmuRptCB(uint8_t id, uint8_t type, uint16_t uuid, uint8_t oper, uint16_t *pLen, uint8_t *pData) {
     uint8_t status = SUCCESS;
 
     // write

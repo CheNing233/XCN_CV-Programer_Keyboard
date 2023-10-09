@@ -24,16 +24,12 @@ uint16_t Int32K_Tune_RAM = 0;
  *
  * @return  none
  */
-void LClk32K_Select(LClk32KTypeDef hc)
-{
+void LClk32K_Select(LClk32KTypeDef hc) {
     uint8_t cfg = R8_CK32K_CONFIG;
 
-    if(hc == Clk32K_LSI)
-    {
+    if (hc == Clk32K_LSI) {
         cfg &= ~RB_CLK_OSC32K_XT;
-    }
-    else
-    {
+    } else {
         cfg |= RB_CLK_OSC32K_XT;
     }
 
@@ -51,8 +47,7 @@ void LClk32K_Select(LClk32KTypeDef hc)
  *
  * @return  none
  */
-void HSECFG_Current(HSECurrentTypeDef c)
-{
+void HSECFG_Current(HSECurrentTypeDef c) {
     uint8_t x32M_c;
 
     x32M_c = R8_XT32M_TUNE;
@@ -72,8 +67,7 @@ void HSECFG_Current(HSECurrentTypeDef c)
  *
  * @return  none
  */
-void HSECFG_Capacitance(HSECapTypeDef c)
-{
+void HSECFG_Capacitance(HSECapTypeDef c) {
     uint8_t x32M_c;
 
     x32M_c = R8_XT32M_TUNE;
@@ -93,8 +87,7 @@ void HSECFG_Capacitance(HSECapTypeDef c)
  *
  * @return  none
  */
-void LSECFG_Current(LSECurrentTypeDef c)
-{
+void LSECFG_Current(LSECurrentTypeDef c) {
     uint8_t x32K_c;
 
     x32K_c = R8_XT32K_TUNE;
@@ -114,8 +107,7 @@ void LSECFG_Current(LSECurrentTypeDef c)
  *
  * @return  none
  */
-void LSECFG_Capacitance(LSECapTypeDef c)
-{
+void LSECFG_Capacitance(LSECapTypeDef c) {
     uint8_t x32K_c;
 
     x32K_c = R8_XT32K_TUNE;
@@ -135,46 +127,35 @@ void LSECFG_Capacitance(LSECapTypeDef c)
  *
  * @return  误差：万分之（单位）
  */
-uint16_t Calibration_LSI_FLASH(void)
-{
-    uint16_t     rev, basev;
-    uint32_t     calv;
-    uint16_t     i;
-    uint16_t     loc, loc_t;
-    float        CNT_STEP_K;
+uint16_t Calibration_LSI_FLASH(void) {
+    uint16_t rev, basev;
+    uint32_t calv;
+    uint16_t i;
+    uint16_t loc, loc_t;
+    float CNT_STEP_K;
     signed short diff_1, diff_2, diffc;
-    uint8_t      k = 0;
+    uint8_t k = 0;
 
     /* 根据当前时钟获取标称值和斜率（T-step） */
     rev = R16_CLK_SYS_CFG & 0xff;
-    if((rev & RB_CLK_SYS_MOD) == (2 << 6))
-    { // 32M做主频
+    if ((rev & RB_CLK_SYS_MOD) == (2 << 6)) { // 32M做主频
         calv = ((5 * 32000000 + (CAB_LSIFQ >> 1)) / CAB_LSIFQ);
         CNT_STEP_K = -1.6;
-    }
-    else if((rev & RB_CLK_SYS_MOD) == (1 << 6))
-    { // PLL进行分频
-        calv = (((uint32_t)5 * 480000000 / (rev & 0x1f) + (CAB_LSIFQ >> 1)) / CAB_LSIFQ);
+    } else if ((rev & RB_CLK_SYS_MOD) == (1 << 6)) { // PLL进行分频
+        calv = (((uint32_t) 5 * 480000000 / (rev & 0x1f) + (CAB_LSIFQ >> 1)) / CAB_LSIFQ);
         CNT_STEP_K = -0.1 * (rev & 0x1f);
-    }
-    else if((rev & RB_CLK_SYS_MOD) == (0 << 6))
-    { // 32M进行分频
+    } else if ((rev & RB_CLK_SYS_MOD) == (0 << 6)) { // 32M进行分频
         calv = ((5 * 32000000 / (rev & 0x1f) + (CAB_LSIFQ >> 1)) / CAB_LSIFQ);
         CNT_STEP_K = -1.6 * (rev & 0x1f);
-    }
-    else
-    { // 32K做主频
+    } else { // 32K做主频
         calv = (5);
         CNT_STEP_K = 0;
     }
     basev = calv; // 获取校准标称值
 
-    if(Int32K_Tune_FLASH)
-    {
+    if (Int32K_Tune_FLASH) {
         loc = Int32K_Tune_FLASH;
-    }
-    else
-    {
+    } else {
         loc = 2048;
     }
     //  if (loc == 2048)
@@ -185,8 +166,7 @@ uint16_t Calibration_LSI_FLASH(void)
 
     sys_safe_access_enable();
     R8_OSC_CAL_CTRL = RB_OSC_CNT_EN;
-    do
-    {
+    do {
         sys_safe_access_enable();
         R16_INT32K_TUNE = loc;
         sys_safe_access_disable();
@@ -201,41 +181,30 @@ uint16_t Calibration_LSI_FLASH(void)
         diff_1 = i - basev;
 
         Int32K_Tune_FLASH = loc;
-        if(diff_1 == 0)
-        {
+        if (diff_1 == 0) {
             return 0; // 校准正好
-        }
-        else if((diff_1 * diff_2) < 0)
-        { // 处于两点之间
-            if((diffc == 1) || (diffc == -1) || (diffc == 0))
-            {
+        } else if ((diff_1 * diff_2) < 0) { // 处于两点之间
+            if ((diffc == 1) || (diffc == -1) || (diffc == 0)) {
                 // 都变成正数
-                if(diff_2 < 0)
-                {
+                if (diff_2 < 0) {
                     diff_2 = ~(diff_2 - 1);
-                }
-                else
-                {
+                } else {
                     diff_1 = ~(diff_1 - 1);
                 }
 
-                if(diff_1 > diff_2)
-                {
+                if (diff_1 > diff_2) {
                     sys_safe_access_enable();
                     R16_INT32K_TUNE = loc_t;
                     sys_safe_access_disable();
 
                     return (diff_2 * 10000 / basev); // 返回误差值，万分之
-                }
-                else
-                {
+                } else {
                     return (diff_1 * 10000 / basev);
                 }
             }
         }
 
-        if(((i > basev ? (i - basev) : (basev - i)) * 10000 / basev) < 11)
-        {
+        if (((i > basev ? (i - basev) : (basev - i)) * 10000 / basev) < 11) {
             return ((i > basev ? (i - basev) : (basev - i)) * 10000 / basev);
         }
         // 保存上一次值
@@ -243,22 +212,17 @@ uint16_t Calibration_LSI_FLASH(void)
         loc_t = loc;
         diffc = diff_1 * CNT_STEP_K;
         loc = loc - diffc;
-        if(loc > RB_INT32K_TUNE)
-        {
+        if (loc > RB_INT32K_TUNE) {
             loc = RB_INT32K_TUNE;
         }
-        if(loc == loc_t)
-        {
-            if(diff_1 > 0)
-            {
+        if (loc == loc_t) {
+            if (diff_1 > 0) {
                 loc = loc + 1; // 当前频率偏小
-            }
-            else
-            {
+            } else {
                 loc = loc - 1; // 当前频率偏大
             }
         }
-    } while(k < 20);
+    } while (k < 20);
 
     Int32K_Tune_FLASH = loc;
     return ((i > basev ? (i - basev) : (basev - i)) * 10000 / basev);
@@ -274,8 +238,7 @@ uint16_t Calibration_LSI_FLASH(void)
  * @return  计数值
  */
 __attribute__((section(".highcode")))
-uint16_t Get_Calibration_Cnt_RAM(uint16_t loc)
-{
+  uint16_t Get_Calibration_Cnt_RAM(uint16_t loc) {
     uint16_t i;
 
     sys_safe_access_enable();
@@ -299,46 +262,35 @@ uint16_t Get_Calibration_Cnt_RAM(uint16_t loc)
  *
  * @return  误差：万分之（单位）
  */
-uint16_t Calibration_LSI_RAM(void)
-{
-    uint16_t     rev, basev;
-    uint32_t     calv;
-    uint16_t     i;
-    uint16_t     loc, loc_t;
-    float        CNT_STEP_K;
+uint16_t Calibration_LSI_RAM(void) {
+    uint16_t rev, basev;
+    uint32_t calv;
+    uint16_t i;
+    uint16_t loc, loc_t;
+    float CNT_STEP_K;
     signed short diff_1, diff_2, diffc;
-    uint8_t      k = 0;
+    uint8_t k = 0;
 
     /* 根据当前时钟获取标称值和斜率（T-step） */
     rev = R16_CLK_SYS_CFG & 0xff;
-    if((rev & RB_CLK_SYS_MOD) == (2 << 6))
-    { // 32M做主频
+    if ((rev & RB_CLK_SYS_MOD) == (2 << 6)) { // 32M做主频
         calv = ((5 * 32000000 + (CAB_LSIFQ >> 1)) / CAB_LSIFQ);
         CNT_STEP_K = -1.6;
-    }
-    else if((rev & RB_CLK_SYS_MOD) == (1 << 6))
-    { // PLL进行分频
-        calv = (((uint32_t)5 * 480000000 / (rev & 0x1f) + (CAB_LSIFQ >> 1)) / CAB_LSIFQ);
+    } else if ((rev & RB_CLK_SYS_MOD) == (1 << 6)) { // PLL进行分频
+        calv = (((uint32_t) 5 * 480000000 / (rev & 0x1f) + (CAB_LSIFQ >> 1)) / CAB_LSIFQ);
         CNT_STEP_K = -0.1 * (rev & 0x1f);
-    }
-    else if((rev & RB_CLK_SYS_MOD) == (0 << 6))
-    { // 32M进行分频
+    } else if ((rev & RB_CLK_SYS_MOD) == (0 << 6)) { // 32M进行分频
         calv = ((5 * 32000000 / (rev & 0x1f) + (CAB_LSIFQ >> 1)) / CAB_LSIFQ);
         CNT_STEP_K = -1.6 * (rev & 0x1f);
-    }
-    else
-    { // 32K做主频
+    } else { // 32K做主频
         calv = (5);
         CNT_STEP_K = 0;
     }
     basev = calv; // 获取校准标称值
 
-    if(Int32K_Tune_RAM)
-    {
+    if (Int32K_Tune_RAM) {
         loc = Int32K_Tune_RAM;
-    }
-    else
-    {
+    } else {
         loc = 2048;
     }
     //  if (loc == 2048)
@@ -349,48 +301,36 @@ uint16_t Calibration_LSI_RAM(void)
 
     sys_safe_access_enable();
     R8_OSC_CAL_CTRL = RB_OSC_CNT_EN;
-    do
-    {
+    do {
         i = Get_Calibration_Cnt_RAM(loc); // 实时校准后采样值
         k++;
         diff_1 = i - basev;
 
         Int32K_Tune_RAM = loc;
-        if(diff_1 == 0)
-        {
+        if (diff_1 == 0) {
             return 0; // 校准正好
-        }
-        else if((diff_1 * diff_2) < 0)
-        { // 处于两点之间
-            if((diffc == 1) || (diffc == -1) || (diffc == 0))
-            {
+        } else if ((diff_1 * diff_2) < 0) { // 处于两点之间
+            if ((diffc == 1) || (diffc == -1) || (diffc == 0)) {
                 // 都变成正数
-                if(diff_2 < 0)
-                {
+                if (diff_2 < 0) {
                     diff_2 = ~(diff_2 - 1);
-                }
-                else
-                {
+                } else {
                     diff_1 = ~(diff_1 - 1);
                 }
 
-                if(diff_1 > diff_2)
-                {
+                if (diff_1 > diff_2) {
                     sys_safe_access_enable();
                     R16_INT32K_TUNE = loc_t;
                     sys_safe_access_disable();
 
                     return (diff_2 * 10000 / basev); // 返回误差值，万分之
-                }
-                else
-                {
+                } else {
                     return (diff_1 * 10000 / basev);
                 }
             }
         }
 
-        if(((i > basev ? (i - basev) : (basev - i)) * 10000 / basev) < 11)
-        {
+        if (((i > basev ? (i - basev) : (basev - i)) * 10000 / basev) < 11) {
             return ((i > basev ? (i - basev) : (basev - i)) * 10000 / basev);
         }
         // 保存上一次值
@@ -398,22 +338,17 @@ uint16_t Calibration_LSI_RAM(void)
         loc_t = loc;
         diffc = diff_1 * CNT_STEP_K;
         loc = loc - diffc;
-        if(loc > RB_INT32K_TUNE)
-        {
+        if (loc > RB_INT32K_TUNE) {
             loc = RB_INT32K_TUNE;
         }
-        if(loc == loc_t)
-        {
-            if(diff_1 > 0)
-            {
+        if (loc == loc_t) {
+            if (diff_1 > 0) {
                 loc = loc + 1; // 当前频率偏小
-            }
-            else
-            {
+            } else {
                 loc = loc - 1; // 当前频率偏大
             }
         }
-    } while(k < 20);
+    } while (k < 20);
 
     Int32K_Tune_RAM = loc;
     return ((i > basev ? (i - basev) : (basev - i)) * 10000 / basev);
@@ -428,8 +363,7 @@ uint16_t Calibration_LSI_RAM(void)
  *
  * @return  none
  */
-void LSI_SetTune_FLASH(void)
-{
+void LSI_SetTune_FLASH(void) {
     sys_safe_access_enable();
     R16_INT32K_TUNE = Int32K_Tune_FLASH;
     sys_safe_access_disable();
@@ -444,8 +378,7 @@ void LSI_SetTune_FLASH(void)
  *
  * @return  none
  */
-void LSI_SetTune_RAM(void)
-{
+void LSI_SetTune_RAM(void) {
     sys_safe_access_enable();
     R16_INT32K_TUNE = Int32K_Tune_RAM;
     sys_safe_access_disable();
@@ -465,10 +398,9 @@ void LSI_SetTune_RAM(void)
  *
  * @return  none
  */
-void RTC_InitTime(uint16_t y, uint16_t mon, uint16_t d, uint16_t h, uint16_t m, uint16_t s)
-{
-    uint32_t         t;
-    uint16_t         year, month, day, sec2, t32k;
+void RTC_InitTime(uint16_t y, uint16_t mon, uint16_t d, uint16_t h, uint16_t m, uint16_t s) {
+    uint32_t t;
+    uint16_t year, month, day, sec2, t32k;
     volatile uint8_t clk_pin;
 
     year = y;
@@ -491,10 +423,9 @@ void RTC_InitTime(uint16_t y, uint16_t mon, uint16_t d, uint16_t h, uint16_t m, 
     t = sec2;
     t = t << 16 | t32k;
 
-    do
-    {
+    do {
         clk_pin = (R8_CK32K_CONFIG & RB_32K_CLK_PIN);
-    } while((clk_pin != (R8_CK32K_CONFIG & RB_32K_CLK_PIN)) || (!clk_pin));
+    } while ((clk_pin != (R8_CK32K_CONFIG & RB_32K_CLK_PIN)) || (!clk_pin));
 
     sys_safe_access_enable();
     R32_RTC_TRIG = day;
@@ -518,8 +449,7 @@ void RTC_InitTime(uint16_t y, uint16_t mon, uint16_t d, uint16_t h, uint16_t m, 
  *
  * @return  none
  */
-void RTC_GetTime(uint16_t *py, uint16_t *pmon, uint16_t *pd, uint16_t *ph, uint16_t *pm, uint16_t *ps)
-{
+void RTC_GetTime(uint16_t *py, uint16_t *pmon, uint16_t *pd, uint16_t *ph, uint16_t *pm, uint16_t *ps) {
     uint32_t t;
     uint16_t day, sec2, t32k;
 
@@ -558,14 +488,12 @@ void RTC_GetTime(uint16_t *py, uint16_t *pmon, uint16_t *pd, uint16_t *ph, uint1
  *
  * @return  none
  */
-void RTC_SetCycle32k(uint32_t cyc)
-{
+void RTC_SetCycle32k(uint32_t cyc) {
     volatile uint8_t clk_pin;
 
-    do
-    {
+    do {
         clk_pin = (R8_CK32K_CONFIG & RB_32K_CLK_PIN);
-    } while((clk_pin != (R8_CK32K_CONFIG & RB_32K_CLK_PIN)) || (!clk_pin));
+    } while ((clk_pin != (R8_CK32K_CONFIG & RB_32K_CLK_PIN)) || (!clk_pin));
 
     sys_safe_access_enable();
     R32_RTC_TRIG = cyc;
@@ -583,14 +511,12 @@ void RTC_SetCycle32k(uint32_t cyc)
  *
  * @return  当前周期数，MAX_CYC = 0xA8BFFFFF = 2831155199
  */
-uint32_t RTC_GetCycle32k(void)
-{
+uint32_t RTC_GetCycle32k(void) {
     volatile uint32_t i;
 
-    do
-    {
+    do {
         i = R32_RTC_CNT_32K;
-    } while(i != R32_RTC_CNT_32K);
+    } while (i != R32_RTC_CNT_32K);
 
     return (i);
 }
@@ -604,8 +530,7 @@ uint32_t RTC_GetCycle32k(void)
  *
  * @return  none
  */
-void RTC_TMRFunCfg(RTC_TMRCycTypeDef t)
-{
+void RTC_TMRFunCfg(RTC_TMRCycTypeDef t) {
     sys_safe_access_enable();
     R8_RTC_MODE_CTRL &= ~(RB_RTC_TMR_EN | RB_RTC_TMR_MODE);
     sys_safe_access_enable();
@@ -622,8 +547,7 @@ void RTC_TMRFunCfg(RTC_TMRCycTypeDef t)
  *
  * @return  none
  */
-void RTC_TRIGFunCfg(uint32_t cyc)
-{
+void RTC_TRIGFunCfg(uint32_t cyc) {
     uint32_t t;
 
     t = RTC_GetCycle32k() + cyc;
@@ -644,16 +568,12 @@ void RTC_TRIGFunCfg(uint32_t cyc)
  *
  * @return  none
  */
-void RTC_ModeFunDisable(RTC_MODETypeDef m)
-{
+void RTC_ModeFunDisable(RTC_MODETypeDef m) {
     uint8_t i = 0;
 
-    if(m == RTC_TRIG_MODE)
-    {
+    if (m == RTC_TRIG_MODE) {
         i |= RB_RTC_TRIG_EN;
-    }
-    else if(m == RTC_TMR_MODE)
-    {
+    } else if (m == RTC_TMR_MODE) {
         i |= RB_RTC_TMR_EN;
     }
 
@@ -671,14 +591,10 @@ void RTC_ModeFunDisable(RTC_MODETypeDef m)
  *
  * @return  中断标志状态
  */
-uint8_t RTC_GetITFlag(RTC_EVENTTypeDef f)
-{
-    if(f == RTC_TRIG_EVENT)
-    {
+uint8_t RTC_GetITFlag(RTC_EVENTTypeDef f) {
+    if (f == RTC_TRIG_EVENT) {
         return (R8_RTC_FLAG_CTRL & RB_RTC_TRIG_FLAG);
-    }
-    else
-    {
+    } else {
         return (R8_RTC_FLAG_CTRL & RB_RTC_TMR_FLAG);
     }
 }
@@ -692,18 +608,16 @@ uint8_t RTC_GetITFlag(RTC_EVENTTypeDef f)
  *
  * @return  none
  */
-void RTC_ClearITFlag(RTC_EVENTTypeDef f)
-{
-    switch(f)
-    {
-        case RTC_TRIG_EVENT:
-            R8_RTC_FLAG_CTRL = RB_RTC_TRIG_CLR;
-            break;
-        case RTC_TMR_EVENT:
-            R8_RTC_FLAG_CTRL = RB_RTC_TMR_CLR;
-            break;
-        default:
-            break;
+void RTC_ClearITFlag(RTC_EVENTTypeDef f) {
+    switch (f) {
+    case RTC_TRIG_EVENT:
+        R8_RTC_FLAG_CTRL = RB_RTC_TRIG_CLR;
+        break;
+    case RTC_TMR_EVENT:
+        R8_RTC_FLAG_CTRL = RB_RTC_TMR_CLR;
+        break;
+    default:
+        break;
     }
 }
 

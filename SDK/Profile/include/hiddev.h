@@ -255,15 +255,14 @@ extern uint8_t hidProtocolMode;
  */
 
 // HID Report callback
-typedef uint8_t (*hidDevReportCB_t)(uint8_t id, uint8_t type, uint16_t uuid,
-        uint8_t oper, uint16_t *pLen, uint8_t *pData);
+typedef uint8_t (*hidDevReportCB_t)(uint8_t id, uint8_t type, uint16_t uuid, uint8_t oper, uint16_t *pLen,
+    uint8_t *pData);
 
 // HID event callback
 typedef void (*hidDevEvtCB_t)(uint8_t evt);
 
 // HID passcode callback
-typedef void (*hidDevPasscodeCB_t)(uint8_t *deviceAddr,
-        uint16_t connectionHandle, uint8_t uiInputs, uint8_t uiOutputs);
+typedef void (*hidDevPasscodeCB_t)(uint8_t *deviceAddr, uint16_t connectionHandle, uint8_t uiInputs, uint8_t uiOutputs);
 
 typedef struct {
     hidDevReportCB_t reportCB;
@@ -339,8 +338,7 @@ extern void HidDev_RegisterReports(uint8_t numReports, hidRptMap_t *pRpt);
  *
  * @return  None.
  */
-extern uint8_t HidDev_Report(uint8_t id, uint8_t type, uint8_t len,
-        uint8_t *pData);
+extern uint8_t HidDev_Report(uint8_t id, uint8_t type, uint8_t len, uint8_t *pData);
 
 /*********************************************************************
  * @fn      HidDev_Start
@@ -418,9 +416,8 @@ extern void HidDev_PasscodeRsp(uint8_t status, uint32_t passcode);
  *
  * @return      Success or Failure
  */
-extern bStatus_t HidDev_ReadAttrCB(uint16_t connHandle, gattAttribute_t *pAttr,
-        uint8_t *pValue, uint16_t *pLen, uint16_t offset, uint16_t maxLen,
-        uint8_t method);
+extern bStatus_t HidDev_ReadAttrCB(uint16_t connHandle, gattAttribute_t *pAttr, uint8_t *pValue, uint16_t *pLen,
+    uint16_t offset, uint16_t maxLen, uint8_t method);
 
 /*********************************************************************
  * @fn      HidDev_WriteAttrCB
@@ -435,8 +432,8 @@ extern bStatus_t HidDev_ReadAttrCB(uint16_t connHandle, gattAttribute_t *pAttr,
  *
  * @return  Success or Failure
  */
-extern bStatus_t HidDev_WriteAttrCB(uint16_t connHandle, gattAttribute_t *pAttr,
-        uint8_t *pValue, uint16_t len, uint16_t offset, uint8_t method);
+extern bStatus_t HidDev_WriteAttrCB(uint16_t connHandle, gattAttribute_t *pAttr, uint8_t *pValue, uint16_t len,
+    uint16_t offset, uint8_t method);
 
 /*********************************************************************
  *********************************************************************/

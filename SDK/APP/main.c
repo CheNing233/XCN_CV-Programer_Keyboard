@@ -26,11 +26,10 @@
 #define EN8_B GPIO_Pin_7 //PB7
 #define EN8_C GPIO_Pin_12 //PA12
 
-
 /*********************************************************************
  * GLOBAL TYPEDEFS
  */
-__attribute__((aligned(4)))  uint32_t MEM_BUF[BLE_MEMHEAP_SIZE / 4];
+__attribute__((aligned(4)))    uint32_t MEM_BUF[BLE_MEMHEAP_SIZE / 4];
 
 #if(defined(BLE_MAC)) && (BLE_MAC == TRUE)
 const uint8_t MacAddr[6] = {0x84, 0xC2, 0xE4, 0x03, 0x02, 0x02};
@@ -99,7 +98,6 @@ int main(void) {
     GPIOA_SetBits(EN8_C);
 
     Keyin_Init();
-
 
     Main_Circulation();
 }

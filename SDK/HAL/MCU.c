@@ -104,8 +104,7 @@ void CH57X_BLEInit(void) {
 #if(CLK_OSC32K)
     cfg.SelRTCClock = (uint32_t) CLK_OSC32K;
 #endif
-    cfg.ConnectNumber = (PERIPHERAL_MAX_CONNECTION & 3)
-            | (CENTRAL_MAX_CONNECTION << 2);
+    cfg.ConnectNumber = (PERIPHERAL_MAX_CONNECTION & 3) | (CENTRAL_MAX_CONNECTION << 2);
     cfg.srandCB = SYS_GetSysTickCnt;
 #if(defined TEM_SAMPLE) && (TEM_SAMPLE == TRUE)
     cfg.tsCB = HAL_GetInterTempValue; // 根据温度变化校准RF和内部RC( 大于7摄氏度 )
@@ -182,8 +181,7 @@ tmosEvents HAL_ProcessEvent(tmosTaskID task_id, tmosEvents events) {
 #if(CLK_OSC32K)
         Lib_Calibration_LSI(); // 校准内部RC
 #endif
-        tmos_start_task(halTaskID, HAL_REG_INIT_EVENT,
-                MS1_TO_SYSTEM_TIME(BLE_CALIBRATION_PERIOD));
+        tmos_start_task(halTaskID, HAL_REG_INIT_EVENT, MS1_TO_SYSTEM_TIME(BLE_CALIBRATION_PERIOD));
         return events ^ HAL_REG_INIT_EVENT;
 #endif
     }
@@ -217,8 +215,7 @@ void HAL_Init() {
     HAL_KeyInit();
 #endif
 #if(defined BLE_CALIBRATION_ENABLE) && (BLE_CALIBRATION_ENABLE == TRUE)
-    tmos_start_task(halTaskID, HAL_REG_INIT_EVENT,
-            MS1_TO_SYSTEM_TIME(BLE_CALIBRATION_PERIOD)); // 添加校准任务，单次校准耗时小于10ms
+    tmos_start_task(halTaskID, HAL_REG_INIT_EVENT, MS1_TO_SYSTEM_TIME(BLE_CALIBRATION_PERIOD)); // 添加校准任务，单次校准耗时小于10ms
 #endif
     //  tmos_start_task( halTaskID, HAL_TEST_EVENT, 1600 );    // 添加一个测试任务
 }

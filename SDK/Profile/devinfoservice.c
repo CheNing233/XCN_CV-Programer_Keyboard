@@ -32,44 +32,37 @@
  * GLOBAL VARIABLES
  */
 // Device information service
-const uint8_t devInfoServUUID[ATT_BT_UUID_SIZE] = { LO_UINT16(
-        DEVINFO_SERV_UUID), HI_UINT16(DEVINFO_SERV_UUID) };
+const uint8_t devInfoServUUID[ATT_BT_UUID_SIZE] = { LO_UINT16(DEVINFO_SERV_UUID), HI_UINT16(DEVINFO_SERV_UUID) };
 
 // System ID
-const uint8_t devInfoSystemIdUUID[ATT_BT_UUID_SIZE] = { LO_UINT16(
-        SYSTEM_ID_UUID), HI_UINT16(SYSTEM_ID_UUID) };
+const uint8_t devInfoSystemIdUUID[ATT_BT_UUID_SIZE] = { LO_UINT16(SYSTEM_ID_UUID), HI_UINT16(SYSTEM_ID_UUID) };
 
 // Model Number String
-const uint8_t devInfoModelNumberUUID[ATT_BT_UUID_SIZE] = { LO_UINT16(
-        MODEL_NUMBER_UUID), HI_UINT16(MODEL_NUMBER_UUID) };
+const uint8_t devInfoModelNumberUUID[ATT_BT_UUID_SIZE] = { LO_UINT16(MODEL_NUMBER_UUID), HI_UINT16(MODEL_NUMBER_UUID) };
 
 // Serial Number String
-const uint8_t devInfoSerialNumberUUID[ATT_BT_UUID_SIZE] = { LO_UINT16(
-        SERIAL_NUMBER_UUID), HI_UINT16(SERIAL_NUMBER_UUID) };
+const uint8_t devInfoSerialNumberUUID[ATT_BT_UUID_SIZE] =
+    { LO_UINT16(SERIAL_NUMBER_UUID), HI_UINT16(SERIAL_NUMBER_UUID) };
 
 // Firmware Revision String
-const uint8_t devInfoFirmwareRevUUID[ATT_BT_UUID_SIZE] = { LO_UINT16(
-        FIRMWARE_REV_UUID), HI_UINT16(FIRMWARE_REV_UUID) };
+const uint8_t devInfoFirmwareRevUUID[ATT_BT_UUID_SIZE] = { LO_UINT16(FIRMWARE_REV_UUID), HI_UINT16(FIRMWARE_REV_UUID) };
 
 // Hardware Revision String
-const uint8_t devInfoHardwareRevUUID[ATT_BT_UUID_SIZE] = { LO_UINT16(
-        HARDWARE_REV_UUID), HI_UINT16(HARDWARE_REV_UUID) };
+const uint8_t devInfoHardwareRevUUID[ATT_BT_UUID_SIZE] = { LO_UINT16(HARDWARE_REV_UUID), HI_UINT16(HARDWARE_REV_UUID) };
 
 // Software Revision String
-const uint8_t devInfoSoftwareRevUUID[ATT_BT_UUID_SIZE] = { LO_UINT16(
-        SOFTWARE_REV_UUID), HI_UINT16(SOFTWARE_REV_UUID) };
+const uint8_t devInfoSoftwareRevUUID[ATT_BT_UUID_SIZE] = { LO_UINT16(SOFTWARE_REV_UUID), HI_UINT16(SOFTWARE_REV_UUID) };
 
 // Manufacturer Name String
-const uint8_t devInfoMfrNameUUID[ATT_BT_UUID_SIZE] = { LO_UINT16(
-        MANUFACTURER_NAME_UUID), HI_UINT16(MANUFACTURER_NAME_UUID) };
+const uint8_t devInfoMfrNameUUID[ATT_BT_UUID_SIZE] = { LO_UINT16(MANUFACTURER_NAME_UUID), HI_UINT16(
+    MANUFACTURER_NAME_UUID) };
 
 // IEEE 11073-20601 Regulatory Certification Data List
-const uint8_t devInfo11073CertUUID[ATT_BT_UUID_SIZE] = { LO_UINT16(
-        IEEE_11073_CERT_DATA_UUID), HI_UINT16(IEEE_11073_CERT_DATA_UUID) };
+const uint8_t devInfo11073CertUUID[ATT_BT_UUID_SIZE] = { LO_UINT16(IEEE_11073_CERT_DATA_UUID), HI_UINT16(
+    IEEE_11073_CERT_DATA_UUID) };
 
 // PnP ID
-const uint8_t devInfoPnpIdUUID[ATT_BT_UUID_SIZE] = { LO_UINT16(PNP_ID_UUID),
-        HI_UINT16(PNP_ID_UUID) };
+const uint8_t devInfoPnpIdUUID[ATT_BT_UUID_SIZE] = { LO_UINT16(PNP_ID_UUID), HI_UINT16(PNP_ID_UUID) };
 
 /*********************************************************************
  * EXTERNAL VARIABLES
@@ -88,13 +81,11 @@ const uint8_t devInfoPnpIdUUID[ATT_BT_UUID_SIZE] = { LO_UINT16(PNP_ID_UUID),
  */
 
 // Device Information Service attribute
-static const gattAttrType_t devInfoService =
-        { ATT_BT_UUID_SIZE, devInfoServUUID };
+static const gattAttrType_t devInfoService = { ATT_BT_UUID_SIZE, devInfoServUUID };
 
 // System ID characteristic
 static uint8_t devInfoSystemIdProps = GATT_PROP_READ;
-static uint8_t devInfoSystemId[DEVINFO_SYSTEM_ID_LEN] =
-        { 0, 0, 0, 0, 0, 0, 0, 0 };
+static uint8_t devInfoSystemId[DEVINFO_SYSTEM_ID_LEN] = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
 // Model Number String characteristic
 static uint8_t devInfoModelNumberProps = GATT_PROP_READ;
@@ -124,17 +115,17 @@ static const uint8_t devInfoMfrName[] = "Manufacturer Name";
 static uint8_t devInfo11073CertProps = GATT_PROP_READ;
 static const uint8_t devInfo11073Cert[] = {
 DEVINFO_11073_BODY_EXP, // authoritative body type
-        0x00,                   // authoritative body structure type
-                                // authoritative body data follows below:
-        'e', 'x', 'p', 'e', 'r', 'i', 'm', 'e', 'n', 't', 'a', 'l' };
+    0x00,                   // authoritative body structure type
+                            // authoritative body data follows below:
+    'e', 'x', 'p', 'e', 'r', 'i', 'm', 'e', 'n', 't', 'a', 'l' };
 
 // System ID characteristic
 static uint8_t devInfoPnpIdProps = GATT_PROP_READ;
 static uint8_t devInfoPnpId[DEVINFO_PNP_ID_LEN] = { 1, // Vendor ID source (1=Bluetooth SIG)
-        LO_UINT16(0x07D7), HI_UINT16(0x07D7), // Vendor ID (WCH)
-        LO_UINT16(0x0000), HI_UINT16(0x0000), // Product ID (vendor-specific)
-        LO_UINT16(0x0110), HI_UINT16(0x0110)  // Product version (JJ.M.N)
-        };
+    LO_UINT16(0x07D7), HI_UINT16(0x07D7), // Vendor ID (WCH)
+    LO_UINT16(0x0000), HI_UINT16(0x0000), // Product ID (vendor-specific)
+    LO_UINT16(0x0110), HI_UINT16(0x0110)  // Product version (JJ.M.N)
+    };
 
 /*********************************************************************
  * Profile Attributes - Table
@@ -142,99 +133,98 @@ static uint8_t devInfoPnpId[DEVINFO_PNP_ID_LEN] = { 1, // Vendor ID source (1=Bl
 
 static gattAttribute_t devInfoAttrTbl[] = {
 // Device Information Service
-        { { ATT_BT_UUID_SIZE, primaryServiceUUID }, /* type */
-        GATT_PERMIT_READ, /* permissions */
-        0, /* handle */
-        (uint8_t *) &devInfoService /* pValue */
-        },
+    { { ATT_BT_UUID_SIZE, primaryServiceUUID }, /* type */
+    GATT_PERMIT_READ, /* permissions */
+    0, /* handle */
+    (uint8_t *) &devInfoService /* pValue */
+    },
 
-        // System ID Declaration
-        { { ATT_BT_UUID_SIZE, characterUUID },
-        GATT_PERMIT_READ, 0, &devInfoSystemIdProps },
+    // System ID Declaration
+    { { ATT_BT_UUID_SIZE, characterUUID },
+    GATT_PERMIT_READ, 0, &devInfoSystemIdProps },
 
-        // System ID Value
-        { { ATT_BT_UUID_SIZE, devInfoSystemIdUUID },
-        GATT_PERMIT_READ, 0, (uint8_t *) devInfoSystemId },
+    // System ID Value
+    { { ATT_BT_UUID_SIZE, devInfoSystemIdUUID },
+    GATT_PERMIT_READ, 0, (uint8_t *) devInfoSystemId },
 
-        // Model Number String Declaration
-        { { ATT_BT_UUID_SIZE, characterUUID },
-        GATT_PERMIT_READ, 0, &devInfoModelNumberProps },
+    // Model Number String Declaration
+    { { ATT_BT_UUID_SIZE, characterUUID },
+    GATT_PERMIT_READ, 0, &devInfoModelNumberProps },
 
-        // Model Number Value
-        { { ATT_BT_UUID_SIZE, devInfoModelNumberUUID },
-        GATT_PERMIT_READ, 0, (uint8_t *) devInfoModelNumber },
+    // Model Number Value
+    { { ATT_BT_UUID_SIZE, devInfoModelNumberUUID },
+    GATT_PERMIT_READ, 0, (uint8_t *) devInfoModelNumber },
 
-        // Serial Number String Declaration
-        { { ATT_BT_UUID_SIZE, characterUUID },
-        GATT_PERMIT_READ, 0, &devInfoSerialNumberProps },
+    // Serial Number String Declaration
+    { { ATT_BT_UUID_SIZE, characterUUID },
+    GATT_PERMIT_READ, 0, &devInfoSerialNumberProps },
 
-        // Serial Number Value
-        { { ATT_BT_UUID_SIZE, devInfoSerialNumberUUID },
-        GATT_PERMIT_READ, 0, (uint8_t *) devInfoSerialNumber },
+    // Serial Number Value
+    { { ATT_BT_UUID_SIZE, devInfoSerialNumberUUID },
+    GATT_PERMIT_READ, 0, (uint8_t *) devInfoSerialNumber },
 
-        // Firmware Revision String Declaration
-        { { ATT_BT_UUID_SIZE, characterUUID },
-        GATT_PERMIT_READ, 0, &devInfoFirmwareRevProps },
+    // Firmware Revision String Declaration
+    { { ATT_BT_UUID_SIZE, characterUUID },
+    GATT_PERMIT_READ, 0, &devInfoFirmwareRevProps },
 
-        // Firmware Revision Value
-        { { ATT_BT_UUID_SIZE, devInfoFirmwareRevUUID },
-        GATT_PERMIT_READ, 0, (uint8_t *) devInfoFirmwareRev },
+    // Firmware Revision Value
+    { { ATT_BT_UUID_SIZE, devInfoFirmwareRevUUID },
+    GATT_PERMIT_READ, 0, (uint8_t *) devInfoFirmwareRev },
 
-        // Hardware Revision String Declaration
-        { { ATT_BT_UUID_SIZE, characterUUID },
-        GATT_PERMIT_READ, 0, &devInfoHardwareRevProps },
+    // Hardware Revision String Declaration
+    { { ATT_BT_UUID_SIZE, characterUUID },
+    GATT_PERMIT_READ, 0, &devInfoHardwareRevProps },
 
-        // Hardware Revision Value
-        { { ATT_BT_UUID_SIZE, devInfoHardwareRevUUID },
-        GATT_PERMIT_READ, 0, (uint8_t *) devInfoHardwareRev },
+    // Hardware Revision Value
+    { { ATT_BT_UUID_SIZE, devInfoHardwareRevUUID },
+    GATT_PERMIT_READ, 0, (uint8_t *) devInfoHardwareRev },
 
-        // Software Revision String Declaration
-        { { ATT_BT_UUID_SIZE, characterUUID },
-        GATT_PERMIT_READ, 0, &devInfoSoftwareRevProps },
+    // Software Revision String Declaration
+    { { ATT_BT_UUID_SIZE, characterUUID },
+    GATT_PERMIT_READ, 0, &devInfoSoftwareRevProps },
 
-        // Software Revision Value
-        { { ATT_BT_UUID_SIZE, devInfoSoftwareRevUUID },
-        GATT_PERMIT_READ, 0, (uint8_t *) devInfoSoftwareRev },
+    // Software Revision Value
+    { { ATT_BT_UUID_SIZE, devInfoSoftwareRevUUID },
+    GATT_PERMIT_READ, 0, (uint8_t *) devInfoSoftwareRev },
 
-        // Manufacturer Name String Declaration
-        { { ATT_BT_UUID_SIZE, characterUUID },
-        GATT_PERMIT_READ, 0, &devInfoMfrNameProps },
+    // Manufacturer Name String Declaration
+    { { ATT_BT_UUID_SIZE, characterUUID },
+    GATT_PERMIT_READ, 0, &devInfoMfrNameProps },
 
-        // Manufacturer Name Value
-        { { ATT_BT_UUID_SIZE, devInfoMfrNameUUID },
-        GATT_PERMIT_READ, 0, (uint8_t *) devInfoMfrName },
+    // Manufacturer Name Value
+    { { ATT_BT_UUID_SIZE, devInfoMfrNameUUID },
+    GATT_PERMIT_READ, 0, (uint8_t *) devInfoMfrName },
 
-        // IEEE 11073-20601 Regulatory Certification Data List Declaration
-        { { ATT_BT_UUID_SIZE, characterUUID },
-        GATT_PERMIT_READ, 0, &devInfo11073CertProps },
+    // IEEE 11073-20601 Regulatory Certification Data List Declaration
+    { { ATT_BT_UUID_SIZE, characterUUID },
+    GATT_PERMIT_READ, 0, &devInfo11073CertProps },
 
-        // IEEE 11073-20601 Regulatory Certification Data List Value
-        { { ATT_BT_UUID_SIZE, devInfo11073CertUUID },
-        GATT_PERMIT_READ, 0, (uint8_t *) devInfo11073Cert },
+    // IEEE 11073-20601 Regulatory Certification Data List Value
+    { { ATT_BT_UUID_SIZE, devInfo11073CertUUID },
+    GATT_PERMIT_READ, 0, (uint8_t *) devInfo11073Cert },
 
-        // PnP ID Declaration
-        { { ATT_BT_UUID_SIZE, characterUUID },
-        GATT_PERMIT_READ, 0, &devInfoPnpIdProps },
+    // PnP ID Declaration
+    { { ATT_BT_UUID_SIZE, characterUUID },
+    GATT_PERMIT_READ, 0, &devInfoPnpIdProps },
 
-        // PnP ID Value
-        { { ATT_BT_UUID_SIZE, devInfoPnpIdUUID },
-        GATT_PERMIT_READ, 0, (uint8_t *) devInfoPnpId } };
+    // PnP ID Value
+    { { ATT_BT_UUID_SIZE, devInfoPnpIdUUID },
+    GATT_PERMIT_READ, 0, (uint8_t *) devInfoPnpId } };
 
 /*********************************************************************
  * LOCAL FUNCTIONS
  */
-static bStatus_t devInfo_ReadAttrCB(uint16_t connHandle, gattAttribute_t *pAttr,
-        uint8_t *pValue, uint16_t *pLen, uint16_t offset, uint16_t maxLen,
-        uint8_t method);
+static bStatus_t devInfo_ReadAttrCB(uint16_t connHandle, gattAttribute_t *pAttr, uint8_t *pValue, uint16_t *pLen,
+    uint16_t offset, uint16_t maxLen, uint8_t method);
 
 /*********************************************************************
  * PROFILE CALLBACKS
  */
 // Device Info Service Callbacks
 gattServiceCBs_t devInfoCBs = { devInfo_ReadAttrCB, // Read callback function pointer
-        NULL,               // Write callback function pointer
-        NULL                // Authorization callback function pointer
-        };
+    NULL,               // Write callback function pointer
+    NULL                // Authorization callback function pointer
+    };
 
 /*********************************************************************
  * NETWORK LAYER CALLBACKS
@@ -254,9 +244,8 @@ gattServiceCBs_t devInfoCBs = { devInfo_ReadAttrCB, // Read callback function po
  */
 bStatus_t DevInfo_AddService(void) {
     // Register GATT attribute list and CBs with GATT Server App
-    return GATTServApp_RegisterService(devInfoAttrTbl,
-            GATT_NUM_ATTRS(devInfoAttrTbl),
-            GATT_MAX_ENCRYPT_KEY_SIZE, &devInfoCBs);
+    return GATTServApp_RegisterService(devInfoAttrTbl, GATT_NUM_ATTRS(devInfoAttrTbl),
+    GATT_MAX_ENCRYPT_KEY_SIZE, &devInfoCBs);
 }
 
 /*********************************************************************
@@ -363,9 +352,8 @@ bStatus_t DevInfo_GetParameter(uint8_t param, void *value) {
  *
  * @return      Success or Failure
  */
-static bStatus_t devInfo_ReadAttrCB(uint16_t connHandle, gattAttribute_t *pAttr,
-        uint8_t *pValue, uint16_t *pLen, uint16_t offset, uint16_t maxLen,
-        uint8_t method) {
+static bStatus_t devInfo_ReadAttrCB(uint16_t connHandle, gattAttribute_t *pAttr, uint8_t *pValue, uint16_t *pLen,
+    uint16_t offset, uint16_t maxLen, uint8_t method) {
     bStatus_t status = SUCCESS;
     uint16_t uuid = BUILD_UINT16(pAttr->type.uuid[0], pAttr->type.uuid[1]);
 

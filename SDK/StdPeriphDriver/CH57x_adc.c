@@ -25,7 +25,7 @@ signed short ADC_DataCalib_Rough(void) // 采样数据粗调,获取偏差值
 {
     uint16_t i;
     uint32_t sum = 0;
-    uint8_t  ch = 0;   // 备份通道
+    uint8_t ch = 0;   // 备份通道
 
     ch = R8_ADC_CHANNEL;
 
@@ -33,8 +33,7 @@ signed short ADC_DataCalib_Rough(void) // 采样数据粗调,获取偏差值
     R8_ADC_CFG |= RB_ADC_OFS_TEST; // 进入测试模式
     R8_ADC_CONVERT = RB_ADC_START;
     while(R8_ADC_CONVERT & RB_ADC_START);
-    for(i = 0; i < 16; i++)
-    {
+    for (i = 0; i < 16; i++) {
         R8_ADC_CONVERT = RB_ADC_START;
         while(R8_ADC_CONVERT & RB_ADC_START);
         sum += (~R16_ADC_DATA) & RB_ADC_DATA;
@@ -57,8 +56,7 @@ signed short ADC_DataCalib_Rough(void) // 采样数据粗调,获取偏差值
  *
  * @return  none
  */
-void ADC_ExtSingleChSampInit(ADC_SampClkTypeDef sp, ADC_SignalPGATypeDef ga)
-{
+void ADC_ExtSingleChSampInit(ADC_SampClkTypeDef sp, ADC_SignalPGATypeDef ga) {
     R8_TKEY_CFG &= ~RB_TKEY_PWR_ON;
     R8_ADC_CFG = RB_ADC_POWER_ON | RB_ADC_BUF_EN | (sp << 6) | (ga << 4);
 }
@@ -73,8 +71,7 @@ void ADC_ExtSingleChSampInit(ADC_SampClkTypeDef sp, ADC_SignalPGATypeDef ga)
  *
  * @return  none
  */
-void ADC_ExtDiffChSampInit(ADC_SampClkTypeDef sp, ADC_SignalPGATypeDef ga)
-{
+void ADC_ExtDiffChSampInit(ADC_SampClkTypeDef sp, ADC_SignalPGATypeDef ga) {
     R8_TKEY_CFG &= ~RB_TKEY_PWR_ON;
     R8_ADC_CFG = RB_ADC_POWER_ON | RB_ADC_DIFF_EN | (sp << 6) | (ga << 4);
 }
@@ -88,8 +85,7 @@ void ADC_ExtDiffChSampInit(ADC_SampClkTypeDef sp, ADC_SignalPGATypeDef ga)
  *
  * @return  none
  */
-void ADC_InterTSSampInit(void)
-{
+void ADC_InterTSSampInit(void) {
     R8_TKEY_CFG &= ~RB_TKEY_PWR_ON;
     R8_TEM_SENSOR = RB_TEM_SEN_PWR_ON;
     R8_ADC_CHANNEL = CH_INTE_VTEMP;
@@ -105,8 +101,7 @@ void ADC_InterTSSampInit(void)
  *
  * @return  none
  */
-void ADC_InterBATSampInit(void)
-{
+void ADC_InterBATSampInit(void) {
     R8_TKEY_CFG &= ~RB_TKEY_PWR_ON;
     R8_ADC_CHANNEL = CH_INTE_VBAT;
     R8_ADC_CFG = RB_ADC_POWER_ON | RB_ADC_BUF_EN | (0 << 4); // 使用-12dB模式，
@@ -121,8 +116,7 @@ void ADC_InterBATSampInit(void)
  *
  * @return  none
  */
-void TouchKey_ChSampInit(void)
-{
+void TouchKey_ChSampInit(void) {
     R8_ADC_CFG = RB_ADC_POWER_ON | RB_ADC_BUF_EN | (2 << 4);
     R8_TKEY_CFG |= RB_TKEY_PWR_ON;
 }
@@ -136,8 +130,7 @@ void TouchKey_ChSampInit(void)
  *
  * @return  ADC转换后的数据
  */
-uint16_t ADC_ExcutSingleConver(void)
-{
+uint16_t ADC_ExcutSingleConver(void) {
     R8_ADC_CONVERT = RB_ADC_START;
     while(R8_ADC_CONVERT & RB_ADC_START);
 
@@ -154,8 +147,7 @@ uint16_t ADC_ExcutSingleConver(void)
  *
  * @return  当前TouchKey等效数据
  */
-uint16_t TouchKey_ExcutSingleConver(uint8_t charg, uint8_t disch)
-{
+uint16_t TouchKey_ExcutSingleConver(uint8_t charg, uint8_t disch) {
     R8_TKEY_COUNT = (disch << 5) | (charg & 0x1f);
     R8_TKEY_CONVERT = RB_TKEY_START;
     while(R8_TKEY_CONVERT & RB_TKEY_START);
@@ -171,8 +163,7 @@ uint16_t TouchKey_ExcutSingleConver(uint8_t charg, uint8_t disch)
  *
  * @return  none
  */
-void ADC_AutoConverCycle(uint8_t cycle)
-{
+void ADC_AutoConverCycle(uint8_t cycle) {
     R8_ADC_AUTO_CYCLE = cycle;
 }
 
@@ -188,22 +179,15 @@ void ADC_AutoConverCycle(uint8_t cycle)
  *
  * @return  none
  */
-void ADC_DMACfg(uint8_t s, uint16_t startAddr, uint16_t endAddr, ADC_DMAModeTypeDef m)
-{
-    if(s == DISABLE)
-    {
+void ADC_DMACfg(uint8_t s, uint16_t startAddr, uint16_t endAddr, ADC_DMAModeTypeDef m) {
+    if (s == DISABLE) {
         R8_ADC_CTRL_DMA &= ~(RB_ADC_DMA_ENABLE | RB_ADC_IE_DMA_END);
-    }
-    else
-    {
+    } else {
         R16_ADC_DMA_BEG = startAddr;
         R16_ADC_DMA_END = endAddr;
-        if(m)
-        {
+        if (m) {
             R8_ADC_CTRL_DMA |= RB_ADC_DMA_LOOP | RB_ADC_IE_DMA_END | RB_ADC_DMA_ENABLE;
-        }
-        else
-        {
+        } else {
             R8_ADC_CTRL_DMA &= ~RB_ADC_DMA_LOOP;
             R8_ADC_CTRL_DMA |= RB_ADC_IE_DMA_END | RB_ADC_DMA_ENABLE;
         }
@@ -220,16 +204,14 @@ void ADC_DMACfg(uint8_t s, uint16_t startAddr, uint16_t endAddr, ADC_DMAModeType
  * @return  temperature (Celsius)
  */
 
-int adc_to_temperature_celsius(uint16_t adc_val)
-{
+int adc_to_temperature_celsius(uint16_t adc_val) {
     uint32_t C25 = 0;
-    int      temp;
+    int temp;
 
-    C25 = (*((PUINT32)ROM_CFG_TMP_25C));
+    C25 = (*((PUINT32) ROM_CFG_TMP_25C));
 
-    /* current temperature = standard temperature + (adc deviation * adc linearity coefficient) */ 
-    temp = (((C25 >> 16) & 0xFFFF) ? ((C25 >> 16) & 0xFFFF) : 25) + \
-        (adc_val - ((int)(C25 & 0xFFFF))) * 10 / 27; 
+    /* current temperature = standard temperature + (adc deviation * adc linearity coefficient) */
+    temp = (((C25 >> 16) & 0xFFFF) ? ((C25 >> 16) & 0xFFFF) : 25) + (adc_val - ((int) (C25 & 0xFFFF))) * 10 / 27;
 
     return (temp);
 }

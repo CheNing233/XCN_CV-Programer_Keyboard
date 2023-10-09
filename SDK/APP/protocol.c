@@ -10,14 +10,14 @@ Board_Protocol_Use Protocol_SW = Board_Use_Init;
 
 uint8_t ReportBuf_Keyboard[8] = {
 //      Keyboard buffer
-        0x00,// 功能键
-        0x00, // 保留
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00 // 普通键
-        };
+    0x00,// 功能键
+    0x00, // 保留
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00 // 普通键
+    };
 
 uint8_t ReportBuf_Consumer[4] = {
 //      Consumer buffer
-        0x00, 0x00, 0x00, 0x00 };
+    0x00, 0x00, 0x00, 0x00 };
 
 static uint8_t TMOSTASK_ProtoCtrl_Fresh_ID = INVALID_TASK_ID;
 static uint16_t TMOSTASK_ProtoCtrl_Fresh(uint8_t task_id, uint16_t events);
@@ -29,17 +29,13 @@ void ProtoCtrl_Init() {
 
     GPIOA_ModeCfg(PROTO_SW_PIN, GPIO_ModeIN_PU);
 
-    TMOSTASK_ProtoCtrl_Fresh_ID = TMOS_ProcessEventRegister(
-            TMOSTASK_ProtoCtrl_Fresh);
+    TMOSTASK_ProtoCtrl_Fresh_ID = TMOS_ProcessEventRegister(TMOSTASK_ProtoCtrl_Fresh);
 
-    TMOSTASK_ProtoCtrl_UploadData_ID = TMOS_ProcessEventRegister(
-            TMOSTASK_ProtoCtrl_UploadData);
+    TMOSTASK_ProtoCtrl_UploadData_ID = TMOS_ProcessEventRegister(TMOSTASK_ProtoCtrl_UploadData);
 
-    tmos_start_task(TMOSTASK_ProtoCtrl_Fresh_ID, 0x0001,
-            UserCfg_RAM.Proto_FreshState_Interval);
+    tmos_start_task(TMOSTASK_ProtoCtrl_Fresh_ID, 0x0001, UserCfg_RAM.Proto_FreshState_Interval);
 
-    tmos_start_task(TMOSTASK_ProtoCtrl_UploadData_ID, 0x0001,
-            UserCfg_RAM.Proto_USBBuffer_PushInterval);
+    tmos_start_task(TMOSTASK_ProtoCtrl_UploadData_ID, 0x0001, UserCfg_RAM.Proto_USBBuffer_PushInterval);
 
 }
 
@@ -53,8 +49,7 @@ uint16_t TMOSTASK_ProtoCtrl_Fresh(uint8_t task_id, uint16_t events) {
 
     if (events & 0x0001) {
 
-        Protocol_SW =
-                (GPIOA_ReadPortPin(PROTO_SW_PIN) ? Board_Use_BLE : Board_Use_USB);
+        Protocol_SW = (GPIOA_ReadPortPin(PROTO_SW_PIN) ? Board_Use_BLE : Board_Use_USB);
 
         if (old_protocolsw != Protocol_SW) {
             switch (Protocol_SW) {
@@ -72,8 +67,7 @@ uint16_t TMOSTASK_ProtoCtrl_Fresh(uint8_t task_id, uint16_t events) {
 
         old_protocolsw = Protocol_SW;
 
-        tmos_start_task(TMOSTASK_ProtoCtrl_Fresh_ID, 0x0001,
-                UserCfg_RAM.Proto_FreshState_Interval);
+        tmos_start_task(TMOSTASK_ProtoCtrl_Fresh_ID, 0x0001, UserCfg_RAM.Proto_FreshState_Interval);
     }
 
     return 0;
@@ -97,21 +91,18 @@ uint16_t TMOSTASK_ProtoCtrl_UploadData(uint8_t task_id, uint16_t events) {
             DevEP1_IN_Deal(sizeof(ReportBuf_Keyboard));
             DevEP2_IN_Deal(sizeof(ReportBuf_Consumer));
 
-            tmos_start_task(TMOSTASK_ProtoCtrl_UploadData_ID, 0x0001,
-                    UserCfg_RAM.Proto_USBBuffer_PushInterval);
+            tmos_start_task(TMOSTASK_ProtoCtrl_UploadData_ID, 0x0001, UserCfg_RAM.Proto_USBBuffer_PushInterval);
             break;
 
         case Board_Use_BLE:
 
             hidEmuSendReport();
 
-            tmos_start_task(TMOSTASK_ProtoCtrl_UploadData_ID, 0x0001,
-                    UserCfg_RAM.Proto_BLEBuffer_PushInterval);
+            tmos_start_task(TMOSTASK_ProtoCtrl_UploadData_ID, 0x0001, UserCfg_RAM.Proto_BLEBuffer_PushInterval);
             break;
 
         default:
-            tmos_start_task(TMOSTASK_ProtoCtrl_UploadData_ID, 0x0001,
-                    UserCfg_RAM.Proto_USBBuffer_PushInterval);
+            tmos_start_task(TMOSTASK_ProtoCtrl_UploadData_ID, 0x0001, UserCfg_RAM.Proto_USBBuffer_PushInterval);
             break;
         }
 

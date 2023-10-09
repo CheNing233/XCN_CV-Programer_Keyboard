@@ -1533,9 +1533,8 @@ typedef struct {
  *          blePending: A response is pending for this client.<BR>
  *          Error, otherwise: ref ATT_ERR_CODE_DEFINES.<BR>
  */
-typedef uint8_t (*pfnGATTReadAttrCB_t)(uint16_t connHandle,
-        gattAttribute_t *pAttr, uint8_t *pValue, uint16_t *pLen,
-        uint16_t offset, uint16_t maxLen, uint8_t method);
+typedef uint8_t (*pfnGATTReadAttrCB_t)(uint16_t connHandle, gattAttribute_t *pAttr, uint8_t *pValue, uint16_t *pLen,
+    uint16_t offset, uint16_t maxLen, uint8_t method);
 
 /**
  * @brief   Callback function prototype to write an attribute value.
@@ -1564,9 +1563,8 @@ typedef uint8_t (*pfnGATTReadAttrCB_t)(uint16_t connHandle,
  *          blePending: A response is pending for this client.<BR>
  *          Error, otherwise: ref ATT_ERR_CODE_DEFINES.<BR>
  */
-typedef uint8_t (*pfnGATTWriteAttrCB_t)(uint16_t connHandle,
-        gattAttribute_t *pAttr, uint8_t *pValue, uint16_t len, uint16_t offset,
-        uint8_t method);
+typedef uint8_t (*pfnGATTWriteAttrCB_t)(uint16_t connHandle, gattAttribute_t *pAttr, uint8_t *pValue, uint16_t len,
+    uint16_t offset, uint8_t method);
 
 /**
  * @brief   Callback function prototype to authorize a Read or Write operation
@@ -1579,8 +1577,7 @@ typedef uint8_t (*pfnGATTWriteAttrCB_t)(uint16_t connHandle,
  * @return  SUCCESS: Operation authorized.<BR>
  *          ATT_ERR_INSUFFICIENT_AUTHOR: Authorization required.<BR>
  */
-typedef bStatus_t (*pfnGATTAuthorizeAttrCB_t)(uint16_t connHandle,
-        gattAttribute_t *pAttr, uint8_t opcode);
+typedef bStatus_t (*pfnGATTAuthorizeAttrCB_t)(uint16_t connHandle, gattAttribute_t *pAttr, uint8_t opcode);
 
 /**
  * GATT Structure for Client Characteristic Configuration.
@@ -1787,18 +1784,18 @@ typedef struct {
  * Passcode Callback Function
  */
 typedef void (*pfnPasscodeCB_t)(uint8_t *deviceAddr, //!< address of device to pair with, and could be either public or random.
-        uint16_t connectionHandle,      //!< Connection handle
-        uint8_t uiInputs, //!< Pairing User Interface Inputs - Ask user to input passcode
-        uint8_t uiOutputs //!< Pairing User Interface Outputs - Display passcode
-        );
+    uint16_t connectionHandle,      //!< Connection handle
+    uint8_t uiInputs, //!< Pairing User Interface Inputs - Ask user to input passcode
+    uint8_t uiOutputs //!< Pairing User Interface Outputs - Display passcode
+    );
 
 /**
  * Pairing State Callback Function
  */
 typedef void (*pfnPairStateCB_t)(uint16_t connectionHandle, //!< Connection handle
-        uint8_t state,     //!< Pairing state @ref GAPBOND_PAIRING_STATE_DEFINES
-        uint8_t status                         //!< Pairing status
-        );
+    uint8_t state,     //!< Pairing state @ref GAPBOND_PAIRING_STATE_DEFINES
+    uint8_t status                         //!< Pairing status
+    );
 
 /**
  * Callback Registration Structure
@@ -1861,7 +1858,7 @@ typedef struct {
  * Observer Event Callback Function
  */
 typedef void (*pfnGapObserverRoleEventCB_t)(gapRoleEvent_t *pEvent //!< Pointer to event structure.
-        );
+    );
 
 /**
  * Observer Callback Structure
@@ -1879,14 +1876,13 @@ typedef void (*gapRolesRssiRead_t)(uint16_t connHandle, int8_t newRSSI);
  * Callback when the device has been started.  Callback event to
  * the Notify of a state change.
  */
-typedef void (*gapRolesStateNotify_t)(gapRole_States_t newState,
-        gapRoleEvent_t * pEvent);
+typedef void (*gapRolesStateNotify_t)(gapRole_States_t newState, gapRoleEvent_t * pEvent);
 
 /**
  * Callback when the connection parameteres are updated.
  */
-typedef void (*gapRolesParamUpdateCB_t)(uint16_t connHandle,
-        uint16_t connInterval, uint16_t connSlaveLatency, uint16_t connTimeout);
+typedef void (*gapRolesParamUpdateCB_t)(uint16_t connHandle, uint16_t connInterval, uint16_t connSlaveLatency,
+    uint16_t connTimeout);
 
 /**
  * Callback structure - must be setup by the application and used when gapRoles_StartDevice() is called.
@@ -1905,8 +1901,7 @@ typedef void (*pfnGapCentralRoleEventCB_t)(gapRoleEvent_t *pEvent); //!< Pointer
 /**
  * HCI Data Length Change Event Callback Function
  */
-typedef void (*pfnHciDataLenChangeEvCB_t)(uint16_t connHandle,
-        uint16_t maxTxOctets, uint16_t maxRxOctets);
+typedef void (*pfnHciDataLenChangeEvCB_t)(uint16_t connHandle, uint16_t maxTxOctets, uint16_t maxRxOctets);
 
 /**
  * Central Callback Structure
@@ -2079,8 +2074,7 @@ extern BOOL tmos_start_task(tmosTaskID taskID, tmosEvents event, tmosTimer time)
  *
  * @return  SUCCESS, or NO_TIMER_AVAIL.
  */
-extern bStatus_t tmos_start_reload_task(tmosTaskID taskID, tmosEvents event,
-        tmosTimer time);
+extern bStatus_t tmos_start_reload_task(tmosTaskID taskID, tmosEvents event, tmosTimer time);
 
 /**
  * @brief   stop a event
@@ -2239,8 +2233,7 @@ extern bStatus_t LL_ClearWhiteList(void);
  *
  * @return  Command Status.
  */
-extern bStatus_t LL_Encrypt(uint8_t *key, uint8_t *plaintextData,
-        uint8_t *encryptData);
+extern bStatus_t LL_Encrypt(uint8_t *key, uint8_t *plaintextData, uint8_t *encryptData);
 
 /**
  * @brief   Decrypt data
@@ -2251,8 +2244,7 @@ extern bStatus_t LL_Encrypt(uint8_t *key, uint8_t *plaintextData,
  *
  * @return  Command Status.
  */
-extern bStatus_t LL_Decrypt(uint8_t *key, uint8_t *plaintextData,
-        uint8_t *decryptData);
+extern bStatus_t LL_Decrypt(uint8_t *key, uint8_t *plaintextData, uint8_t *decryptData);
 
 /**
  * @brief   get number of unAck packet in current connect buffer
@@ -2422,8 +2414,7 @@ extern bStatus_t ATT_HandleValueCfm(uint16_t connHandle);
 /*
  * Compare two UUIDs. The UUIDs are converted if necessary.
  */
-extern uint8_t ATT_CompareUUID(const uint8_t *pUUID1, uint16_t len1,
-        const uint8_t *pUUID2, uint16_t len2);
+extern uint8_t ATT_CompareUUID(const uint8_t *pUUID1, uint16_t len1, const uint8_t *pUUID2, uint16_t len2);
 
 /**
  * @brief   Initialize the Generic Attribute Profile Client.
@@ -2481,8 +2472,7 @@ extern gattAttribute_t *GATT_FindHandle(uint16_t handle, uint16_t *pHandle);
  *          bleMemAllocError: Memory allocation error occurred.<BR>
  *          bleTimeout: Previous transaction timed out.<BR>
  */
-extern bStatus_t GATT_Indication(uint16_t connHandle, attHandleValueInd_t *pInd,
-        uint8_t authenticated, uint8_t taskId);
+extern bStatus_t GATT_Indication(uint16_t connHandle, attHandleValueInd_t *pInd, uint8_t authenticated, uint8_t taskId);
 /**
  * @brief   This sub-procedure is used when a server is configured to 
  *          notify a characteristic value to a client without expecting
@@ -2506,8 +2496,7 @@ extern bStatus_t GATT_Indication(uint16_t connHandle, attHandleValueInd_t *pInd,
  *          bleMemAllocError: Memory allocation error occurred.<BR>
  *          bleTimeout: Previous transaction timed out.<BR>
  */
-extern bStatus_t GATT_Notification(uint16_t connHandle,
-        attHandleValueNoti_t *pNoti, uint8_t authenticated);
+extern bStatus_t GATT_Notification(uint16_t connHandle, attHandleValueNoti_t *pNoti, uint8_t authenticated);
 
 /**
  * @brief   This sub-procedure is used by the client to set the ATT_MTU
@@ -2539,8 +2528,7 @@ extern bStatus_t GATT_Notification(uint16_t connHandle,
  *          bleMemAllocError: Memory allocation error occurred.<BR>
  *          bleTimeout: Previous transaction timed out.<BR>
  */
-extern bStatus_t GATT_ExchangeMTU(uint16_t connHandle,
-        attExchangeMTUReq_t *pReq, uint8_t taskId);
+extern bStatus_t GATT_ExchangeMTU(uint16_t connHandle, attExchangeMTUReq_t *pReq, uint8_t taskId);
 
 /**
  * @brief   This sub-procedure is used by a client to discover all 
@@ -2571,8 +2559,7 @@ extern bStatus_t GATT_ExchangeMTU(uint16_t connHandle,
  *          bleMemAllocError: Memory allocation error occurred.<BR>
  *          bleTimeout: Previous transaction timed out.<BR>
  */
-extern bStatus_t GATT_DiscAllPrimaryServices(uint16_t connHandle,
-        uint8_t taskId);
+extern bStatus_t GATT_DiscAllPrimaryServices(uint16_t connHandle, uint8_t taskId);
 
 /**
  * @brief   This sub-procedure is used by a client to discover a specific
@@ -2609,8 +2596,7 @@ extern bStatus_t GATT_DiscAllPrimaryServices(uint16_t connHandle,
  *          bleMemAllocError: Memory allocation error occurred.<BR>
  *          bleTimeout: Previous transaction timed out.<BR>
  */
-extern bStatus_t GATT_DiscPrimaryServiceByUUID(uint16_t connHandle,
-        uint8_t *pUUID, uint8_t len, uint8_t taskId);
+extern bStatus_t GATT_DiscPrimaryServiceByUUID(uint16_t connHandle, uint8_t *pUUID, uint8_t len, uint8_t taskId);
 
 /**
  * @brief   This sub-procedure is used by a client to find include
@@ -2646,8 +2632,8 @@ extern bStatus_t GATT_DiscPrimaryServiceByUUID(uint16_t connHandle,
  *          bleMemAllocError: Memory allocation error occurred.<BR>
  *          bleTimeout: Previous transaction timed out.<BR>
  */
-extern bStatus_t GATT_FindIncludedServices(uint16_t connHandle,
-        uint16_t startHandle, uint16_t endHandle, uint8_t taskId);
+extern bStatus_t GATT_FindIncludedServices(uint16_t connHandle, uint16_t startHandle, uint16_t endHandle,
+    uint8_t taskId);
 
 /**
  * @brief   This sub-procedure is used by a client to find all the 
@@ -2683,8 +2669,7 @@ extern bStatus_t GATT_FindIncludedServices(uint16_t connHandle,
  *          bleMemAllocError: Memory allocation error occurred.<BR>
  *          bleTimeout: Previous transaction timed out.<BR>
  */
-extern bStatus_t GATT_DiscAllChars(uint16_t connHandle, uint16_t startHandle,
-        uint16_t endHandle, uint8_t taskId);
+extern bStatus_t GATT_DiscAllChars(uint16_t connHandle, uint16_t startHandle, uint16_t endHandle, uint8_t taskId);
 
 /**
  * @brief   This sub-procedure is used by a client to discover service 
@@ -2720,8 +2705,7 @@ extern bStatus_t GATT_DiscAllChars(uint16_t connHandle, uint16_t startHandle,
  *          bleMemAllocError: Memory allocation error occurred.<BR>
  *          bleTimeout: Previous transaction timed out.<BR>
  */
-extern bStatus_t GATT_DiscCharsByUUID(uint16_t connHandle,
-        attReadByTypeReq_t *pReq, uint8_t taskId);
+extern bStatus_t GATT_DiscCharsByUUID(uint16_t connHandle, attReadByTypeReq_t *pReq, uint8_t taskId);
 
 /**
  * @brief   This sub-procedure is used by a client to find all the 
@@ -2757,8 +2741,7 @@ extern bStatus_t GATT_DiscCharsByUUID(uint16_t connHandle,
  *          bleMemAllocError: Memory allocation error occurred.<BR>
  *          bleTimeout: Previous transaction timed out.<BR>
  */
-extern bStatus_t GATT_DiscAllCharDescs(uint16_t connHandle,
-        uint16_t startHandle, uint16_t endHandle, uint8_t taskId);
+extern bStatus_t GATT_DiscAllCharDescs(uint16_t connHandle, uint16_t startHandle, uint16_t endHandle, uint8_t taskId);
 
 /**
  * @brief   This sub-procedure is used to read a Characteristic Value
@@ -2795,8 +2778,7 @@ extern bStatus_t GATT_DiscAllCharDescs(uint16_t connHandle,
  *          bleMemAllocError: Memory allocation error occurred.<BR>
  *          bleTimeout: Previous transaction timed out.<BR>
  */
-extern bStatus_t GATT_ReadCharValue(uint16_t connHandle, attReadReq_t *pReq,
-        uint8_t taskId);
+extern bStatus_t GATT_ReadCharValue(uint16_t connHandle, attReadReq_t *pReq, uint8_t taskId);
 
 /**
  * @brief   This sub-procedure is used to read a Characteristic Value
@@ -2831,8 +2813,7 @@ extern bStatus_t GATT_ReadCharValue(uint16_t connHandle, attReadReq_t *pReq,
  *          bleMemAllocError: Memory allocation error occurred.<BR>
  *          bleTimeout: Previous transaction timed out.<BR>
  */
-extern bStatus_t GATT_ReadUsingCharUUID(uint16_t connHandle,
-        attReadByTypeReq_t *pReq, uint8_t taskId);
+extern bStatus_t GATT_ReadUsingCharUUID(uint16_t connHandle, attReadByTypeReq_t *pReq, uint8_t taskId);
 
 /**
  * @brief   This sub-procedure is used to read a Characteristic Value from
@@ -2863,8 +2844,7 @@ extern bStatus_t GATT_ReadUsingCharUUID(uint16_t connHandle,
  *          bleMemAllocError: Memory allocation error occurred.<BR>
  *          bleTimeout: Previous transaction timed out.<BR>
  */
-extern bStatus_t GATT_ReadLongCharValue(uint16_t connHandle,
-        attReadBlobReq_t *pReq, uint8_t taskId);
+extern bStatus_t GATT_ReadLongCharValue(uint16_t connHandle, attReadBlobReq_t *pReq, uint8_t taskId);
 
 /**
  * @brief   This sub-procedure is used to read multiple Characteristic Values
@@ -2897,8 +2877,7 @@ extern bStatus_t GATT_ReadLongCharValue(uint16_t connHandle,
  *          bleMemAllocError: Memory allocation error occurred.<BR>
  *          bleTimeout: Previous transaction timed out.<BR>
  */
-extern bStatus_t GATT_ReadMultiCharValues(uint16_t connHandle,
-        attReadMultiReq_t *pReq, uint8_t taskId);
+extern bStatus_t GATT_ReadMultiCharValues(uint16_t connHandle, attReadMultiReq_t *pReq, uint8_t taskId);
 
 /**
  * @brief   This sub-procedure is used to write a Characteristic Value
@@ -3005,8 +2984,7 @@ extern bStatus_t GATT_SignedWriteNoRsp(uint16_t connHandle, attWriteReq_t *pReq)
  *          bleMemAllocError: Memory allocation error occurred.<BR>
  *          bleTimeout: Previous transaction timed out.<BR>
  */
-extern bStatus_t GATT_WriteCharValue(uint16_t connHandle, attWriteReq_t *pReq,
-        uint8_t taskId);
+extern bStatus_t GATT_WriteCharValue(uint16_t connHandle, attWriteReq_t *pReq, uint8_t taskId);
 
 /**
  * @brief   This sub-procedure is used to write a Characteristic Value to
@@ -3042,8 +3020,7 @@ extern bStatus_t GATT_WriteCharValue(uint16_t connHandle, attWriteReq_t *pReq,
  *          bleMemAllocError: Memory allocation error occurred.<BR>
  *          bleTimeout: Previous transaction timed out.<BR>
  */
-extern bStatus_t GATT_WriteLongCharValue(uint16_t connHandle,
-        attPrepareWriteReq_t *pReq, uint8_t taskId);
+extern bStatus_t GATT_WriteLongCharValue(uint16_t connHandle, attPrepareWriteReq_t *pReq, uint8_t taskId);
 
 /**
  * @brief   This sub-procedure is used to write a Characteristic Value to
@@ -3090,9 +3067,8 @@ extern bStatus_t GATT_WriteLongCharValue(uint16_t connHandle,
  *          bleMemAllocError: Memory allocation error occurred.<BR>
  *          bleTimeout: Previous transaction timed out.<BR>
  */
-extern bStatus_t GATT_ReliableWrites(uint16_t connHandle,
-        attPrepareWriteReq_t *pReqs, uint8_t numReqs, uint8_t flags,
-        uint8_t taskId);
+extern bStatus_t GATT_ReliableWrites(uint16_t connHandle, attPrepareWriteReq_t *pReqs, uint8_t numReqs, uint8_t flags,
+    uint8_t taskId);
 
 /**
  * @brief   This sub-procedure is used to read a characteristic descriptor
@@ -3125,8 +3101,7 @@ extern bStatus_t GATT_ReliableWrites(uint16_t connHandle,
  *          bleMemAllocError: Memory allocation error occurred.<BR>
  *          bleTimeout: Previous transaction timed out.<BR>
  */
-extern bStatus_t GATT_ReadCharDesc(uint16_t connHandle, attReadReq_t *pReq,
-        uint8_t taskId);
+extern bStatus_t GATT_ReadCharDesc(uint16_t connHandle, attReadReq_t *pReq, uint8_t taskId);
 
 /**
  * @brief   This sub-procedure is used to read a characteristic descriptor
@@ -3161,8 +3136,7 @@ extern bStatus_t GATT_ReadCharDesc(uint16_t connHandle, attReadReq_t *pReq,
  *          bleMemAllocError: Memory allocation error occurred.<BR>
  *          bleTimeout: Previous transaction timed out.<BR>
  */
-extern bStatus_t GATT_ReadLongCharDesc(uint16_t connHandle,
-        attReadBlobReq_t *pReq, uint8_t taskId);
+extern bStatus_t GATT_ReadLongCharDesc(uint16_t connHandle, attReadBlobReq_t *pReq, uint8_t taskId);
 
 /**
  * @brief   This sub-procedure is used to write a characteristic
@@ -3195,8 +3169,7 @@ extern bStatus_t GATT_ReadLongCharDesc(uint16_t connHandle,
  *          bleMemAllocError: Memory allocation error occurred.<BR>
  *          bleTimeout: Previous transaction timed out.<BR>
  */
-extern bStatus_t GATT_WriteCharDesc(uint16_t connHandle, attWriteReq_t *pReq,
-        uint8_t taskId);
+extern bStatus_t GATT_WriteCharDesc(uint16_t connHandle, attWriteReq_t *pReq, uint8_t taskId);
 
 /**
  * @brief   This sub-procedure is used to write a Characteristic Value to
@@ -3232,8 +3205,7 @@ extern bStatus_t GATT_WriteCharDesc(uint16_t connHandle, attWriteReq_t *pReq,
  *          bleMemAllocError: Memory allocation error occurred.<BR>
  *          bleTimeout: Previous transaction timed out.<BR>
  */
-extern bStatus_t GATT_WriteLongCharDesc(uint16_t connHandle,
-        attPrepareWriteReq_t *pReq, uint8_t taskId);
+extern bStatus_t GATT_WriteLongCharDesc(uint16_t connHandle, attPrepareWriteReq_t *pReq, uint8_t taskId);
 
 /**
  * @brief   GATT implementation of the allocator functionality.
@@ -3248,8 +3220,7 @@ extern bStatus_t GATT_WriteLongCharDesc(uint16_t connHandle,
  *
  * @return  pointer to the heap allocation; NULL if error or failure.
  */
-extern void *GATT_bm_alloc(uint16_t connHandle, uint8_t opcode, uint16_t size,
-        uint16_t *pSizeAlloc, uint8_t flag);
+extern void *GATT_bm_alloc(uint16_t connHandle, uint8_t opcode, uint16_t size, uint16_t *pSizeAlloc, uint8_t flag);
 
 /**
  * @brief   GATT implementation of the de-allocator functionality.
@@ -3276,8 +3247,8 @@ extern void GATT_bm_free(gattMsg_t *pMsg, uint8_t opcode);
  *          bleMemAllocError: Memory allocation error occurred.<BR>
  *          bleInvalidRange: Encryption key size's out of range.<BR>
  */
-extern bStatus_t GATTServApp_RegisterService(gattAttribute_t *pAttrs,
-        uint16_t numAttrs, uint8_t encKeySize, gattServiceCBs_t *pServiceCBs);
+extern bStatus_t GATTServApp_RegisterService(gattAttribute_t *pAttrs, uint16_t numAttrs, uint8_t encKeySize,
+    gattServiceCBs_t *pServiceCBs);
 
 /**
  * @brief   Add function for the GATT Service.
@@ -3305,8 +3276,7 @@ extern bStatus_t GATTServApp_AddService(uint32_t services);
  * @return  SUCCESS: Service deregistered successfully.<BR>
  *          FAILURE: Service not found.<BR>
  */
-extern bStatus_t GATTServApp_DeregisterService(uint16_t handle,
-        gattAttribute_t **p2pAttrs);
+extern bStatus_t GATTServApp_DeregisterService(uint16_t handle, gattAttribute_t **p2pAttrs);
 
 /**
  * @brief   Initialize the client characteristic configuration table.
@@ -3320,8 +3290,7 @@ extern bStatus_t GATTServApp_DeregisterService(uint16_t handle,
  *
  * @return  none
  */
-extern void GATTServApp_InitCharCfg(uint16_t connHandle,
-        gattCharCfg_t *charCfgTbl);
+extern void GATTServApp_InitCharCfg(uint16_t connHandle, gattCharCfg_t *charCfgTbl);
 
 /**
  * @brief   Send out a Service Changed Indication.
@@ -3336,8 +3305,7 @@ extern void GATTServApp_InitCharCfg(uint16_t connHandle,
  *          bleNotConnected: Connection is down.<BR>
  *          blePending: A confirmation is pending with this client.<BR>
  */
-extern bStatus_t GATTServApp_SendServiceChangedInd(uint16_t connHandle,
-        uint8_t taskId);
+extern bStatus_t GATTServApp_SendServiceChangedInd(uint16_t connHandle, uint8_t taskId);
 
 /**
  * @brief   Read the client characteristic configuration for a given client.
@@ -3351,8 +3319,7 @@ extern bStatus_t GATTServApp_SendServiceChangedInd(uint16_t connHandle,
  *
  * @return  attribute value
  */
-extern uint16_t GATTServApp_ReadCharCfg(uint16_t connHandle,
-        gattCharCfg_t *charCfgTbl);
+extern uint16_t GATTServApp_ReadCharCfg(uint16_t connHandle, gattCharCfg_t *charCfgTbl);
 
 /**
  * @brief   Write the client characteristic configuration for a given client.
@@ -3367,8 +3334,7 @@ extern uint16_t GATTServApp_ReadCharCfg(uint16_t connHandle,
  *
  * @return  Success or Failure
  */
-extern uint8_t GATTServApp_WriteCharCfg(uint16_t connHandle,
-        gattCharCfg_t *charCfgTbl, uint16_t value);
+extern uint8_t GATTServApp_WriteCharCfg(uint16_t connHandle, gattCharCfg_t *charCfgTbl, uint16_t value);
 
 /**
  * @brief   Process the client characteristic configuration
@@ -3383,9 +3349,8 @@ extern uint8_t GATTServApp_WriteCharCfg(uint16_t connHandle,
  *
  * @return  Success or Failure
  */
-extern bStatus_t GATTServApp_ProcessCCCWriteReq(uint16_t connHandle,
-        gattAttribute_t *pAttr, uint8_t *pValue, uint16_t len, uint16_t offset,
-        uint16_t validCfg);
+extern bStatus_t GATTServApp_ProcessCCCWriteReq(uint16_t connHandle, gattAttribute_t *pAttr, uint8_t *pValue,
+    uint16_t len, uint16_t offset, uint16_t validCfg);
 
 /**
  * @brief   Set a GAP GATT Server parameter.
@@ -3498,8 +3463,7 @@ extern bStatus_t GAP_ResolvePrivateAddr(uint8_t *pIRK, uint8_t *pAddr);
  * @return  SUCCESS: data accepted
  *          bleIncorrectMode: invalid profile role
  */
-extern bStatus_t GAP_UpdateAdvertisingData(uint8_t taskID, uint8_t adType,
-        uint8_t dataLen, uint8_t *pAdvertData);
+extern bStatus_t GAP_UpdateAdvertisingData(uint8_t taskID, uint8_t adType, uint8_t dataLen, uint8_t *pAdvertData);
 
 /*-------------------------------------------------------------------
  * FUNCTIONS - GAP Bond API
@@ -3518,8 +3482,7 @@ extern bStatus_t GAP_UpdateAdvertisingData(uint8_t taskID, uint8_t adType,
  *
  * @return      SUCCESS or INVALIDPARAMETER (invalid paramID)
  */
-extern bStatus_t GAPBondMgr_SetParameter(uint16_t param, uint8_t len,
-        void *pValue);
+extern bStatus_t GAPBondMgr_SetParameter(uint16_t param, uint8_t len, void *pValue);
 
 /**
  * @brief   Get a GAP Bond Manager parameter.
@@ -3545,8 +3508,7 @@ extern bStatus_t GAPBondMgr_GetParameter(uint16_t param, void *pValue);
  * @return  SUCCESS - bond record found and changed
  *          bleIncorrectMode - Link not found.
  */
-extern bStatus_t GAPBondMgr_PasscodeRsp(uint16_t connectionHandle,
-        uint8_t status, uint32_t passcode);
+extern bStatus_t GAPBondMgr_PasscodeRsp(uint16_t connectionHandle, uint8_t status, uint32_t passcode);
 
 /**
  * @brief   Send a security request
@@ -3621,9 +3583,8 @@ extern bStatus_t GAPRole_ReadRssiCmd(uint16_t connHandle);
  * @return  SUCCESS: Connection update started started.<BR>
  *          bleIncorrectMode: No connection to update.<BR>
  */
-extern bStatus_t GAPRole_UpdateLink(uint16_t connHandle,
-        uint16_t connIntervalMin, uint16_t connIntervalMax,
-        uint16_t connLatency, uint16_t connTimeout);
+extern bStatus_t GAPRole_UpdateLink(uint16_t connHandle, uint16_t connIntervalMin, uint16_t connIntervalMax,
+    uint16_t connLatency, uint16_t connTimeout);
 
 /*-------------------------------------------------------------------
  * FUNCTIONS - BROADCASTER_PROFILE_API Broadcaster Profile API
@@ -3645,8 +3606,7 @@ extern bStatus_t GAPRole_BroadcasterInit(void);
  *
  * @return  SUCCESS or bleAlreadyInRequestedMode
  */
-extern bStatus_t GAPRole_BroadcasterStartDevice(
-        gapRolesBroadcasterCBs_t *pAppCallbacks);
+extern bStatus_t GAPRole_BroadcasterStartDevice(gapRolesBroadcasterCBs_t *pAppCallbacks);
 
 /**
  * @brief   Does the Broadcaster receive scan request call initialization.
@@ -3693,8 +3653,7 @@ extern bStatus_t GAPRole_ObserverStartDevice(gapRoleObserverCB_t *pAppCallbacks)
  *          bleIncorrectMode: Invalid profile role.<BR>
  *          bleAlreadyInRequestedMode: Not available.<BR>
  */
-extern bStatus_t GAPRole_ObserverStartDiscovery(uint8_t mode,
-        uint8_t activeScan, uint8_t whiteList);
+extern bStatus_t GAPRole_ObserverStartDiscovery(uint8_t mode, uint8_t activeScan, uint8_t whiteList);
 
 /**
  * @brief   Cancel a device discovery scan.
@@ -3730,8 +3689,7 @@ extern bStatus_t GAPRole_PeripheralInit(void);
  *
  * @return  SUCCESS or bleAlreadyInRequestedMode
  */
-extern bStatus_t GAPRole_PeripheralStartDevice(uint8_t taskid,
-        gapBondCBs_t *pCB, gapRolesCBs_t *pAppCallbacks);
+extern bStatus_t GAPRole_PeripheralStartDevice(uint8_t taskid, gapBondCBs_t *pCB, gapRolesCBs_t *pAppCallbacks);
 
 /**
  * @brief   Update the parameters of an existing connection
@@ -3745,9 +3703,8 @@ extern bStatus_t GAPRole_PeripheralStartDevice(uint8_t taskid,
  *
  * @return  SUCCESS, bleNotConnected or bleInvalidRange
  */
-extern bStatus_t GAPRole_PeripheralConnParamUpdateReq(uint16_t connHandle,
-        uint16_t connIntervalMin, uint16_t connIntervalMax, uint16_t latency,
-        uint16_t connTimeout, uint8_t taskId);
+extern bStatus_t GAPRole_PeripheralConnParamUpdateReq(uint16_t connHandle, uint16_t connIntervalMin,
+    uint16_t connIntervalMax, uint16_t latency, uint16_t connTimeout, uint8_t taskId);
 
 /*-------------------------------------------------------------------
  * FUNCTIONS - CENTRAL_PROFILE_API Central Profile API
@@ -3772,8 +3729,7 @@ extern bStatus_t GAPRole_CentralInit(void);
  * @return  SUCCESS: Operation successful.<BR>
  *          bleAlreadyInRequestedMode: Device already started.<BR>
  */
-extern bStatus_t GAPRole_CentralStartDevice(uint8_t taskid, gapBondCBs_t *pCB,
-        gapCentralRoleCB_t *pAppCallbacks);
+extern bStatus_t GAPRole_CentralStartDevice(uint8_t taskid, gapBondCBs_t *pCB, gapCentralRoleCB_t *pAppCallbacks);
 
 /**
  * @brief   Start a device discovery scan.
@@ -3786,8 +3742,7 @@ extern bStatus_t GAPRole_CentralStartDevice(uint8_t taskid, gapBondCBs_t *pCB,
  *          bleIncorrectMode: Invalid profile role.<BR>
  *          bleAlreadyInRequestedMode: Not available.<BR>
  */
-extern bStatus_t GAPRole_CentralStartDiscovery(uint8_t mode, uint8_t activeScan,
-        uint8_t whiteList);
+extern bStatus_t GAPRole_CentralStartDiscovery(uint8_t mode, uint8_t activeScan, uint8_t whiteList);
 
 /**
  * @brief   Cancel a device discovery scan.
@@ -3812,8 +3767,8 @@ extern bStatus_t GAPRole_CentralCancelDiscovery(void);
  *          bleAlreadyInRequestedMode: can't process now.<BR>
  *          bleNoResources: too many links.<BR>
  */
-extern bStatus_t GAPRole_CentralEstablishLink(uint8_t highDutyCycle,
-        uint8_t whiteList, uint8_t addrTypePeer, uint8_t *peerAddr);
+extern bStatus_t GAPRole_CentralEstablishLink(uint8_t highDutyCycle, uint8_t whiteList, uint8_t addrTypePeer,
+    uint8_t *peerAddr);
 
 /*-------------------------------------------------------------------
  * FUNCTIONS - RF_PHY Profile API
@@ -3851,8 +3806,7 @@ extern bStatus_t RF_Config(rfConfig_t *pConfig);
  *
  * @return  0 - success.
  */
-extern bStatus_t RF_Rx(uint8_t *txBuf, uint8_t txLen, uint8_t pktRxType,
-        uint8_t pktTxType);
+extern bStatus_t RF_Rx(uint8_t *txBuf, uint8_t txLen, uint8_t pktRxType, uint8_t pktTxType);
 
 /**
  * @brief   tx mode.
@@ -3868,8 +3822,7 @@ extern bStatus_t RF_Rx(uint8_t *txBuf, uint8_t txLen, uint8_t pktRxType,
  *
  * @return  0 - success.
  */
-extern bStatus_t RF_Tx(uint8_t *txBuf, uint8_t txLen, uint8_t pktTxType,
-        uint8_t pktRxType);
+extern bStatus_t RF_Tx(uint8_t *txBuf, uint8_t txLen, uint8_t pktTxType, uint8_t pktRxType);
 
 /**
  * @brief   shut down,stop tx/rx mode.
@@ -3964,8 +3917,7 @@ extern bStatus_t API_LE_ReceiverTestCmd(uint8_t rx_channel);
  *
  * @return  0 - success.
  */
-extern bStatus_t API_LE_TransmitterTestCmd(uint8_t tx_channel, uint8_t len,
-        uint8_t payload, uint8_t tx_power);
+extern bStatus_t API_LE_TransmitterTestCmd(uint8_t tx_channel, uint8_t len, uint8_t payload, uint8_t tx_power);
 
 /**
  * @brief   used to stop any test which is in progress

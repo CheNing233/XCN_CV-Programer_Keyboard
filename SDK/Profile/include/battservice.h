@@ -146,9 +146,8 @@ extern bStatus_t Batt_MeasLevel(void);
  *
  * @return  none.
  */
-extern void Batt_Setup(uint8_t adc_ch, uint16_t minVal, uint16_t maxVal,
-        battServiceSetupCB_t sCB, battServiceTeardownCB_t tCB,
-        battServiceCalcCB_t cCB);
+extern void Batt_Setup(uint8_t adc_ch, uint16_t minVal, uint16_t maxVal, battServiceSetupCB_t sCB,
+    battServiceTeardownCB_t tCB, battServiceCalcCB_t cCB);
 
 /*********************************************************************
  * @fn          Batt_HandleConnStatusCB

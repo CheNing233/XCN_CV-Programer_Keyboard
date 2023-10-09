@@ -21,20 +21,15 @@
  *
  * @return  none
  */
-void PWR_DCDCCfg(FunctionalState s)
-{
-    if(s == DISABLE)
-    {
+void PWR_DCDCCfg(FunctionalState s) {
+    if (s == DISABLE) {
         sys_safe_access_enable();
-        R16_POWER_PLAN &= ~(RB_PWR_DCDC_EN|RB_PWR_DCDC_PRE);
-        sys_safe_access_disable();	
-    }
-    else
-    {
+        R16_POWER_PLAN &= ~(RB_PWR_DCDC_EN | RB_PWR_DCDC_PRE);
+        sys_safe_access_disable();
+    } else {
         uint32_t HW_Data[2];
         FLASH_EEPROM_CMD(CMD_GET_ROM_INFO, ROM_CFG_ADR_HW, HW_Data, 0);
-        if((HW_Data[0]) & (1 << 13))
-        {
+        if ((HW_Data[0]) & (1 << 13)) {
             return;
         }
         sys_safe_access_enable();
@@ -53,17 +48,15 @@ void PWR_DCDCCfg(FunctionalState s)
  *
  * @return  none
  */
-void PWR_UnitModCfg(FunctionalState s, uint8_t unit)
-{
+void PWR_UnitModCfg(FunctionalState s, uint8_t unit) {
     uint8_t pwr_ctrl = R8_HFCK_PWR_CTRL;
     uint8_t ck32k_cfg = R8_CK32K_CONFIG;
 
-    if(s == DISABLE) //关闭
-    {
+    if (s == DISABLE) //关闭
+        {
         pwr_ctrl &= ~(unit & 0x1c);
         ck32k_cfg &= ~(unit & 0x03);
-    }
-    else //打开
+    } else //打开
     {
         pwr_ctrl |= (unit & 0x1c);
         ck32k_cfg |= (unit & 0x03);
@@ -85,16 +78,12 @@ void PWR_UnitModCfg(FunctionalState s, uint8_t unit)
  *
  * @return  none
  */
-void PWR_PeriphClkCfg(FunctionalState s, uint16_t perph)
-{
+void PWR_PeriphClkCfg(FunctionalState s, uint16_t perph) {
     uint32_t sleep_ctrl = R32_SLEEP_CONTROL;
 
-    if(s == DISABLE)
-    {
+    if (s == DISABLE) {
         sleep_ctrl |= perph;
-    }
-    else
-    {
+    } else {
         sleep_ctrl &= ~perph;
     }
 
@@ -118,34 +107,29 @@ void PWR_PeriphClkCfg(FunctionalState s, uint16_t perph)
  *
  * @return  none
  */
-void PWR_PeriphWakeUpCfg(FunctionalState s, uint8_t perph, WakeUP_ModeypeDef mode)
-{
+void PWR_PeriphWakeUpCfg(FunctionalState s, uint8_t perph, WakeUP_ModeypeDef mode) {
     uint8_t m;
 
-    if(s == DISABLE)
-    {
+    if (s == DISABLE) {
         sys_safe_access_enable();
         R8_SLP_WAKE_CTRL &= ~perph;
-    }
-    else
-    {
-        switch(mode)
-        {
-            case Edge_LongDelay:
-                m = RB_WAKE_EV_MODE;
-                break;
+    } else {
+        switch (mode) {
+        case Edge_LongDelay:
+            m = RB_WAKE_EV_MODE;
+            break;
 
-            case Level_LongDelay:
-                m = 0;
-                break;
+        case Level_LongDelay:
+            m = 0;
+            break;
 
-            case Level_ShortDelay:
-                m = RB_WAKE_DELAY;
-                break;
+        case Level_ShortDelay:
+            m = RB_WAKE_DELAY;
+            break;
 
-            default:
-                m = RB_WAKE_EV_MODE | RB_WAKE_DELAY;
-                break;
+        default:
+            m = RB_WAKE_EV_MODE | RB_WAKE_DELAY;
+            break;
         }
         sys_safe_access_enable();
         R8_SLP_WAKE_CTRL &= ~(RB_WAKE_EV_MODE | RB_WAKE_DELAY);
@@ -165,27 +149,20 @@ void PWR_PeriphWakeUpCfg(FunctionalState s, uint8_t perph, WakeUP_ModeypeDef mod
  *
  * @return  none
  */
-void PowerMonitor(FunctionalState s, VolM_LevelypeDef vl)
-{
+void PowerMonitor(FunctionalState s, VolM_LevelypeDef vl) {
     uint8_t ctrl = R8_BAT_DET_CTRL;
     uint8_t cfg = R8_BAT_DET_CFG;
 
-    if(s == DISABLE)
-    {
+    if (s == DISABLE) {
         sys_safe_access_enable();
         R8_BAT_DET_CTRL = 0;
         sys_safe_access_disable();
-    }
-    else
-    {
-        if(vl & 0x80)
-        {
+    } else {
+        if (vl & 0x80) {
             cfg = vl & 0x03;
             ctrl = RB_BAT_MON_EN | ((vl >> 2) & 1);
-        }
-        else
-        {
-            
+        } else {
+
             cfg = vl & 0x03;
             ctrl = RB_BAT_DET_EN;
         }
@@ -211,8 +188,7 @@ void PowerMonitor(FunctionalState s, VolM_LevelypeDef vl)
  * @return  none
  */
 __attribute__((section(".highcode")))
-void LowPower_Idle(void)
-{
+void LowPower_Idle(void) {
     FLASH_ROM_SW_RESET();
     R8_FLASH_CTRL = 0x04; //flash关闭
 
@@ -232,8 +208,7 @@ void LowPower_Idle(void)
  * @return  none
  */
 __attribute__((section(".highcode")))
-void LowPower_Halt(void)
-{
+void LowPower_Halt(void) {
     uint8_t x32Kpw, x32Mpw;
 
     FLASH_ROM_SW_RESET();
@@ -241,8 +216,7 @@ void LowPower_Halt(void)
     x32Kpw = R8_XT32K_TUNE;
     x32Mpw = R8_XT32M_TUNE;
     x32Mpw = (x32Mpw & 0xfc) | 0x03; // 150%额定电流
-    if(R16_RTC_CNT_32K > 0x3fff)
-    {                                    // 超过500ms
+    if (R16_RTC_CNT_32K > 0x3fff) {                                    // 超过500ms
         x32Kpw = (x32Kpw & 0xfc) | 0x01; // LSE驱动电流降低到额定电流
     }
 
@@ -280,8 +254,7 @@ void LowPower_Halt(void)
  * @return  none
  */
 __attribute__((section(".highcode")))
-void LowPower_Sleep(uint8_t rm)
-{
+void LowPower_Sleep(uint8_t rm) {
     uint8_t x32Kpw, x32Mpw;
 
     FLASH_ROM_SW_RESET();
@@ -289,8 +262,7 @@ void LowPower_Sleep(uint8_t rm)
     x32Kpw = R8_XT32K_TUNE;
     x32Mpw = R8_XT32M_TUNE;
     x32Mpw = (x32Mpw & 0xfc) | 0x03; // 150%额定电流
-    if(R16_RTC_CNT_32K > 0x3fff)
-    {                                    // 超过500ms
+    if (R16_RTC_CNT_32K > 0x3fff) {                                    // 超过500ms
         x32Kpw = (x32Kpw & 0xfc) | 0x01; // LSE驱动电流降低到额定电流
     }
 
@@ -332,8 +304,7 @@ void LowPower_Sleep(uint8_t rm)
  * @return  none
  */
 __attribute__((section(".highcode")))
-void LowPower_Shutdown(uint8_t rm)
-{
+void LowPower_Shutdown(uint8_t rm) {
     uint8_t x32Kpw, x32Mpw;
 
     FLASH_ROM_SW_RESET();
@@ -341,8 +312,7 @@ void LowPower_Shutdown(uint8_t rm)
     x32Kpw = R8_XT32K_TUNE;
     x32Mpw = R8_XT32M_TUNE;
     x32Mpw = (x32Mpw & 0xfc) | 0x03; // 150%额定电流
-    if(R16_RTC_CNT_32K > 0x3fff)
-    {                                    // 超过500ms
+    if (R16_RTC_CNT_32K > 0x3fff) {                                    // 超过500ms
         x32Kpw = (x32Kpw & 0xfc) | 0x01; // LSE驱动电流降低到额定电流
     }
 
@@ -352,7 +322,7 @@ void LowPower_Shutdown(uint8_t rm)
     R8_XT32K_TUNE = x32Kpw;
     R8_XT32M_TUNE = x32Mpw;
     sys_safe_access_disable();
-    SetSysClock( CLK_SOURCE_HSE_6_4MHz );
+    SetSysClock(CLK_SOURCE_HSE_6_4MHz);
 
     PFIC->SCTLR |= (1 << 2);				//deep sleep
 

@@ -20,8 +20,7 @@ extern "C" {
 /**
  * @brief  系统主频定义
  */
-typedef enum
-{
+typedef enum {
     CLK_SOURCE_LSI = 0x00,
     CLK_SOURCE_LSE,
 
@@ -45,58 +44,39 @@ typedef enum
 /**
  * @brief  32K时钟选择
  */
-typedef enum
-{
-    Clk32K_LSI = 0,
-    Clk32K_LSE,
+typedef enum {
+    Clk32K_LSI = 0, Clk32K_LSE,
 
 } LClk32KTypeDef;
 
 /**
  * @brief  32M晶振电流挡位
  */
-typedef enum
-{
-    HSE_RCur_75 = 0,
-    HSE_RCur_100,
-    HSE_RCur_125,
-    HSE_RCur_150
+typedef enum {
+    HSE_RCur_75 = 0, HSE_RCur_100, HSE_RCur_125, HSE_RCur_150
 
 } HSECurrentTypeDef;
 
 /**
  * @brief  32M晶振内部电容挡位
  */
-typedef enum
-{
-    HSECap_10p = 0,
-    HSECap_12p,
-    HSECap_14p,
-    HSECap_16p,
-    HSECap_18p,
-    HSECap_20p,
-    HSECap_22p,
-    HSECap_24p
+typedef enum {
+    HSECap_10p = 0, HSECap_12p, HSECap_14p, HSECap_16p, HSECap_18p, HSECap_20p, HSECap_22p, HSECap_24p
 
 } HSECapTypeDef;
 
 /**
  * @brief  32K晶振电流挡位
  */
-typedef enum
-{
-    LSE_RCur_70 = 0,
-    LSE_RCur_100,
-    LSE_RCur_140,
-    LSE_RCur_200
+typedef enum {
+    LSE_RCur_70 = 0, LSE_RCur_100, LSE_RCur_140, LSE_RCur_200
 
 } LSECurrentTypeDef;
 
 /**
  * @brief  32K晶振内部电容挡位
  */
-typedef enum
-{
+typedef enum {
     LSECap_2p = 0,
     LSECap_13p,
     LSECap_14p,
@@ -128,8 +108,7 @@ typedef enum
 /**
  * @brief  rtc timer mode period define
  */
-typedef enum
-{
+typedef enum {
     Period_0_125_S = 0, // 0.125s 周期
     Period_0_25_S,      // 0.25s 周期
     Period_0_5_S,       // 0.5s 周期
@@ -143,8 +122,7 @@ typedef enum
 /**
  * @brief  rtc interrupt event define
  */
-typedef enum
-{
+typedef enum {
     RTC_TRIG_EVENT = 0, // RTC 触发事件
     RTC_TMR_EVENT,      // RTC 周期定时事件
 
@@ -153,8 +131,7 @@ typedef enum
 /**
  * @brief  rtc interrupt event define
  */
-typedef enum
-{
+typedef enum {
     RTC_TRIG_MODE = 0, // RTC 触发模式
     RTC_TMR_MODE,      // RTC 周期定时模式
 
