@@ -3,9 +3,11 @@
 #include "protocol.h"
 #include "hiddev.h"
 #include "usercfg.h"
+#include "settingctrl.h"
+#include "motorout.h"
 
-static uint8_t Keymap = 0x00;
-static uint8_t Keymap_o = 0x00;
+uint8_t Keymap = 0x00;
+uint8_t Keymap_o = 0x00;
 
 uint8_t Key_x_encnt = 0;
 uint8_t Key_c_encnt = 0;
@@ -39,6 +41,8 @@ uint8_t enco_right = 0;
 uint8_t enco_finish_flg = TRUE;
 
 uint8_t finish_upload = TRUE;
+uint8_t cancel_all = FALSE;
+
 
 static uint8_t TMOS_Keys_Debounce_ID = INVALID_TASK_ID;
 static uint16_t TMOS_Keys_Debounce(uint8_t task_id, uint16_t events);
@@ -46,7 +50,7 @@ static uint16_t TMOS_Keys_Debounce(uint8_t task_id, uint16_t events);
 static uint8_t TMOS_Enco_Debounce_ID = INVALID_TASK_ID;
 static uint16_t TMOS_Enco_Debounce(uint8_t task_id, uint16_t events);
 
-static uint8_t TMOS_Keys_TaskManager_ID = INVALID_TASK_ID;
+uint8_t TMOS_Keys_TaskManager_ID = INVALID_TASK_ID;
 static uint16_t TMOS_Keys_TaskManager(uint8_t task_id, uint16_t events);
 
 static uint8_t TMOS_Keys_TransMacro_ID = INVALID_TASK_ID;
@@ -55,8 +59,13 @@ static uint16_t TMOS_Keys_TransMacro(uint8_t task_id, uint16_t events);
 void Keyin_Init() {
 
     // KEY INIT
-    GPIOA_ModeCfg(KEY_LEFT_CTRL | ROLLER_BUTTON | ROLLER_A | ROLLER_B, GPIO_ModeIN_PU);
-    GPIOB_ModeCfg(KEY_RIGHT_ENTER | KEY_X | KEY_C | KEY_V, GPIO_ModeIN_PU);
+//    GPIOA_ModeCfg(KEY_LEFT_CTRL | ROLLER_BUTTON | ROLLER_A | ROLLER_B, GPIO_ModeIN_PU);
+//    GPIOB_ModeCfg(KEY_RIGHT_ENTER | KEY_X | KEY_C | KEY_V, GPIO_ModeIN_PU);
+
+    GPIOA_ModeCfg(
+        KEY_RIGHT_ENTER | ROLLER_A | ROLLER_B, GPIO_ModeIN_PU);
+    GPIOB_ModeCfg(
+        ROLLER_BUTTON | KEY_LEFT_CTRL | KEY_X | KEY_C | KEY_V, GPIO_ModeIN_PU);
 
     TMOS_Keys_Debounce_ID = TMOS_ProcessEventRegister(TMOS_Keys_Debounce);
     TMOS_Enco_Debounce_ID = TMOS_ProcessEventRegister(TMOS_Enco_Debounce);
@@ -67,6 +76,46 @@ void Keyin_Init() {
     tmos_start_task(TMOS_Enco_Debounce_ID, 0x0001, UserCfg_RAM.KeyIn_Enco_Debouncing_Sampling_Interval);
     tmos_start_task(TMOS_Keys_TaskManager_ID, 0x0001, UserCfg_RAM.KeyIn_TaskFlgManager_Circle_Interval);
     tmos_start_task(TMOS_Keys_TransMacro_ID, 0x0001, UserCfg_RAM.KeyIn_TransMacro_Circle_Interval);
+
+}
+
+void Keyin_Reset_All(){
+
+//     Keymap = 0x00;
+//     Keymap_o = 0x00;
+
+     Key_x_encnt = 0;
+     Key_c_encnt = 0;
+     Key_v_encnt = 0;
+     Key_ctrl_encnt = 0;
+     Key_enter_encnt = 0;
+     Key_rbt_encnt = 0;
+     Key_rl_encnt = 0;
+     Key_rr_encnt = 0;
+
+     Key_x_decnt = 0;
+     Key_c_decnt = 0;
+     Key_v_decnt = 0;
+     Key_ctrl_decnt = 0;
+     Key_enter_decnt = 0;
+     Key_rbt_decnt = 0;
+     Key_rl_decnt = 0;
+     Key_rr_decnt = 0;
+
+     Key_x_tricnt = 0;
+     Key_c_tricnt = 0;
+     Key_v_tricnt = 0;
+     Key_ctrl_tricnt = 0;
+     Key_enter_tricnt = 0;
+     Key_rbt_tricnt = 0;
+     Key_rl_tricnt = 0;
+     Key_rr_tricnt = 0;
+
+     enco_left = 0;
+     enco_right = 0;
+     enco_finish_flg = TRUE;
+
+     finish_upload = TRUE;
 
 }
 
@@ -160,7 +209,7 @@ uint16_t TMOS_Keys_Debounce(uint8_t task_id, uint16_t events) {
         }
     }
 
-    if (!GPIOA_ReadPortPin(KEY_LEFT_CTRL)) {
+    if (!GPIOB_ReadPortPin(KEY_LEFT_CTRL)) {
         dbc_release_cnt_ctrl = 0;
 
         if (dbc_push_cnt_ctrl == UserCfg_RAM.KeyIn_Debouncing_DelayCircle_Cnt) {
@@ -180,7 +229,7 @@ uint16_t TMOS_Keys_Debounce(uint8_t task_id, uint16_t events) {
         }
     }
 
-    if (!GPIOB_ReadPortPin(KEY_RIGHT_ENTER)) {
+    if (!GPIOA_ReadPortPin(KEY_RIGHT_ENTER)) {
         dbc_release_cnt_enter = 0;
 
         if (dbc_push_cnt_enter == UserCfg_RAM.KeyIn_Debouncing_DelayCircle_Cnt) {
@@ -200,7 +249,7 @@ uint16_t TMOS_Keys_Debounce(uint8_t task_id, uint16_t events) {
         }
     }
 
-    if (!GPIOA_ReadPortPin(ROLLER_BUTTON)) {
+    if (!GPIOB_ReadPortPin(ROLLER_BUTTON)) {
         dbc_release_cnt_rbt = 0;
 
         if (dbc_push_cnt_rbt == UserCfg_RAM.KeyIn_Debouncing_DelayCircle_Cnt) {
@@ -278,72 +327,120 @@ uint16_t TMOS_Enco_Debounce(uint8_t task_id, uint16_t events) {
 
 uint16_t TMOS_Keys_TaskManager(uint8_t task_id, uint16_t events) {
 
-    if (((Keymap & (0x01 << MAP_X)) > 0) && ((Keymap_o & (0x01 << MAP_X)) == 0)) {
-        // push
-        Key_x_encnt++;
-    } else if (((Keymap & (0x01 << MAP_X)) == 0) && ((Keymap_o & (0x01 << MAP_X)) > 0)) {
-        // release
-        Key_x_decnt++;
-    }
+    static uint8_t go_setting = FALSE;
+    static uint8_t out_setting = FALSE;
 
-    if (((Keymap & (0x01 << MAP_C)) > 0) && ((Keymap_o & (0x01 << MAP_C)) == 0)) {
-        // push
-        Key_c_encnt++;
-    } else if (((Keymap & (0x01 << MAP_C)) == 0) && ((Keymap_o & (0x01 << MAP_C)) > 0)) {
-        // release
-        Key_c_decnt++;
-    }
-
-    if (((Keymap & (0x01 << MAP_V)) > 0) && ((Keymap_o & (0x01 << MAP_V)) == 0)) {
-        // push
-        Key_v_encnt++;
-    } else if (((Keymap & (0x01 << MAP_V)) == 0) && ((Keymap_o & (0x01 << MAP_V)) > 0)) {
-        // release
-        Key_v_decnt++;
-    }
-
-    if (((Keymap & (0x01 << MAP_CTRL)) > 0) && ((Keymap_o & (0x01 << MAP_CTRL)) == 0)) {
-        // push
-        Key_ctrl_encnt++;
-    } else if (((Keymap & (0x01 << MAP_CTRL)) == 0) && ((Keymap_o & (0x01 << MAP_CTRL)) > 0)) {
-        // release
-        Key_ctrl_decnt++;
-    }
-
-    if (((Keymap & (0x01 << MAP_ENTER)) > 0) && ((Keymap_o & (0x01 << MAP_ENTER)) == 0)) {
-        // push
-        Key_enter_encnt++;
-    } else if (((Keymap & (0x01 << MAP_ENTER)) == 0) && ((Keymap_o & (0x01 << MAP_ENTER)) > 0)) {
-        // release
-        Key_enter_decnt++;
-    }
-
-    if (((Keymap & (0x01 << MAP_RBT)) > 0) && ((Keymap_o & (0x01 << MAP_RBT)) == 0)) {
-        // push
-        Key_rbt_encnt++;
-    } else if (((Keymap & (0x01 << MAP_RBT)) == 0) && ((Keymap_o & (0x01 << MAP_RBT)) > 0)) {
-        // release
-        Key_rbt_decnt++;
-    }
-
-    if (((Keymap & (0x01 << MAP_RL)) > 0) && ((Keymap_o & (0x01 << MAP_RL)) == 0)
-        && ((Keymap & (0x01 << MAP_RR)) == 0)) {
-        // push rl
-        Key_rl_encnt++;
-    } else if (((Keymap & (0x01 << MAP_RR)) > 0) && ((Keymap_o & (0x01 << MAP_RR)) == 0)
-        && ((Keymap & (0x01 << MAP_RL)) == 0)) {
-        // push rr
-        Key_rr_encnt++;
-    } else if ((((Keymap & (0x01 << MAP_RL)) > 0) && ((Keymap & (0x01 << MAP_RR)) > 0))
-        || (((Keymap & (0x01 << MAP_RL)) == 0) && ((Keymap & (0x01 << MAP_RR)) == 0))) {
-
-        if (((Keymap & (0x01 << MAP_RL)) != (Keymap_o & (0x01 << MAP_RL)))) {
-            Key_rl_decnt++;
+    if(out_setting == TRUE){
+        if(Keymap == 0x00){
+            out_setting = FALSE;
         }
-        if (((Keymap & (0x01 << MAP_RR)) != (Keymap_o & (0x01 << MAP_RR)))) {
-            Key_rr_decnt++;
+    }
+
+    if(go_setting == TRUE){
+        if(Keymap == 0x00){
+            go_setting = FALSE;
+            is_setting_state = TRUE;
+            Motor_Block_LightShock();
+        }
+    }
+
+    if(Keymap == UserCfg_RAM.Ctrl_Keymap){
+        go_setting = TRUE;
+        cancel_all = TRUE;
+    }
+
+    if(is_setting_state){
+
+        SettingCtrl_Scan();
+        out_setting = TRUE;
+
+    }
+
+    else if (go_setting == FALSE && out_setting == FALSE && is_setting_state == FALSE) {
+
+        cancel_all = FALSE;
+
+        if (((Keymap & (0x01 << MAP_X)) > 0) && ((Keymap_o & (0x01 << MAP_X)) == 0)) {
+            // push
+            Key_x_encnt++;
+        } else if (((Keymap & (0x01 << MAP_X)) == 0) && ((Keymap_o & (0x01 << MAP_X)) > 0)) {
+            // release
+            Key_x_decnt++;
         }
 
+        if (((Keymap & (0x01 << MAP_C)) > 0) && ((Keymap_o & (0x01 << MAP_C)) == 0)) {
+            // push
+            Key_c_encnt++;
+        } else if (((Keymap & (0x01 << MAP_C)) == 0) && ((Keymap_o & (0x01 << MAP_C)) > 0)) {
+            // release
+            Key_c_decnt++;
+        }
+
+        if (((Keymap & (0x01 << MAP_V)) > 0) && ((Keymap_o & (0x01 << MAP_V)) == 0)) {
+            // push
+            Key_v_encnt++;
+        } else if (((Keymap & (0x01 << MAP_V)) == 0) && ((Keymap_o & (0x01 << MAP_V)) > 0)) {
+            // release
+            Key_v_decnt++;
+        }
+
+        if (((Keymap & (0x01 << MAP_CTRL)) > 0) && ((Keymap_o & (0x01 << MAP_CTRL)) == 0)) {
+            // push
+            Key_ctrl_encnt++;
+        } else if (((Keymap & (0x01 << MAP_CTRL)) == 0) && ((Keymap_o & (0x01 << MAP_CTRL)) > 0)) {
+            // release
+            Key_ctrl_decnt++;
+        }
+
+        if (((Keymap & (0x01 << MAP_ENTER)) > 0) && ((Keymap_o & (0x01 << MAP_ENTER)) == 0)) {
+            // push
+            Key_enter_encnt++;
+        } else if (((Keymap & (0x01 << MAP_ENTER)) == 0) && ((Keymap_o & (0x01 << MAP_ENTER)) > 0)) {
+            // release
+            Key_enter_decnt++;
+        }
+
+        if (((Keymap & (0x01 << MAP_RBT)) > 0) && ((Keymap_o & (0x01 << MAP_RBT)) == 0)) {
+            // push
+            Key_rbt_encnt++;
+        } else if (((Keymap & (0x01 << MAP_RBT)) == 0) && ((Keymap_o & (0x01 << MAP_RBT)) > 0)) {
+            // release
+            Key_rbt_decnt++;
+        }
+
+        if (((Keymap & (0x01 << MAP_RL)) > 0) && ((Keymap_o & (0x01 << MAP_RL)) == 0)
+            && ((Keymap & (0x01 << MAP_RR)) == 0)) {
+            // push rl
+            Key_rl_encnt++;
+            if(MotorOut_MainSW == TRUE){
+                MotorOut_unblock_cnt = 3;
+            }
+        } else if (((Keymap & (0x01 << MAP_RR)) > 0) && ((Keymap_o & (0x01 << MAP_RR)) == 0)
+            && ((Keymap & (0x01 << MAP_RL)) == 0)) {
+            // push rr
+            Key_rr_encnt++;
+            if(MotorOut_MainSW == TRUE){
+                MotorOut_unblock_cnt = 3;
+            }
+        } else if ((((Keymap & (0x01 << MAP_RL)) > 0) && ((Keymap & (0x01 << MAP_RR)) > 0))
+            || (((Keymap & (0x01 << MAP_RL)) == 0) && ((Keymap & (0x01 << MAP_RR)) == 0))) {
+
+            if (((Keymap & (0x01 << MAP_RL)) != (Keymap_o & (0x01 << MAP_RL)))) {
+                Key_rl_decnt++;
+            }
+            if (((Keymap & (0x01 << MAP_RR)) != (Keymap_o & (0x01 << MAP_RR)))) {
+                Key_rr_decnt++;
+            }
+
+        }
+
+    }
+
+
+    if((Keymap & 0x3f) != (Keymap_o & 0x3f)
+        && MotorOut_MainSW == TRUE
+    ){
+        MotorOut_unblock_cnt = 4;
     }
 
     Keymap_o = Keymap;
@@ -357,6 +454,15 @@ uint16_t TMOS_Keys_TransMacro(uint8_t task_id, uint16_t events) {
     uint8_t i = 0;
 
     if ((!finish_upload) && (Protocol_SW == Board_Use_BLE)) {
+
+        tmos_start_task(TMOS_Keys_TransMacro_ID, 0x0001, UserCfg_RAM.KeyIn_TransMacro_Circle_Interval);
+        return 0;
+    }
+
+    if (cancel_all){
+        tmos_memset(ReportBuf_Keyboard, 0x00, sizeof(ReportBuf_Keyboard));
+        tmos_memset(ReportBuf_Consumer, 0x00, sizeof(ReportBuf_Consumer));
+
         tmos_start_task(TMOS_Keys_TransMacro_ID, 0x0001, UserCfg_RAM.KeyIn_TransMacro_Circle_Interval);
         return 0;
     }

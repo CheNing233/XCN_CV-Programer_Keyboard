@@ -41,41 +41,6 @@ void USB_CB_LightChange(uint8_t light_state) {
 
 void USB_BulkTrans(uint8_t length, uint8_t cmdkey) {
 
-//
-//    if (pEP4_OUT_DataBuf[0] == 'w') {
-//        //擦除数据
-//        //这里的length 是字节,但是实际的擦除是按照256字节高位对齐,比如传入257字节,实际是擦除了512字节.
-//        //擦除后的区域,使用EEPROM_READ读出来默认是0xff,使用指针方式绝对地址读取,非0xff
-//        //传入的地址是相对地址,0对应dataflash的起始地址
-//        len = pEP4_OUT_DataBuf[1];
-//
-//        EEPROM_ERASE(0, 256);
-//
-//        //写入数据
-//        //这里的buffer是需要写入的指针数据,不需要进行4字节对齐,数据长度是1的倍数,数据需要在RAM里面
-//        //传入的地址是相对地址,0对应dataflash的起始地址
-//        EEPROM_WRITE(0, pEP4_OUT_DataBuf+2, len);
-//
-//        // ACK
-//        pEP3_IN_DataBuf[0] = 66;
-//        DevEP3_IN_Deal(1);
-//    }
-//
-//    if (pEP4_OUT_DataBuf[0] == 'r') {
-//        len = pEP4_OUT_DataBuf[1];
-//
-//        EEPROM_READ(0, pEP3_IN_DataBuf, len);
-//        DevEP3_IN_Deal(len);
-//    }
-//
-//    if (pEP4_OUT_DataBuf[0] == 'u') {
-//
-//        tmos_memcpy(pEP3_IN_DataBuf, &UserCfg_RAM, sizeof(usercfg));
-//
-//        DevEP3_IN_Deal(sizeof(usercfg));
-//
-//    }
-
     uint16_t keyset_addr = 0;
 
     keycfg temp_keycfg = {

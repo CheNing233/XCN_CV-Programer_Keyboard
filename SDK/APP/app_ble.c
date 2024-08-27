@@ -345,7 +345,6 @@ static void hidEmuStateCB(gapRole_States_t newState, gapRoleEvent_t *pEvent) {
 
         // get connection handle
         hidEmuConnHandle = event->connectionHandle;
-//        GAPRole_UpdateLink(hidEmuConnHandle, 1, 1, 0, 100);
 
         tmos_start_task(hidEmuTaskId, START_PARAM_UPDATE_EVT,
         START_PARAM_UPDATE_EVT_DELAY);
@@ -365,6 +364,11 @@ static void hidEmuStateCB(gapRole_States_t newState, gapRoleEvent_t *pEvent) {
         } else if (pEvent->gap.opcode == GAP_LINK_ESTABLISHED_EVENT) {
             PRINT("Advertising timeout..\n");
         }
+
+        if(Protocol_SW == Board_Use_BLE){
+            HidDev_Start();
+        }
+
         break;
 
     case GAPROLE_ERROR:

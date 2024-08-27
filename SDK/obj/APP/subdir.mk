@@ -1,5 +1,5 @@
 ################################################################################
-# MRS Version: 1.9.0
+# MRS Version: 1.9.1
 # 自动生成的文件。不要编辑！
 ################################################################################
 
@@ -9,8 +9,10 @@ C_SRCS += \
 ../APP/app_ble.c \
 ../APP/app_usb.c \
 ../APP/keyin.c \
-../APP/led.c \
+../APP/ledout.c \
+../APP/motorout.c \
 ../APP/protocol.c \
+../APP/settingctrl.c \
 ../APP/usercfg.c 
 
 OBJS += \
@@ -18,8 +20,10 @@ OBJS += \
 ./APP/app_ble.o \
 ./APP/app_usb.o \
 ./APP/keyin.o \
-./APP/led.o \
+./APP/ledout.o \
+./APP/motorout.o \
 ./APP/protocol.o \
+./APP/settingctrl.o \
 ./APP/usercfg.o 
 
 C_DEPS += \
@@ -27,8 +31,10 @@ C_DEPS += \
 ./APP/app_ble.d \
 ./APP/app_usb.d \
 ./APP/keyin.d \
-./APP/led.d \
+./APP/ledout.d \
+./APP/motorout.d \
 ./APP/protocol.d \
+./APP/settingctrl.d \
 ./APP/usercfg.d 
 
 

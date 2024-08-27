@@ -21,10 +21,9 @@
 #include "app_ble.h"
 #include "usercfg.h"
 #include "keyin.h"
-
-#define EN8_A GPIO_Pin_4 //PB4
-#define EN8_B GPIO_Pin_7 //PB7
-#define EN8_C GPIO_Pin_12 //PA12
+#include "ledout.h"
+#include "motorout.h"
+#include "settingctrl.h"
 
 /*********************************************************************
  * GLOBAL TYPEDEFS
@@ -73,7 +72,7 @@ int main(void) {
 //    UART1_DefInit();
 //#endif
 
-    DelayMs(10);
+    DelayMs(1);
 
     UserCfg_Init();
 
@@ -88,16 +87,11 @@ int main(void) {
 
     ProtoCtrl_Init();
 
-    // LED INIT
-    GPIOB_ModeCfg(EN8_A, GPIO_ModeOut_PP_5mA);
-    GPIOB_ModeCfg(EN8_B, GPIO_ModeOut_PP_5mA);
-    GPIOA_ModeCfg(EN8_C, GPIO_ModeOut_PP_5mA);
-
-    GPIOB_SetBits(EN8_A);
-    GPIOB_SetBits(EN8_B);
-    GPIOA_SetBits(EN8_C);
-
     Keyin_Init();
+    LedOut_Init();
+    MotorOut_Init();
+
+    MotorOut_unblock_cnt = 5;
 
     Main_Circulation();
 }

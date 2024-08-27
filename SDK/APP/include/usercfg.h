@@ -49,6 +49,8 @@ typedef struct __PACKED _usercfg {
 
     uint8_t BLE_Uplaod_PackCnt;// BLE每次发送包数量
 
+    uint8_t Ctrl_Keymap;// 板级控制key map
+
 } usercfg;
 
 typedef struct __PACKED _keycfg {

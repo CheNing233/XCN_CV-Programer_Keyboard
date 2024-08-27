@@ -119,7 +119,7 @@ static hidRptMap_t *hidDevRptById(uint8_t id, uint8_t type);
 static hidRptMap_t *hidDevRptByCccdHandle(uint16_t handle);
 
 static uint8_t hidDevSendReport(uint8_t id, uint8_t type, uint8_t len, uint8_t *pData);
-static void hidDevHighAdvertising(void);
+//static void hidDevHighAdvertising(void);
 static void hidDevLowAdvertising(void);
 static void hidDevInitialAdvertising(void);
 static uint8_t hidDevBondCount(void);
@@ -950,19 +950,19 @@ static uint8_t HidDev_sendNoti(uint16_t handle, uint8_t len, uint8_t *pData) {
  *
  * @return  None.
  */
-static void hidDevHighAdvertising(void) {
-    uint8_t param;
-
-    GAP_SetParamValue(TGAP_DISC_ADV_INT_MIN, HID_HIGH_ADV_INT_MIN);
-    GAP_SetParamValue(TGAP_DISC_ADV_INT_MAX, HID_HIGH_ADV_INT_MAX);
-    GAP_SetParamValue(TGAP_LIM_ADV_TIMEOUT, HID_HIGH_ADV_TIMEOUT);
-
-    GAP_SetParamValue(TGAP_CONN_EST_INT_MIN, HID_CONN_INT_MIN);
-    GAP_SetParamValue(TGAP_CONN_EST_INT_MAX, HID_CONN_INT_MAX);
-
-    param = TRUE;
-    GAPRole_SetParameter(GAPROLE_ADVERT_ENABLED, sizeof(uint8_t), &param);
-}
+//static void hidDevHighAdvertising(void) {
+//    uint8_t param;
+//
+//    GAP_SetParamValue(TGAP_DISC_ADV_INT_MIN, HID_HIGH_ADV_INT_MIN);
+//    GAP_SetParamValue(TGAP_DISC_ADV_INT_MAX, HID_HIGH_ADV_INT_MAX);
+//    GAP_SetParamValue(TGAP_LIM_ADV_TIMEOUT, HID_HIGH_ADV_TIMEOUT);
+//
+//    GAP_SetParamValue(TGAP_CONN_EST_INT_MIN, HID_CONN_INT_MIN);
+//    GAP_SetParamValue(TGAP_CONN_EST_INT_MAX, HID_CONN_INT_MAX);
+//
+//    param = TRUE;
+//    GAPRole_SetParameter(GAPROLE_ADVERT_ENABLED, sizeof(uint8_t), &param);
+//}
 
 /*********************************************************************
  * @fn      hidDevLowAdvertising

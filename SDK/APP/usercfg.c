@@ -8,6 +8,7 @@
 #include "config.h"
 #include "usercfg.h"
 #include "hiddev.h"
+#include "keyin.h"
 
 usercfg UserCfg_RAM = {
 
@@ -26,8 +27,9 @@ usercfg UserCfg_RAM = {
     .USB_UploadRate = 0x01,
     .BLE_Conn_Interval = 4,
 
-    .BLE_Uplaod_PackCnt = 20
+    .BLE_Uplaod_PackCnt = 20,
 
+    .Ctrl_Keymap = ((0x01 << MAP_CTRL) | (0x01 << MAP_RBT)),
 };
 
 keycfg KeyCfg_RAM_X = {

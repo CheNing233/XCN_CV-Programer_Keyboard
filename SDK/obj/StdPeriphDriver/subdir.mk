@@ -1,5 +1,5 @@
 ################################################################################
-# MRS Version: 1.9.0
+# MRS Version: 1.9.1
 # 自动生成的文件。不要编辑！
 ################################################################################
 
@@ -11,6 +11,7 @@ C_SRCS += \
 ../StdPeriphDriver/CH57x_gpio.c \
 ../StdPeriphDriver/CH57x_pwr.c \
 ../StdPeriphDriver/CH57x_sys.c \
+../StdPeriphDriver/CH57x_timer2.c \
 ../StdPeriphDriver/CH57x_uart0.c \
 ../StdPeriphDriver/CH57x_uart1.c \
 ../StdPeriphDriver/CH57x_usbdev.c 
@@ -22,6 +23,7 @@ OBJS += \
 ./StdPeriphDriver/CH57x_gpio.o \
 ./StdPeriphDriver/CH57x_pwr.o \
 ./StdPeriphDriver/CH57x_sys.o \
+./StdPeriphDriver/CH57x_timer2.o \
 ./StdPeriphDriver/CH57x_uart0.o \
 ./StdPeriphDriver/CH57x_uart1.o \
 ./StdPeriphDriver/CH57x_usbdev.o 
@@ -33,6 +35,7 @@ C_DEPS += \
 ./StdPeriphDriver/CH57x_gpio.d \
 ./StdPeriphDriver/CH57x_pwr.d \
 ./StdPeriphDriver/CH57x_sys.d \
+./StdPeriphDriver/CH57x_timer2.d \
 ./StdPeriphDriver/CH57x_uart0.d \
 ./StdPeriphDriver/CH57x_uart1.d \
 ./StdPeriphDriver/CH57x_usbdev.d 

@@ -20,7 +20,9 @@ APP/keyin.o: ../APP/keyin.c \
  C:\Users\19156\Desktop\DualModeKeyboard\SDK\APP\include/keyin.h \
  C:\Users\19156\Desktop\DualModeKeyboard\SDK\APP\include/protocol.h \
  C:\Users\19156\Desktop\DualModeKeyboard\SDK\Profile\include/hiddev.h \
- C:\Users\19156\Desktop\DualModeKeyboard\SDK\APP\include/usercfg.h
+ C:\Users\19156\Desktop\DualModeKeyboard\SDK\APP\include/usercfg.h \
+ C:\Users\19156\Desktop\DualModeKeyboard\SDK\APP\include/settingctrl.h \
+ C:\Users\19156\Desktop\DualModeKeyboard\SDK\APP\include/motorout.h
 
 C:\Users\19156\Desktop\DualModeKeyboard\SDK\HAL\include/config.h:
 
@@ -65,3 +67,7 @@ C:\Users\19156\Desktop\DualModeKeyboard\SDK\APP\include/protocol.h:
 C:\Users\19156\Desktop\DualModeKeyboard\SDK\Profile\include/hiddev.h:
 
 C:\Users\19156\Desktop\DualModeKeyboard\SDK\APP\include/usercfg.h:
+
+C:\Users\19156\Desktop\DualModeKeyboard\SDK\APP\include/settingctrl.h:
+
+C:\Users\19156\Desktop\DualModeKeyboard\SDK\APP\include/motorout.h:

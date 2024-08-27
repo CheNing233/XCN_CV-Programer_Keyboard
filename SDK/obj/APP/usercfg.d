@@ -18,7 +18,8 @@ APP/usercfg.o: ../APP/usercfg.c \
  C:\Users\19156\Desktop\DualModeKeyboard\SDK\StdPeriphDriver\inc/CH57x_usbhost.h \
  C:\Users\19156\Desktop\DualModeKeyboard\SDK\StdPeriphDriver\inc/ISP573.h \
  C:\Users\19156\Desktop\DualModeKeyboard\SDK\APP\include/usercfg.h \
- C:\Users\19156\Desktop\DualModeKeyboard\SDK\Profile\include/hiddev.h
+ C:\Users\19156\Desktop\DualModeKeyboard\SDK\Profile\include/hiddev.h \
+ C:\Users\19156\Desktop\DualModeKeyboard\SDK\APP\include/keyin.h
 
 C:\Users\19156\Desktop\DualModeKeyboard\SDK\HAL\include/config.h:
 
@@ -59,3 +60,5 @@ C:\Users\19156\Desktop\DualModeKeyboard\SDK\StdPeriphDriver\inc/ISP573.h:
 C:\Users\19156\Desktop\DualModeKeyboard\SDK\APP\include/usercfg.h:
 
 C:\Users\19156\Desktop\DualModeKeyboard\SDK\Profile\include/hiddev.h:
+
+C:\Users\19156\Desktop\DualModeKeyboard\SDK\APP\include/keyin.h:

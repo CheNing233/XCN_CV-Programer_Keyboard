@@ -6,7 +6,7 @@
 #include "keyin.h"
 
 //      USB/BLE SW
-Board_Protocol_Use Protocol_SW = Board_Use_Init;
+Board_Protocol_Use Protocol_SW = Board_Use_USB;
 
 uint8_t ReportBuf_Keyboard[8] = {
 //      Keyboard buffer
@@ -27,11 +27,11 @@ static uint16_t TMOSTASK_ProtoCtrl_UploadData(uint8_t task_id, uint16_t events);
 
 void ProtoCtrl_Init() {
 
-    GPIOA_ModeCfg(PROTO_SW_PIN, GPIO_ModeIN_PU);
-
     TMOSTASK_ProtoCtrl_Fresh_ID = TMOS_ProcessEventRegister(TMOSTASK_ProtoCtrl_Fresh);
 
     TMOSTASK_ProtoCtrl_UploadData_ID = TMOS_ProcessEventRegister(TMOSTASK_ProtoCtrl_UploadData);
+
+    ProtoCtrl_Act_USB();
 
     tmos_start_task(TMOSTASK_ProtoCtrl_Fresh_ID, 0x0001, UserCfg_RAM.Proto_FreshState_Interval);
 
@@ -39,27 +39,40 @@ void ProtoCtrl_Init() {
 
 }
 
+
+void ProtoCtrl_Act_USB(){
+    Protocol_SW = Board_Use_USB;
+    HidDev_Close();
+}
+
+void ProtoCtrl_Act_BLE(){
+    Protocol_SW = Board_Use_BLE;
+    HidDev_Start();
+}
+
 uint16_t TMOSTASK_ProtoCtrl_Fresh(uint8_t task_id, uint16_t events) {
 
-    static Board_Protocol_Use old_protocolsw = Board_Use_Init;
+    static Board_Protocol_Use old_protocolsw = Board_Use_USB;
+
+    /*
+     * ÆúÓÃ
+     */
 
     if (events & SYS_EVENT_MSG) {
         return (events ^ SYS_EVENT_MSG);
     }
 
-    if (events & 0x0001) {
-
-        Protocol_SW = (GPIOA_ReadPortPin(PROTO_SW_PIN) ? Board_Use_BLE : Board_Use_USB);
+    if (events & 0x00ff) {
 
         if (old_protocolsw != Protocol_SW) {
             switch (Protocol_SW) {
             case Board_Use_USB:
-                HidDev_Close();
+
 
                 break;
 
             case Board_Use_BLE:
-                HidDev_Start();
+
 
                 break;
             }

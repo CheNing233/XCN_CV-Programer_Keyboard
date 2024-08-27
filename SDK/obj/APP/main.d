@@ -26,7 +26,10 @@ APP/MAIN.o: ../APP/MAIN.c \
  C:\Users\19156\Desktop\DualModeKeyboard\SDK\APP\include/app_usb.h \
  C:\Users\19156\Desktop\DualModeKeyboard\SDK\APP\include/app_ble.h \
  C:\Users\19156\Desktop\DualModeKeyboard\SDK\APP\include/usercfg.h \
- C:\Users\19156\Desktop\DualModeKeyboard\SDK\APP\include/keyin.h
+ C:\Users\19156\Desktop\DualModeKeyboard\SDK\APP\include/keyin.h \
+ C:\Users\19156\Desktop\DualModeKeyboard\SDK\APP\include/ledout.h \
+ C:\Users\19156\Desktop\DualModeKeyboard\SDK\APP\include/motorout.h \
+ C:\Users\19156\Desktop\DualModeKeyboard\SDK\APP\include/settingctrl.h
 
 C:\Users\19156\Desktop\DualModeKeyboard\SDK\HAL\include/CONFIG.h:
 
@@ -83,3 +86,9 @@ C:\Users\19156\Desktop\DualModeKeyboard\SDK\APP\include/app_ble.h:
 C:\Users\19156\Desktop\DualModeKeyboard\SDK\APP\include/usercfg.h:
 
 C:\Users\19156\Desktop\DualModeKeyboard\SDK\APP\include/keyin.h:
+
+C:\Users\19156\Desktop\DualModeKeyboard\SDK\APP\include/ledout.h:
+
+C:\Users\19156\Desktop\DualModeKeyboard\SDK\APP\include/motorout.h:
+
+C:\Users\19156\Desktop\DualModeKeyboard\SDK\APP\include/settingctrl.h:
